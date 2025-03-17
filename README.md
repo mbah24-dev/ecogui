@@ -1,6 +1,15 @@
 <body>
     <h1>🚀 BConnect-Shop</h1>
     <p><strong>BConnect-Shop</strong> est une plateforme e-commerce moderne inspirée d'Amazon, conçue avec NestJS, Angular, Prisma et PostgreSQL via Supabase.</p>
+    <p align="center">
+      <img src="https://img.shields.io/badge/Angular-ff3e00?style=for-the-badge&logo=angular&logoColor=white" alt="Angular"/>
+    </p>
+    <p align="center">
+      <img src="https://img.shields.io/badge/NestJS-E0234E?style=for-the-badge&logo=nestjs&logoColor=white" alt="NestJS"/>
+    </p>
+    <p align="center">
+      <img src="https://img.shields.io/badge/Student%20at%2042-000000?style=for-the-badge&logo=42&logoColor=white" alt="Étudiant à 42"/>
+    </p>
     
   <h2>✨ Fonctionnalités</h2>
     <ul>
