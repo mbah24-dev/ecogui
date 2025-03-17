@@ -1,3 +1,6 @@
+<p align="center">
+  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
+</p>
 <body>
     <h1>🚀 BConnect-Shop</h1>
     <p><strong>BConnect-Shop</strong> est une plateforme e-commerce moderne inspirée d'Amazon, conçue avec NestJS, Angular, Prisma et PostgreSQL via Supabase.</p>
