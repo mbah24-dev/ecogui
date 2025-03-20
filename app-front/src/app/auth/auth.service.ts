@@ -1,22 +1,19 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable, tap } from "rxjs";
+import { Enviroment } from "../../enviroments/enviroment";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-    private apiUrl: string = "http://localhost:3000/auth";
-  router: any;
 
-    constructor(private http: HttpClient) {}
+    constructor(private http: HttpClient, private env: Enviroment) {}
     signin(role: 'buyer' | 'seller' | 'admin', credentials: any): Observable<any> {
-      return this.http.post(`${this.apiUrl}/signin/${role}`, credentials).pipe(
+      return this.http.post(`${this.env.apiUrl}/auth/signin/${role}`, credentials, { withCredentials: true }).pipe(
         tap((response: any) => {
           if (response.accessToken) {
-            // Stocke le token JWT dans le localStorage
-            localStorage.setItem('auth_token', response.accessToken);
-            // Stocke aussi l'utilisateur
+            localStorage.setItem('accessToken', response.accessToken);
             localStorage.setItem('user', JSON.stringify(response.user));
           }
         })
@@ -24,18 +21,38 @@ export class AuthService {
     }
 
     signup(role: 'buyer' | 'seller', userData: any): Observable<any> {
-      return (this.http.post(`${this.apiUrl}/signup/${role}`, userData));
+      return (this.http.post(`${this.env.apiUrl}/auth/signup/${role}`, userData, { withCredentials: true })).pipe(
+        tap((response: any) => {
+          if (response.accessToken) {
+            localStorage.setItem('accessToken', response.accessToken);
+            localStorage.setItem('user', JSON.stringify(response.user));
+          }
+        })
+      );
     }
 
     logout(): Observable<any> {
-      return this.http.post(`${this.apiUrl}/logout`, {}).pipe(
+      const token = localStorage.getItem('accessToken');
+      if (!token) {
+        throw new Error('Token manquant');
+      }
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+      return this.http.post(`${this.env.apiUrl}/auth/logout`, {}, { headers, withCredentials: true }).pipe(
         tap(() => {
-          // Supprime le token du localStorage pour déconnecter l'utilisateur
-          localStorage.removeItem('auth_token');
+          localStorage.removeItem('accessToken');
           localStorage.removeItem('user');
-          this.router.navigate(['/signin']);  // Redirige vers la page de connexion
         })
       );
+    }
+
+    get_users_info(): Observable<{user: any}> {
+      const token = localStorage.getItem('accessToken');
+      if (!token) {
+        throw new Error('Token manquant');
+      }
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+      // withCredentials a true permet d'envoyer les cookies de session
+      return this.http.get<{user: any}>(`${this.env.apiUrl}/users/me/info`, { headers, withCredentials: true });
     }
 
 }
