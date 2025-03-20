@@ -1,4 +1,9 @@
-<div>
-  <h1>  Bienvenue sur votre tableau de bord</h1>
+<div *ngIf="usersConnected; else notAuthenticated">
+  <h1>Bienvenue sur votre tableau de bord {{ usersConnected.name }} ({{ usersConnected.role }})</h1>
   <button (click)="logout()">Se déconnecter</button>
 </div>
+
+<ng-template #notAuthenticated>
+  <p>{{ errorMessage || 'Vous devez être connecté pour accéder à cette page.' }}</p>
+  <button routerLink="/login">Se connecter</button>
+</ng-template>
