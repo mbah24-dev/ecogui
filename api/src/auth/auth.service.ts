@@ -62,6 +62,7 @@ export class AuthService {
 			id: foundUser.id,
 			email: foundUser.email,
 			role: foundUser.role,
+			name: foundUser.name
 		};
 	
 		// 6️⃣ Retourne le token et les infos de l'utilisateur
@@ -73,13 +74,30 @@ export class AuthService {
 	}
 	
 
-	async signup(signupBody: CreateUserDto) {
+	async signup(signupBody: CreateUserDto, req: RequestExpressSession, res: Response) {
 		const addUserObject = await this.userService.create_user(signupBody);
-		return (this.bcryptUtils.generateToken({
+		const token = (this.bcryptUtils.generateToken({
 			userId: addUserObject.user_Id,
 			email: signupBody.email,
 			role: signupBody.role
 		}));
+		const foundUser = await this.prismaService.user.findUnique({
+			where: { id: addUserObject.user_Id },
+		});
+		if (!foundUser) {
+			throw new UnauthorizedException('Email incorrect.');
+		}
+		req.session.user = {
+			id: foundUser.id,
+			email: foundUser.email,
+			role: foundUser.role,
+			name: foundUser.name
+		};
+		return res.json({
+			message: 'Inscription réussie',
+			accessToken: token,
+			user: req.session.user,
+		});
 	}
 
 	async signout(@Req() req: RequestExpressSession, res: Response) {

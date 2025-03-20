@@ -6,7 +6,7 @@
 /*   By: mbah <mbah@student.42lyon.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 23:06:39 by mbah              #+#    #+#             */
-/*   Updated: 2025/03/17 18:47:24 by mbah             ###   ########.fr       */
+/*   Updated: 2025/03/20 00:21:46 by mbah             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,13 +39,14 @@ export class AuthController {
 	
 	@Post('signin/buyer')
 	async signin_buyer(@Body() userInfo: LoginDto, @Req() req: RequestExpressSession, @Res() res: Response) {
+		console.log('Tentative de connexion:', userInfo);
 		const role: Role = Role.BUYER;
 		return (await this.authService.signin(userInfo, role, req, res));
 	}
 
 	@Post('signup/buyer')
-	async signup_buyer(@Body() userInfo: CreateUserDto) {
-		return (await this.authService.signup(userInfo));
+	async signup_buyer(@Body() userInfo: CreateUserDto, @Req() req: RequestExpressSession, @Res() res: Response) {
+		return (await this.authService.signup(userInfo, req, res));
 	}
 
 	@Post('signin/seller')
@@ -55,9 +56,9 @@ export class AuthController {
 	}
 
 	@Post('signup/seller')
-	async signup_seller(@Body() userInfo: CreateUserDto) {
+	async signup_seller(@Body() userInfo: CreateUserDto, @Req() req: RequestExpressSession, @Res() res: Response) {
 		userInfo.role = Role.SELLER;
-		return (await this.authService.signup(userInfo));
+		return (await this.authService.signup(userInfo, req, res));
 	}
 
 	@Post('signin/admin')

@@ -6,7 +6,7 @@
 /*   By: mbah <mbah@student.42lyon.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 22:20:39 by mbah              #+#    #+#             */
-/*   Updated: 2025/03/19 13:25:43 by mbah             ###   ########.fr       */
+/*   Updated: 2025/03/20 02:22:11 by mbah             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,12 @@ import * as session from 'express-session';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-
-  // 🔥 S'ASSURER QUE LA SESSION EST BIEN CONFIGURÉE
+  app.enableCors({
+    origin: 'http://localhost:4200', // Permet uniquement l'origine de mon frontend Angular
+    methods: 'GET,POST,PUT,DELETE',
+    credentials: true, // Permet l'envoi de cookies/credentials avec la requête
+  });
+  
   if (!process.env.JWT_SECRET) {
     throw new Error('JWT_SECRET is not defined');
   }
@@ -32,7 +36,7 @@ async function bootstrap() {
       cookie: {
         secure: false, // ⚠️ Mettre `true` en prod (HTTPS obligatoire)
         httpOnly: true,
-        maxAge: 1000 * 60 * 5, // 1 heure
+        maxAge: 7 * 24 * 60 * 60 * 1000, // 7d
       },
     }),
   );
@@ -44,11 +48,6 @@ async function bootstrap() {
       transform: true,
     }),
   );
-  app.enableCors({
-    origin: 'http://localhost:4200', // L'adresse de votre application Angular
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    allowedHeaders: 'Content-Type, Authorization',
-  });
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();

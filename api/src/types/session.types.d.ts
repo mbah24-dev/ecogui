@@ -6,7 +6,7 @@
 /*   By: mbah <mbah@student.42lyon.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 18:08:48 by mbah              #+#    #+#             */
-/*   Updated: 2025/03/17 18:16:50 by mbah             ###   ########.fr       */
+/*   Updated: 2025/03/20 00:30:38 by mbah             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ declare module 'express-session' {
       id: string;
       email: string;
       role: string;
+	  name: string;
     };
   }
 }
