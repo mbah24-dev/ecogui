@@ -3,6 +3,7 @@ import { AuthService } from '../../../auth/auth.service';
 import { Router } from '@angular/router';
 import { User } from '../../../types/app.types';
 import { NgIf } from '@angular/common';
+import { RoleService } from '../../../role.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -11,11 +12,17 @@ import { NgIf } from '@angular/common';
   styleUrl: './dashboard.component.scss'
 })
 export class DashboardComponent implements OnInit {
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private roleService: RoleService) {}
   usersConnected?: User;
   errorMessage: string = '';
+  role: 'buyer' | 'seller' | 'admin' = 'buyer'
 
   ngOnInit(): void {
+      this.role = this.roleService.getRole();
+      console.log({role: this.role});
       this.get_users_info();
   }
 
@@ -23,6 +30,7 @@ export class DashboardComponent implements OnInit {
     this.authService.logout().subscribe(() => {
         console.log("Déconnexion réussie");
         this.usersConnected = undefined;
+        this.roleService.setRole(this.role);
         this.router.navigate(['/signin']);
     })
   }

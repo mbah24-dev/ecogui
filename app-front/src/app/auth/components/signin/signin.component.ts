@@ -1,16 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { AuthService } from '../../auth.service';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgIf, NgStyle } from '@angular/common';
+import { RoleService } from '../../../role.service';
 
 @Component({
   selector: 'app-signin',
-  imports: [FormsModule, RouterLink, NgIf, ReactiveFormsModule, NgStyle],
+  imports: [FormsModule, NgIf, ReactiveFormsModule, NgStyle],
   templateUrl: './signin.component.html',
   styleUrl: './signin.component.scss'
 })
-export class SigninComponent {
+export class SigninComponent implements OnInit{
   signinForm!: FormGroup;
   submitted: boolean = false;
   componentTilte: string = "Bconnect Shop";
@@ -19,12 +20,17 @@ export class SigninComponent {
 
   constructor(
     private authService: AuthService,
-    private router: Router, private formsBuilder: FormBuilder) {
-      this.signinForm = this.formsBuilder.group({
-        email: ['', [Validators.required, Validators.email]],
-        password: ['', [Validators.required, Validators.minLength(6)]]
-      });
-    }
+    private router: Router, private formsBuilder: FormBuilder,
+    private route: ActivatedRoute, private roleService: RoleService) {}
+
+  ngOnInit(): void {
+    this.role = this.roleService.getRole();
+    console.log({role: this.role});
+    this.signinForm = this.formsBuilder.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(6)]]
+    });
+  }
   onSubmit() {
     this.submitted = true;
     console.log(this.signinForm.value);
@@ -38,11 +44,22 @@ export class SigninComponent {
       next: (response) => {
         localStorage.setItem('accessToken', response.accessToken);
         localStorage.setItem('user', JSON.stringify(response.user));
+        this.roleService.setRole(this.role);
         this.router.navigate(['/dashboard']);
       },
       error: (error) => {
         this.errorMessage = "Email ou Mot de passe incorrect";
       }
     });
+  }
+
+  nav_signup() {
+    if (this.role)
+      this.router.navigate(['/signup']);
+  }
+
+  nav_forgot_password() {
+    if (this.role)
+      this.router.navigate(['/forgot-password']);
   }
 }

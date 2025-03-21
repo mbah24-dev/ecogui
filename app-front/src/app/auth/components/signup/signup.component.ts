@@ -1,24 +1,31 @@
-import { Component } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { AuthService } from '../../auth.service';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { NgIf, NgStyle } from '@angular/common';
+import { RoleService } from '../../../role.service';
 
 @Component({
   selector: 'app-signup',
-  imports: [FormsModule, RouterLink, NgIf, ReactiveFormsModule, NgStyle],
+  imports: [FormsModule, NgIf, ReactiveFormsModule, NgStyle],
   templateUrl: './signup.component.html',
   styleUrl: './signup.component.scss'
 })
-export class SignupComponent {
+export class SignupComponent implements OnInit {
     signupForm!: FormGroup;
     submitted: boolean = false;
     componentTilte: string = "Bconnect Shop";
-    role: 'buyer' | 'seller' = 'buyer';
+    role: 'buyer' | 'seller' | 'admin' = 'buyer';
     errorMessage: string = '';
 
-    constructor(private authService: AuthService, private router: Router, private formBuilder: FormBuilder) {
+    constructor(private authService: AuthService,
+      private router: Router, private formBuilder: FormBuilder,
+      private route: ActivatedRoute, private roleService: RoleService) {}
+
+    ngOnInit(): void {
+      this.role = this.roleService.getRole();
+      console.log({role: this.role});
       this.signupForm = this.formBuilder.group({
         email: ['', [Validators.required, Validators.email]],
         password: ['', [Validators.required, Validators.minLength(6)]],
@@ -33,12 +40,13 @@ export class SignupComponent {
       }
     }
 
-    signup(role:'buyer' | 'seller', userData: {email: string, password: string, name: string}) {
+    signup(role:'buyer' | 'seller' | 'admin', userData: {email: string, password: string, name: string}) {
       this.authService.signup(role, userData).subscribe(
         {
           next: response => {
             localStorage.setItem('accessToken', response.accessToken);
             localStorage.setItem('user', JSON.stringify(response.user));
+            this.roleService.setRole(this.role);
             this.router.navigate(['/dashboard']);
           },
           error: error => {
@@ -46,5 +54,10 @@ export class SignupComponent {
           }
         }
       );
+    }
+
+    nav_signin() {
+      if (this.role)
+        this.router.navigate(['/signin']);
     }
 }

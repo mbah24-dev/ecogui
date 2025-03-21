@@ -20,7 +20,7 @@ export class AuthService {
       );
     }
 
-    signup(role: 'buyer' | 'seller', userData: any): Observable<any> {
+    signup(role: 'buyer' | 'seller' | 'admin', userData: any): Observable<any> {
       return (this.http.post(`${this.env.apiUrl}/auth/signup/${role}`, userData, { withCredentials: true })).pipe(
         tap((response: any) => {
           if (response.accessToken) {

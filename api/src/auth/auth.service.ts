@@ -75,6 +75,12 @@ export class AuthService {
 	
 
 	async signup(signupBody: CreateUserDto, req: RequestExpressSession, res: Response) {
+		const alreadyHaveAccount = await this.prismaService.user.findUnique({
+			where: { email: signupBody.email }
+		})
+		if (alreadyHaveAccount) {
+			throw new HttpException('Vous avez deja un compte, Penser a changer votre statut', HttpStatus.UNAUTHORIZED);
+		}
 		const addUserObject = await this.userService.create_user(signupBody);
 		const token = (this.bcryptUtils.generateToken({
 			userId: addUserObject.user_Id,
