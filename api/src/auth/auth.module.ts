@@ -6,7 +6,7 @@
 /*   By: mbah <mbah@student.42lyon.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 23:06:42 by mbah              #+#    #+#             */
-/*   Updated: 2025/03/19 12:54:14 by mbah             ###   ########.fr       */
+/*   Updated: 2025/03/23 18:27:07 by mbah             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ import { UsersService } from 'src/users/users.service';
 import { AuthService } from './auth.service';
 import { JwtStrategy } from './jwt.strategy';
 import { BcryptUtilsService } from 'src/bcrypt-utils/bcrypt-utils.service';
+import { SendEmailService } from 'src/send-email/send-email.service';
 
 @Module({
 	imports: [
@@ -27,7 +28,7 @@ import { BcryptUtilsService } from 'src/bcrypt-utils/bcrypt-utils.service';
 		  signOptions: { expiresIn: '37d' }
 	  }),
 	],
-	providers: [AuthService, BcryptUtilsService, UsersService, PrismaService, JwtModule, JwtStrategy],
+	providers: [AuthService, BcryptUtilsService, UsersService, PrismaService, JwtModule, JwtStrategy, SendEmailService],
 	controllers: [AuthController]
   })
   export class AuthModule {}
