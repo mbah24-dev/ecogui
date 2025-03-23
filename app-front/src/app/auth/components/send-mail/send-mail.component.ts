@@ -8,12 +8,12 @@ import { NgIf } from '@angular/common';
 @Component({
   selector: 'app-login',
   imports: [FormsModule, ReactiveFormsModule, NgIf],
-  templateUrl: './login.component.html',
-  styleUrl: './login.component.scss'
+  templateUrl: './send-mail.component.html',
+  styleUrl: './send-mail.component.scss'
 })
 
-export class LoginComponent implements OnInit {
-  signinForm!: FormGroup;
+export class SendMail implements OnInit {
+  sendMailForm!: FormGroup;
   submitted: boolean = false;
   componentTitle: string = "Bconnect Shop";
   role: 'buyer' | 'seller' | 'admin' = 'buyer';
@@ -32,9 +32,8 @@ export class LoginComponent implements OnInit {
     console.log({ role: this.role });
 
     // Initialisation du formulaire avec les validations
-    this.signinForm = this.formBuilder.group({
+    this.sendMailForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]]
     });
 
     // Ajout des écouteurs pour la validation en TypeScript
@@ -43,33 +42,19 @@ export class LoginComponent implements OnInit {
 
   onSubmit() {
     this.submitted = true;
-    console.log(this.signinForm.value);
-    if (this.signinForm.valid) {
-      this.signin(this.role, this.signinForm.value);
+    console.log(this.sendMailForm.value);
+    if (this.sendMailForm.valid) {
+      this.sendmail("");
     }
   }
 
-  signin(role: 'buyer' | 'seller' | 'admin', data: { email: string, password: string }) {
-    this.authService.signin(role, data).subscribe({
-      next: (response) => {
-        console.log("Réponse de l'API NestJS: ", response);
-        localStorage.setItem('accessToken', response.accessToken);
-        localStorage.setItem('user', JSON.stringify(response.user));
-        this.roleService.setRole(this.role);
-        this.router.navigate(['/dashboard']);
-      },
-      error: () => {
-        this.errorMessage = "Email ou Mot de passe incorrect";
-      }
-    });
+  sendmail(email: string) {
+
   }
 
   nav_signup() {
-    this.router.navigate(['/signup']);
-  }
-
-  nav_forgot_password() {
-    this.router.navigate(['/send-mail']);
+    if (this.role)
+      this.router.navigate(['/signup']);
   }
 
   /** ✅ Ajout des fonctions de validation et de gestion des erreurs */
