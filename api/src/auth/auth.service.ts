@@ -1,4 +1,4 @@
-import { Req } from '@nestjs/common';
+import { Req, Body } from '@nestjs/common';
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
@@ -19,13 +19,16 @@ import { LoginDto } from 'src/dto/login-user.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UsersService } from 'src/users/users.service';
 import { Request as RequestExpressSession, Response } from 'express'
+import { ResetPasswordDto } from 'src/dto/reset-password.dto';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
 	constructor(
 		private readonly prismaService: PrismaService,
 		private readonly bcryptUtils: BcryptUtilsService,
-		private readonly userService: UsersService
+		private readonly userService: UsersService,
+		private readonly jwtService: JwtService
 	) {}
 	
 	async signin(signinBody: LoginDto, role: Role, req: RequestExpressSession, res: Response) {
@@ -116,5 +119,36 @@ export class AuthService {
 			message: 'Déconnecté avec succès',
 			response: res.json()
 		});
+	}
+
+	async resetPassword(token: string, body: ResetPasswordDto) {
+		try {
+			const { password }: ResetPasswordDto = body;
+			const decoded = this.jwtService.verify(token, { secret: process.env.JWT_SECRET });
+
+			const user = await this.prismaService.user.findUnique({
+				where: {
+					id: decoded.userId,
+					resetToken: token
+				}
+			});
+
+			if (!user) {
+				throw new HttpException('Token invalide ou expiré', HttpStatus.BAD_REQUEST);
+			}
+
+			const newPasswordHashed = await this.bcryptUtils.hashPassword(password);
+
+			await this.prismaService.user.update({
+				where: {id: decoded.userId},
+				data: {
+					password: newPasswordHashed,
+					resetToken: null
+				}
+			});
+			return ({ message: 'Mot de passe réinitialisé avec succès !' });
+		} catch (error) {
+			throw new HttpException('Token invalide ou expiré', HttpStatus.BAD_REQUEST);
+		}
 	}
 }

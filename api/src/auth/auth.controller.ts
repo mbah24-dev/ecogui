@@ -6,11 +6,11 @@
 /*   By: mbah <mbah@student.42lyon.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 23:06:39 by mbah              #+#    #+#             */
-/*   Updated: 2025/03/20 00:21:46 by mbah             ###   ########.fr       */
+/*   Updated: 2025/03/23 18:16:58 by mbah             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-import { Body, Controller, Get, Post, UseGuards, Request, Req, UnauthorizedException, Res } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards, Request, Req, UnauthorizedException, Res, Param, Query } from '@nestjs/common';
 import { CreateUserDto } from 'src/dto/create-user.dto';
 import { UsersService } from 'src/users/users.service';
 import { AuthService } from './auth.service';
@@ -19,13 +19,17 @@ import { RequestWithUser } from './jwt.strategy';
 import { LoginDto } from 'src/dto/login-user.dto';
 import { Role } from '@prisma/client';
 import { Request as RequestExpressSession, Response } from 'express';
+import { SendEmailDto } from 'src/dto/send-email.dto';
+import { SendEmailService } from 'src/send-email/send-email.service';
+import { ResetPasswordDto } from 'src/dto/reset-password.dto';
 
 
 @Controller('auth')
 export class AuthController {
 	constructor(
 		private readonly authService: AuthService,
-		private readonly userService: UsersService
+		private readonly userService: UsersService,
+		private readonly sendEmail: SendEmailService
 	) {}
 	
 	@UseGuards(JwtAuthGuard)
@@ -80,6 +84,16 @@ export class AuthController {
 			throw new UnauthorizedException('Aucune session active');
 		}
 		return req.session.user;
+	}
+
+	@Post('send-email')
+	async send_email(@Body() body: SendEmailDto) {
+		return (await this.sendEmail.requestPasswordReset(body));
+	}
+
+	@Post('reset-password')
+	async reset_password(@Body() body: ResetPasswordDto, @Query('token') token: string) {
+		return (await this.authService.resetPassword(token, body));
 	}
 
 	/*@Post('me/admin/signup')

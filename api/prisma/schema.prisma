@@ -24,6 +24,7 @@ model User {
   password  String
   name      String
   role      Role
+  resetToken  String?
   products  Product[] // Produits vendus
   orders    Order[] // Commandes passées
   reviews   Review[]
