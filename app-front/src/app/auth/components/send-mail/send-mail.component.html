@@ -21,7 +21,7 @@
 						</span>
 					</div>
 
-          <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
+          <p *ngIf="messageAlert" [ngClass]="{ 'text-success': isValid, 'text-danger': !isValid }">{{ messageAlert }}</p>
 					<div class="container-login100-form-btn">
 						<button class="login100-form-btn">
 							Send

@@ -3,11 +3,12 @@ import { AuthService } from '../../auth.service';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RoleService } from '../../../role.service';
-import { NgIf } from '@angular/common';
+import { NgClass, NgIf } from '@angular/common';
+import { error } from 'console';
 
 @Component({
   selector: 'app-login',
-  imports: [FormsModule, ReactiveFormsModule, NgIf],
+  imports: [FormsModule, ReactiveFormsModule, NgIf, NgClass],
   templateUrl: './send-mail.component.html',
   styleUrl: './send-mail.component.scss'
 })
@@ -18,6 +19,8 @@ export class SendMail implements OnInit {
   componentTitle: string = "Bconnect Shop";
   role: 'buyer' | 'seller' | 'admin' = 'buyer';
   errorMessage: string = '';
+  messageAlert: string = '';
+  isValid: boolean = false;
 
   constructor(
     private authService: AuthService,
@@ -42,15 +45,26 @@ export class SendMail implements OnInit {
 
   onSubmit() {
     this.submitted = true;
-    console.log(this.sendMailForm.value);
+
     if (this.sendMailForm.valid) {
-      this.sendmail("");
+      const email = this.sendMailForm.value.email; // 👈 Extraire correctement l'email
+      this.sendmail(email);
     }
   }
 
   sendmail(email: string) {
-
+    this.authService.send_email({ email }).subscribe({
+      next: (response) => {
+        this.isValid = true;
+        this.messageAlert = response.message;
+      },
+      error: (err) => {
+        this.isValid = false;
+        this.messageAlert = err.error?.message || 'Aucun utilisateur associé à cet email';
+      }
+    });
   }
+
 
   nav_signup() {
     if (this.role)

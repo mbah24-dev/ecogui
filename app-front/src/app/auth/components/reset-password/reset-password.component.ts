@@ -2,23 +2,24 @@ import { Component, Input, OnInit } from '@angular/core';
 import { AuthService } from '../../auth.service';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { NgModule } from '@angular/core';
-import { NgIf, NgStyle } from '@angular/common';
 import { RoleService } from '../../../role.service';
+import { NgClass, NgIf } from '@angular/common';
 
 @Component({
-  selector: 'app-signup',
-  imports: [FormsModule, NgIf, ReactiveFormsModule, NgStyle],
-  templateUrl: './register.component.html',
-  styleUrl: './register.component.scss'
+  selector: 'app-login',
+  imports: [FormsModule, ReactiveFormsModule, NgIf, NgClass],
+  templateUrl: './reset-password.component.html',
+  styleUrl: './reset-password.component.scss'
 })
 
-export class RegisterComponent implements OnInit {
-  signupForm!: FormGroup;
+export class ResetPassword implements OnInit {
+  resetPasswordForm!: FormGroup;
   submitted: boolean = false;
   componentTitle: string = "Bconnect Shop";
   role: 'buyer' | 'seller' | 'admin' = 'buyer';
   errorMessage: string = '';
+  isValid: boolean = false;
+  token: string = '';
 
   constructor(
     private authService: AuthService,
@@ -30,51 +31,56 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit(): void {
     this.role = this.roleService.getRole();
+    this.token = this.route.snapshot.queryParams['token'];
+    if (!this.token) {
+      this.errorMessage = "Token invalide ou expiré.";
+    }
     console.log({ role: this.role });
 
-    this.signupForm = this.formBuilder.group({
-      email: ['', [Validators.required, Validators.email]],
+    this.resetPasswordForm = this.formBuilder.group({
       password: ['', [
         Validators.required,
         Validators.minLength(8),
         Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/) // ✅ Regex mise à jour
       ]],
       c_password: ['', [Validators.required]],
-      name: ['', [Validators.required, Validators.minLength(5)]]
     });
 
-    this.addValidationListeners(); // ✅ Ajout des écouteurs d'événements
+    this.addValidationListeners();
   }
 
   onSubmit() {
     this.submitted = true;
 
-    if (this.signupForm.valid && this.passwordsMatch()) {
-      this.signup(this.role, this.signupForm.value);
+    if (this.resetPasswordForm.valid && this.passwordsMatch()) {
+      const password = this.resetPasswordForm.value.password;
+      this.reset_password(password);
     } else {
       this.showValidate(document.querySelector<HTMLInputElement>('input[name="c_password"]')!);
     }
   }
 
-  private passwordsMatch(): boolean {
-    const password = this.signupForm.controls['password'].value;
-    const confirmPassword = this.signupForm.controls['c_password'].value;
-    return password === confirmPassword;
-  }
-
-  signup(role: 'buyer' | 'seller' | 'admin', userData: { email: string, password: string, name: string }) {
-    this.authService.signup(role, userData).subscribe({
+  reset_password(password: string) {
+    if (!this.token) return;
+    this.authService.reset_password(password, this.token).subscribe({
       next: (response) => {
-        localStorage.setItem('accessToken', response.accessToken);
-        localStorage.setItem('user', JSON.stringify(response.user));
-        this.roleService.setRole(this.role);
-        this.router.navigate(['/dashboard']);
+        this.errorMessage = response.message;
+        setTimeout(() => {
+          this.router.navigate(['/signin']);
+        }, 3000);
+        this.isValid = true;
       },
       error: (err) => {
-        console.log(err)
-        this.errorMessage = 'Inscription échouée. Vérifiez vos infos.';
+        this.isValid = false;
+        this.errorMessage = err.error?.message || "Erreur lors de la réinitialisation.";
       }
-    });
+    })
+  }
+
+  private passwordsMatch(): boolean {
+    const password = this.resetPasswordForm.controls['password'].value;
+    const confirmPassword = this.resetPasswordForm.controls['c_password'].value;
+    return password === confirmPassword;
   }
 
   nav_signin() {
@@ -122,11 +128,6 @@ export class RegisterComponent implements OnInit {
   private validate(input: HTMLInputElement): boolean {
     const value = input.value.trim();
 
-    if (input.name === 'email') {
-      const emailRegex = /^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{1,5}|[0-9]{1,3})(\]?)$/;
-      return emailRegex.test(value);
-    }
-
     if (input.name === 'password') {
       const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/;
       return passwordRegex.test(value);
@@ -134,10 +135,6 @@ export class RegisterComponent implements OnInit {
 
     if (input.name === 'c_password') {
       return this.passwordsMatch();
-    }
-
-    if (input.name === 'name') {
-      return value.length >= 5;
     }
 
     return value !== '';
@@ -157,3 +154,4 @@ export class RegisterComponent implements OnInit {
     }
   }
 }
+

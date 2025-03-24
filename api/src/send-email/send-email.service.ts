@@ -2,7 +2,8 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { SendEmailDto } from 'src/dto/send-email.dto';
 import { JwtService } from '@nestjs/jwt';
-import nodemailer from 'nodemailer';
+import * as nodemailer from 'nodemailer';
+import { resetPasswordTemplate } from './email-template';
 
 @Injectable()
 export class SendEmailService {
@@ -32,12 +33,12 @@ export class SendEmailService {
 		});
 		const resetLink = `http://localhost:4200/reset-password?token=${token}`;
 
-		await this.send_email(email, resetLink);
+		await this.send_email(email, resetLink, user_found.name);
 
 		return ({ message: 'Un email de réinitialisation a été envoyé.' });
 	}
 
-	private async send_email(to: string, resetLink: string) {
+	private async send_email(to: string, resetLink: string, name: string) {
 		const transporter = nodemailer.createTransport({
 			service: 'gmail',
 			auth: {
@@ -50,8 +51,7 @@ export class SendEmailService {
 			from: 'noreply@bconnect.com',
 			to,
 			subject: 'Réinitialisation de votre mot de passe',
-			html: `<p>Cliquez sur le lien ci-dessous pour réinitialiser votre mot de passe :</p>
-				   <a href="${resetLink}">${resetLink}</a>`,
+			html: resetPasswordTemplate(resetLink, name),
 		  });
 	}
 }

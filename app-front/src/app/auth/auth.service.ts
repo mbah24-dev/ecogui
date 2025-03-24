@@ -55,4 +55,16 @@ export class AuthService {
       return this.http.get<{user: any}>(`${this.env.apiUrl}/users/me/info`, { headers, withCredentials: true });
     }
 
+    send_email(userData: { email: string }): Observable<{ message: string }> {
+      return (this.http.post<{ message: string }>(`${this.env.apiUrl}/auth/send-email`, userData))
+    }
+
+    reset_password(password: string, token: string): Observable<{ message: string }> {
+      return this.http.post<{ message: string }>(
+        `${this.env.apiUrl}/auth/reset-password?token=${token}`,
+        { password }
+      );
+    }
+
+
 }

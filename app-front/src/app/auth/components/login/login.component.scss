@@ -182,10 +182,16 @@ iframe {
   cursor: pointer;
 }
 
-.error-message {
-  color: #c80000;
+.text-success {
+  color: green;
   font-weight: bold;
-  background-color: #333333;
+  text-decoration: underline;
+}
+
+.text-danger {
+  color: red;
+  font-weight: bold;
+  text-decoration: underline;
 }
 
 /*------------------------------------------------------------------
