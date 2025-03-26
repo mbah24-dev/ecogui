@@ -10,8 +10,8 @@ generator client {
 
 datasource db {
   provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+  url       = env("DIRECT_URL")
+  //directUrl = env("DIRECT_URL")
 }
 
 /**
@@ -19,19 +19,25 @@ datasource db {
  */
 
 model User {
-  id        String    @id @default(uuid())
-  email     String    @unique
-  password  String
-  name      String
-  role      Role
-  resetToken  String?
-  products  Product[] // Produits vendus
-  orders    Order[] // Commandes passées
-  reviews   Review[]
-  addresses Address[]
-  cart      Cart?
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  id           String      @id @default(uuid())
+  email        String      @unique
+  password     String
+  name         String
+  role         Role
+  resetToken   String?
+  profilePic   String? // URL de la photo de profil (optionnelle)
+  products     Product[]
+  soldProducts OrderItem[] @relation(name: "SoldProducts")
+  orders       Order[]
+  reviews      Review[]
+  addresses    Address[]
+  cart         Cart?
+  balance      Float       @default(0.0) // Solde du vendeur
+  isOnline     Boolean     @default(false)
+  phoneNumber  String?     @unique // Numéro de téléphone unique
+  countryCode  String?     // Code pays (+33, +1, etc.)
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
 }
 
 enum Role {
@@ -44,20 +50,37 @@ enum Role {
 }
 
 model Product {
-  id          String      @id @default(uuid())
+  id          String         @id @default(uuid())
   name        String
   description String
   price       Float
   stock       Int
-  category    Category    @relation(fields: [categoryId], references: [id])
+  status      ProductStatus  @default(AVAILABLE) // Statut du produit
+  category    Category       @relation(fields: [categoryId], references: [id])
   categoryId  String
-  seller      User        @relation(fields: [sellerId], references: [id])
+  seller      User           @relation(fields: [sellerId], references: [id])
   sellerId    String
   orderItems  OrderItem[]
   reviews     Review[]
   cartItems   CartItem[]
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
+  images      ProductImage[]
+  views       Int            @default(0) // Nombre de vues
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+}
+
+// Enum pour le statut des produits
+enum ProductStatus {
+  AVAILABLE
+  SOLD_OUT
+  PENDING
+}
+
+model ProductImage {
+  id        String  @id @default(uuid())
+  url       String
+  product   Product @relation(fields: [productId], references: [id])
+  productId String
 }
 
 model Category {
@@ -83,8 +106,17 @@ model OrderItem {
   orderId   String
   product   Product @relation(fields: [productId], references: [id])
   productId String
+  seller    User    @relation(name: "SoldProducts", fields: [sellerId], references: [id]) // Ajout du vendeur
+  sellerId  String
   quantity  Int
   price     Float
+  status    OrderItemStatus @default(PENDING)
+}
+
+enum OrderItemStatus {
+	CONFIRMED
+	PENDING
+	REFUSED
 }
 
 enum OrderStatus {
@@ -101,6 +133,8 @@ model Review {
   userId    String
   product   Product  @relation(fields: [productId], references: [id])
   productId String
+  message   String // Avis laissé par l'utilisateur
+  rating    Int // Note sur 10 attribuée au produit
   createdAt DateTime @default(now())
 }
 
@@ -125,8 +159,8 @@ model Cart {
 model CartItem {
   id        String  @id @default(uuid())
   cart      Cart    @relation(fields: [cartId], references: [id])
-  cartId    String
+  cartId    String  
   product   Product @relation(fields: [productId], references: [id])
-  productId String
+  productId String  
   quantity  Int
 }
