@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   send-email.module.ts                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mbah <mbah@student.42lyon.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/26 03:44:35 by mbah              #+#    #+#             */
+/*   Updated: 2025/03/26 03:44:36 by mbah             ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 import { Module } from '@nestjs/common';
 import { SendEmailService } from './send-email.service';
 import { JwtModule } from '@nestjs/jwt';

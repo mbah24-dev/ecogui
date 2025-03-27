@@ -1,9 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   send-email.service.ts                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mbah <mbah@student.42lyon.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/26 03:44:40 by mbah              #+#    #+#             */
+/*   Updated: 2025/03/27 22:37:26 by mbah             ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { SendEmailDto } from 'src/dto/send-email.dto';
+import { SendEmailDto } from 'src/dto/send-email/send-email.dto';
 import { JwtService } from '@nestjs/jwt';
 import * as nodemailer from 'nodemailer';
-import { resetPasswordTemplate } from './email-template';
+import { resetPasswordTemplate } from './template/reset-password';
 
 @Injectable()
 export class SendEmailService {
@@ -33,12 +45,12 @@ export class SendEmailService {
 		});
 		const resetLink = `http://localhost:4200/reset-password?token=${token}`;
 
-		await this.send_email(email, resetLink, user_found.name);
+		await this.send_email_to_reset_password(email, resetLink, user_found.name, 'Réinitialisation de votre mot de passe');
 
 		return ({ message: 'Un email de réinitialisation a été envoyé.' });
 	}
 
-	private async send_email(to: string, resetLink: string, name: string) {
+	private async send_email_to_reset_password(to: string, resetLink: string, name: string, subject: string) {
 		const transporter = nodemailer.createTransport({
 			service: 'gmail',
 			auth: {
@@ -50,9 +62,54 @@ export class SendEmailService {
 		  await transporter.sendMail({
 			from: 'noreply@bconnect.com',
 			to,
-			subject: 'Réinitialisation de votre mot de passe',
+			subject,
 			html: resetPasswordTemplate(resetLink, name),
 		  });
 	}
+
+	async send_email(
+		to: string,
+		subject: string,
+		templateFunction: Function, // Fonction qui génère le template HTML
+		...templateParams: any[]    // Paramètres sous forme de rest operator
+	) {
+		const transporter = nodemailer.createTransport({
+			service: 'gmail',
+			auth: {
+				user: process.env.EMAIL_USER,
+				pass: process.env.EMAIL_PASS,
+			},
+		});
+		if (!Array.isArray(templateParams)) {
+			console.error("❌ ERREUR: Les paramètres du template ne sont pas un tableau !");
+			return;
+		}
+	
+		// Génération du contenu HTML
+		let htmlContent;
+		try {
+			const flattenedParams = templateParams.flat(); // Aplatit les éventuels tableaux imbriqués
+			htmlContent = templateFunction(...flattenedParams);
+
+		} catch (error) {
+			console.error("❌ ERREUR: Échec de la génération du template:", error);
+			return;
+		}
+	
+		// Envoi de l'email
+		try {
+			await transporter.sendMail({
+				from: 'noreply@bconnect.com',
+				to,
+				subject,
+				html: htmlContent,
+			});
+			console.log("✅ Email envoyé avec succès !");
+		} catch (error) {
+			console.error("❌ ERREUR: Échec de l'envoi de l'email:", error);
+		}
+	}
+	
+	  
 }
 
