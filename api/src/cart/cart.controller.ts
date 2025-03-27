@@ -6,7 +6,7 @@
 /*   By: mbah <mbah@student.42lyon.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 01:59:36 by mbah              #+#    #+#             */
-/*   Updated: 2025/03/26 04:32:10 by mbah             ###   ########.fr       */
+/*   Updated: 2025/03/27 20:25:51 by mbah             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ import { Request as RequestExpressSession, Response } from 'express'
 import { AdminGuard } from 'src/guards/admin.guard';
 import { AddProductToCartDto } from 'src/dto/cart/add-product-to-cart.dto';
 import { IsAdmin } from 'src/decorator/is-admin.decorator';
+import { AdminOrBuyerGuard } from 'src/guards/admin-or-buyer.guard';
 
 @Controller('cart')
 export class CartController {
@@ -38,8 +39,7 @@ export class CartController {
 		return (res.json({ cartItem }));
 	}
 
-	@UseGuards(JwtAuthGuard, BuyerGuard, AdminGuard)
-	@IsBuyer()
+	@UseGuards(JwtAuthGuard, AdminOrBuyerGuard)
 	@Delete('delete-item/product=:productId')
 	async delete_an_product_to_cart(
 		@Req() req: RequestExpressSession,
@@ -65,8 +65,7 @@ export class CartController {
 		return (res.json(response));
 	}
 
-	@UseGuards(JwtAuthGuard, BuyerGuard, AdminGuard)
-	@IsBuyer()
+	@UseGuards(JwtAuthGuard, AdminOrBuyerGuard)
 	@Put('update-item/product=:productId')
 	async update_an_product_to_cart(
 		@Req() req: RequestExpressSession,
@@ -80,7 +79,7 @@ export class CartController {
 		return (res.json({ item_updated }));
 	}
 
-	@UseGuards(JwtAuthGuard, BuyerGuard, AdminGuard)
+	@UseGuards(JwtAuthGuard, BuyerGuard)
 	@IsBuyer()
 	@Get('me')
 	async get_current_user_cart(@Req() req: RequestExpressSession, @Res() res: Response) {
