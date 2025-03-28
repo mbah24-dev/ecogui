@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   users.module.ts                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mbah <mbah@student.42lyon.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/26 03:45:23 by mbah              #+#    #+#             */
+/*   Updated: 2025/03/26 03:45:24 by mbah             ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 import { Module } from '@nestjs/common';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';

@@ -1,13 +1,28 @@
-import { Body, Controller, Delete, ForbiddenException, Get, HttpException, HttpStatus, Param, Post, Put, Req, Request, Res, UseGuards } from '@nestjs/common';
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   users.controller.ts                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mbah <mbah@student.42lyon.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/26 03:44:54 by mbah              #+#    #+#             */
+/*   Updated: 2025/03/26 03:45:03 by mbah             ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+import { Body, Controller, Delete, ForbiddenException, Get, HttpException, HttpStatus,
+	Param, Post, Put, Req, Request, Res, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { RequestWithUser } from 'src/auth/jwt.strategy';
-import { CreateUserDto } from 'src/dto/create-user.dto';
+import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
+import { RequestWithUser } from 'src/jwt/jwt.strategy';
+import { CreateUserDto } from 'src/dto/users/create-user.dto';
 import { Role } from '@prisma/client';
-import { AdminGuard } from 'src/auth/admin.guard';
-import { IsAdmin } from 'src/auth/is-admin.decorator';
-import { SetUserRoleDto } from 'src/dto/set-user-role.dto';
+import { AdminGuard } from 'src/guards/admin.guard';
+import { IsAdmin } from 'src/decorator/is-admin.decorator';
+import { SetUserRoleDto } from 'src/dto/users/set-user-role.dto';
 import { Request as RequestExpressSession, Response } from 'express';
+import { IsSeller } from 'src/decorator/is-seller.decorator';
+import { AdminOrSellerGuard } from 'src/guards/admin-or-seller.guard';
 
 @Controller('users')
 export class UsersController {
@@ -124,5 +139,29 @@ export class UsersController {
 		}
 		const user = (await this._users_service.set_user_role(user_id, data.role));
 		return (res.json({ user }));
+	}
+
+	@UseGuards(JwtAuthGuard, AdminOrSellerGuard)
+	@IsSeller()
+	@IsAdmin()
+	@Get('connected/products')
+	async get_current_user_produtcs(@Req() req: RequestExpressSession, @Res() res: Response) {
+		if (!req.session.user) {
+			return res.status(401).json({ message: 'Utilisateur non connecté' });
+		}
+		const products = await this._users_service.get_current_user_products(req.session.user.id);
+		return (res.json( {products} ));
+	}
+
+	@UseGuards(JwtAuthGuard, AdminOrSellerGuard)
+	@IsSeller()
+	@IsAdmin()
+	@Get('connected/products/sold')
+	async get_current_user_produtcsSold(@Req() req: RequestExpressSession, @Res() res: Response) {
+		if (!req.session.user) {
+			return res.status(401).json({ message: 'Utilisateur non connecté' });
+		}
+		const products = await this._users_service.get_current_user_produtcsSold(req.session.user.id);
+		return (res.json( {products} ));
 	}
 }

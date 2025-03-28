@@ -6,14 +6,14 @@
 /*   By: mbah <mbah@student.42lyon.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 23:26:22 by mbah              #+#    #+#             */
-/*   Updated: 2025/03/16 15:28:28 by mbah             ###   ########.fr       */
+/*   Updated: 2025/03/26 03:45:28 by mbah             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Role } from '@prisma/client';
 import { BcryptUtilsService } from 'src/bcrypt-utils/bcrypt-utils.service';
-import { CreateUserDto } from 'src/dto/create-user.dto';
+import { CreateUserDto } from 'src/dto/users/create-user.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
@@ -109,6 +109,37 @@ export class UsersService {
 			}))
 		} catch (error) {
 			throw new HttpException(error.message || 'un probleme es survenue lors de la modification', HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	async get_current_user_products(userId: string) {
+		const user = await this._prisma.user.findUnique({
+			where: {
+				id: userId
+			},
+			include: {
+				products: { include: { images: true } }
+			}
+		});
+		if (!user || user.products.length === 0)
+			throw new HttpException('Aucun produit trouvé', HttpStatus.NOT_FOUND);
+		return (user.products);
+	}
+
+	async get_current_user_produtcsSold(userId: string) {
+		try {
+			const productsSold = await this._prisma.orderItem.findMany({
+				where: {
+					sellerId: userId
+				},
+				include: { 
+					product: true,
+					order: true 
+				}
+			})
+			return (productsSold);
+		} catch (error) {
+			throw new HttpException(error.message || 'Aucun produit trouvé', HttpStatus.NOT_FOUND);
 		}
 	}
 }
