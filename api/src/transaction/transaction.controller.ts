@@ -10,10 +10,13 @@ import { OrderItemStatus, OrderStatus } from '@prisma/client';
 import { SellerGuard } from 'src/guards/seller.guard';
 import { IsSeller } from 'src/decorator/is-seller.decorator';
 import { ApproveOrderItemDto } from 'src/dto/transaction/approved-order-item.dto';
+import { OrdersValidationService } from './orders-validation.service';
 
 @Controller('transaction')
 export class TransactionController {
-	constructor(private readonly transactionService: TransactionService) {}
+	constructor(
+		private readonly transactionService: TransactionService,
+		private readonly ordersValidationService: OrdersValidationService) {}
 
 	@UseGuards(JwtAuthGuard, BuyerGuard)
 	@IsBuyer()
@@ -24,6 +27,25 @@ export class TransactionController {
 		}
 		const order = await this.transactionService.create_order(req.session.user.id);
 		return (res.json({ order }))
+	}
+
+	@UseGuards(JwtAuthGuard, SellerGuard)
+	@IsSeller()
+	@Put('seller/confirm/product')
+	async confirm_seller_product(
+		@Body() body: ApproveOrderItemDto,
+		@Req() req: RequestExpressSession,
+		@Res() res: Response
+	) {
+		if (!req.session.user) {
+			return (res.status(401).json({ message: 'Utilisateur non connecté'}));
+		}
+		const response = await this.ordersValidationService.seller_confirm_product_by_id(
+			body.productId,
+			req.session.user.id, 
+			body.orderId, body.decision
+		);
+		return (res.json({ response }));
 	}
 
 	@UseGuards(JwtAuthGuard, BuyerGuard)

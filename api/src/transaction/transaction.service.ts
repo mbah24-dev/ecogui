@@ -24,29 +24,24 @@ export class TransactionService {
 		
 		if (!cart || !cart.items.length) throw new HttpException('Panier vide.', HttpStatus.BAD_REQUEST);
 		
-		// Création de la commande dans la base de données
 		const order = await this.prismaService.$transaction(async (prisma) => {
 			const createdOrder = await prisma.order.create({
 			data: { buyerId: userId, totalPrice: cart.total }
 			});
-		
-			// Ajout des items du panier dans les items de la commande
+
 			await this.transactionUtils.add_cart_items_to_order_items(cart, prisma, createdOrder);
 			return (createdOrder);
 		});
-		
-		// Vide le panier de l'utilisateur après la commande
+
 		//await this.cartService.clear_the_cart(userId);
 		
-		// Récupére les vendeurs des produits présents dans la commande
-		const sellers = new Set<string>(); // Utilisation d'un Set pour éviter les doublons
+		const sellers = new Set<string>();
 		cart.items.forEach(item => {
 			if (item.product.sellerId) {
-			sellers.add(item.product.sellerId); // Ajoute l'ID du vendeur
+			sellers.add(item.product.sellerId);
 			}
 		});
-		
-		// Récupére les informations sur les produits dans la commande
+
 		const orderDetails = {
 			orderId: order.id,
 			orderDate: new Date().toLocaleDateString(),
@@ -58,8 +53,7 @@ export class TransactionService {
 			})),
 			totalPrice: cart.total
 		};		
-		  
-		// Retourne les informations de la commande et les vendeurs associés
+	
 		return { orderDetails, sellers };
 	}
 
@@ -71,17 +65,15 @@ export class TransactionService {
 			});
 	
 			if (seller) {
-				// j'applique un filtre unique sur les produits de ce vendeur
 				const sellerProducts = orderDetails.products.filter(product => 
 					product.sellerId === sellerId
 				);
 	
-				// Calculons le total uniquement pour ses produits
 				const sellerTotal = sellerProducts.reduce((sum, product) => sum + (product.price * product.quantity), 0);
 	
-				// Vérifion si le vendeur a bien des produits
 				if (sellerProducts.length > 0) {
 					await this.sendEmailService.send_email(
+						1,
 						seller.email,               
 						"Nouvelle commande",      
 						sellerOrderNotificationTemplate,
@@ -101,20 +93,17 @@ export class TransactionService {
 	
 	  
 	async create_order(userId: string) {
-		// Crée la commande et retourne les informations de la commande et des vendeurs
 		const { orderDetails, sellers } = await this.create_order_and_get_details(userId);
-		// Envoie des notifications par email à chaque vendeur
 		await this.notify_sellers_about_new_order(orderDetails, sellers);
 
-		// notifions l'acheteur
 		const user = await this.prismaService.user.findUnique({
 		  where: { id: userId },
 		  select: { email: true, name: true }
 		});
 	  
 		if (user) {
-		  // Envoi de l'email à l'utilisateur
 		  await this.sendEmailService.send_email(
+			1,
 			user.email,                
 			"Confirmation de commande",
 			buyerOrderConfirmationTemplate, 
@@ -128,7 +117,6 @@ export class TransactionService {
 		  );		  
 		  
 		}
-		// Retourne l'ID de la commande
 		return { orderId: orderDetails.orderId };
 	}
 	  
@@ -166,14 +154,12 @@ export class TransactionService {
 			}
 		});
 	
-		if (!orders.length) {
+		if (!orders.length)
 			throw new HttpException('Aucune commande trouvée', HttpStatus.NOT_FOUND);
-		}
 	
 		return (orders);
 	}
 	
-
 	async get_user_orders(userId: string) {
 		const orders = await this.prismaService.order.findMany({
 			where: { buyerId: userId },

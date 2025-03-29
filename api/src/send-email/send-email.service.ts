@@ -6,7 +6,7 @@
 /*   By: mbah <mbah@student.42lyon.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 03:44:40 by mbah              #+#    #+#             */
-/*   Updated: 2025/03/27 22:37:26 by mbah             ###   ########.fr       */
+/*   Updated: 2025/03/29 02:50:42 by mbah             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,10 +68,11 @@ export class SendEmailService {
 	}
 
 	async send_email(
+		flatIt: number,
 		to: string,
 		subject: string,
 		templateFunction: Function, // Fonction qui génère le template HTML
-		...templateParams: any[]    // Paramètres sous forme de rest operator
+		...templateParams: any[]   // Paramètres sous forme de rest operator
 	) {
 		const transporter = nodemailer.createTransport({
 			service: 'gmail',
@@ -88,8 +89,11 @@ export class SendEmailService {
 		// Génération du contenu HTML
 		let htmlContent;
 		try {
-			const flattenedParams = templateParams.flat(); // Aplatit les éventuels tableaux imbriqués
-			htmlContent = templateFunction(...flattenedParams);
+			if (flatIt === 1) {
+				const flattenedParams = templateParams.flat(); // Aplatit les éventuels tableaux imbriqués
+				htmlContent = templateFunction(...flattenedParams);
+			} else
+				htmlContent = templateFunction(...templateParams);
 
 		} catch (error) {
 			console.error("❌ ERREUR: Échec de la génération du template:", error);
@@ -109,6 +113,43 @@ export class SendEmailService {
 			console.error("❌ ERREUR: Échec de l'envoi de l'email:", error);
 		}
 	}
+
+	/*async send_email(
+		to: string,
+		subject: string,
+		templateFunction: Function,
+		...templateParams: any[]
+	  ) {
+		const transporter = nodemailer.createTransport({
+		  service: 'gmail',
+		  auth: {
+			user: process.env.EMAIL_USER,
+			pass: process.env.EMAIL_PASS,
+		  },
+		});
+	  
+		// Génération du contenu HTML
+		let htmlContent;
+		try {
+		  htmlContent = templateFunction(...templateParams);
+		} catch (error) {
+		  console.error("❌ ERREUR: Échec de la génération du template:", error);
+		  return;
+		}
+	  
+		// Envoi de l'email
+		try {
+		  await transporter.sendMail({
+			from: 'noreply@bconnect.com',
+			to,
+			subject,
+			html: htmlContent,
+		  });
+		  console.log("✅ Email envoyé avec succès !");
+		} catch (error) {
+		  console.error("❌ ERREUR: Échec de l'envoi de l'email:", error);
+		}
+	  }*/
 	
 	  
 }

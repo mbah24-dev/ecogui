@@ -6,7 +6,7 @@
 /*   By: mbah <mbah@student.42lyon.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 14:06:41 by mbah              #+#    #+#             */
-/*   Updated: 2025/03/27 21:18:37 by mbah             ###   ########.fr       */
+/*   Updated: 2025/03/29 14:01:15 by mbah             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ export class TransactionUtils {
 	}
 	
 	async add_cart_items_to_order_items(user_cart: any, prisma: any, order: any) {
-		 // 3.2 Ajoute les produits à la commande
 		 for (const item of user_cart.items) {
 			const product = await prisma.product.findUnique({
 			  where: { id: item.productId }
@@ -56,7 +55,6 @@ export class TransactionUtils {
 			} catch (error) {
 				throw new HttpException(error.message || 'Impossible d\'ajouter ce produit a la commande', HttpStatus.BAD_REQUEST);
 			}
-			// 3.3 Met à jour le stock
 			await this.update_product_stock(product, prisma, item.quantity, '-');
 		  }
 	}
