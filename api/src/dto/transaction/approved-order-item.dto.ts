@@ -1,19 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   set-user-role.dto.ts                               :+:      :+:    :+:   */
+/*   approved-order-item.dto.ts                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mbah <mbah@student.42lyon.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/16 17:32:19 by mbah              #+#    #+#             */
-/*   Updated: 2025/03/16 17:35:12 by mbah             ###   ########.fr       */
+/*   Created: 2025/03/26 18:26:44 by mbah              #+#    #+#             */
+/*   Updated: 2025/03/26 18:29:38 by mbah             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-import { IsEnum } from 'class-validator';
-import { Role } from '@prisma/client';
+import { OrderItemStatus } from "@prisma/client";
+import { IsString, IsUUID } from "class-validator";
 
-export class SetUserRoleDto {
-  @IsEnum(Role, { message: 'Le rôle doit être ADMIN, SELLER ou BUYER' })
-  role: Role;
+export class ApproveOrderItemDto {
+	@IsUUID()
+	productId: string;
+
+	@IsUUID()
+	orderId: string;
+
+	@IsString()
+	decision: OrderItemStatus
 }

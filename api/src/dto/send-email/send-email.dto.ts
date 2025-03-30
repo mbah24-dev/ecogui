@@ -1,16 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   bconnect.shop.enum.ts                              :+:      :+:    :+:   */
+/*   send-email.dto.ts                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mbah <mbah@student.42lyon.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/15 23:22:55 by mbah              #+#    #+#             */
-/*   Updated: 2025/03/15 23:25:10 by mbah             ###   ########.fr       */
+/*   Created: 2025/03/26 03:43:50 by mbah              #+#    #+#             */
+/*   Updated: 2025/03/26 03:43:51 by mbah             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-export enum Role {
-	BUYER,
-	SELLER
+import { IsEmail, IsNotEmpty, IsString } from "class-validator";
+
+export class SendEmailDto {
+	@IsString()
+	@IsEmail()
+	@IsNotEmpty()
+	email: string
 }
