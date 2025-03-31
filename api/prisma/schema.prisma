@@ -24,6 +24,7 @@ model User {
   password     String
   name         String
   role         Role
+  score		   Int  @default(50)
   resetToken   String?
   profilePic   String? // URL de la photo de profil (optionnelle)
   products     Product[]
@@ -47,6 +48,7 @@ enum Role {
   ADMIN
   BANNED
   RESTRICTED
+  ARCHIVED
 }
 
 model Product {
@@ -74,6 +76,7 @@ enum ProductStatus {
   AVAILABLE
   SOLD_OUT
   PENDING
+  ARCHIVED
 }
 
 model ProductImage {
@@ -96,6 +99,7 @@ model Order {
   items      OrderItem[]
   status     OrderStatus @default(PENDING)
   totalPrice Float
+  invoices  Invoice[] 
   createdAt  DateTime    @default(now())
   updatedAt  DateTime    @updatedAt
 }
@@ -105,7 +109,7 @@ model OrderItem {
   order     Order   @relation(fields: [orderId], references: [id])
   orderId   String
   product   Product @relation(fields: [productId], references: [id])
-  productId String
+  productId String  @unique
   seller    User    @relation(name: "SoldProducts", fields: [sellerId], references: [id]) // Ajout du vendeur
   sellerId  String
   quantity  Int
@@ -120,11 +124,32 @@ enum OrderItemStatus {
 }
 
 enum OrderStatus {
+  CONFIRMED
   PENDING
   PAID
   SHIPPED
   DELIVERED
   CANCELED
+  PARTIAL
+}
+
+model Invoice {
+  id          String   @id @default(uuid())
+  order       Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId     String   
+  totalAmount Decimal  @db.Decimal(10,2)
+  pdfUrl      String?  // Stockage de la facture (S3, serveur, etc.)
+  status      InvoiceStatus @default(GENERATED)
+  createdAt   DateTime @default(now())
+
+  @@map("invoices") // Nom de la table dans la DB
+}
+
+enum InvoiceStatus {
+  GENERATED  // Facture générée mais pas encore envoyée
+  SENT       // Facture envoyée au client
+  PAID       // Facture payée
+  CANCELED   // Facture annulée
 }
 
 model Review {
@@ -142,10 +167,10 @@ model Address {
   id        String   @id @default(uuid())
   user      User     @relation(fields: [userId], references: [id])
   userId    String
-  street    String
+  commune    String?
   city      String
-  country   String
-  zipCode   String
+  country   String @default("Guinee")
+  description String?
   createdAt DateTime @default(now())
 }
 
@@ -154,6 +179,7 @@ model Cart {
   user   User       @relation(fields: [userId], references: [id])
   userId String     @unique
   items  CartItem[]
+  total	Float @default(0.0)
 }
 
 model CartItem {

@@ -16,13 +16,15 @@ export class AddressService {
 	}
 
 	async get_current_user_address(userId: string) {
-		const user_address = await this.prismaService.address.findFirst({
+		/*const user_address = await this.prismaService.address.findFirst({
 			where: { userId }
 		});
 
 		if (!user_address) throw new HttpException('Aucune addresse disponible', HttpStatus.NOT_FOUND);
 
-		return (user_address);
+		return (user_address); */
+
+		return ({ city: 'Conakry', commune: 'Dixin', country: 'Guinee', description: 'A coter de ecobank'});
 	}
 
 	async get_all_addresses() {

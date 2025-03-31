@@ -1,22 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cart.module.ts                                     :+:      :+:    :+:   */
+/*   address.types.d.ts                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mbah <mbah@student.42lyon.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/26 03:43:27 by mbah              #+#    #+#             */
-/*   Updated: 2025/03/30 18:29:50 by mbah             ###   ########.fr       */
+/*   Created: 2025/03/30 00:16:54 by mbah              #+#    #+#             */
+/*   Updated: 2025/03/30 00:35:19 by mbah             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-import { Module } from '@nestjs/common';
-import { CartService } from './cart.service';
-import { CartController } from './cart.controller';
-import { PrismaService } from 'src/prisma/prisma.service';
+export enum City {
+	Conakry = 'Conakry',
+	Kindia = 'Kindia',
+	Kankan = 'Kankan',
+	Faranah = 'Faranah',
+	Labe = 'Labe',
+	Nzerekore = 'Nzerekore',
+	Mamou = 'Mamou',
+	Siguiri = 'Siguiri',
+	Boke = 'Boke',
+	Kissidougou = 'Kissidougou',
+	Coyah = 'Coyah',
+}
 
-@Module({
-	providers: [CartService, PrismaService],
-	controllers: [CartController]
-})
-export class CartModule {}
+export enum ConakryCommune {
+	Dixinn = 'Dixinn',
+	Kaloum = 'Kaloum',
+	Matam = 'Matam',
+	Ratoma = 'Ratoma',
+	Matoto = 'Matoto',
+	Coyah = 'Coyah',
+}

@@ -1,22 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cart.module.ts                                     :+:      :+:    :+:   */
+/*   is-seller.decorator.ts                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mbah <mbah@student.42lyon.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/26 03:43:27 by mbah              #+#    #+#             */
-/*   Updated: 2025/03/30 18:29:50 by mbah             ###   ########.fr       */
+/*   Created: 2025/03/16 01:24:47 by mbah              #+#    #+#             */
+/*   Updated: 2025/03/25 18:16:24 by mbah             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-import { Module } from '@nestjs/common';
-import { CartService } from './cart.service';
-import { CartController } from './cart.controller';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { SetMetadata } from '@nestjs/common';
 
-@Module({
-	providers: [CartService, PrismaService],
-	controllers: [CartController]
-})
-export class CartModule {}
+export const IS_SELLER_KEY = 'isSeller';
+export const IsSeller = () => SetMetadata(IS_SELLER_KEY, true);

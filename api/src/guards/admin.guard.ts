@@ -17,32 +17,19 @@ import { Role } from '@prisma/client';
 
 @Injectable()
 export class AdminGuard implements CanActivate {
-  constructor(private reflector: Reflector) {}
-
   canActivate(context: ExecutionContext): boolean {
-    const isAdminRoute = this.reflector.get<boolean>('isAdmin', context.getHandler());
-
-    if (!isAdminRoute) return true; // ✅ Si la route n’a pas @IsAdmin(), AdminGuard ne s'active pas
-
     const request = context.switchToHttp().getRequest();
-    console.log('🔍 AdminGuard activé sur la route:', request.url);
-    console.log('📦 Session complète:', request.session);
+    const user = request.session?.user;
 
-    const user = request.session?.user; // 🔥 Vérifie bien la session
     if (!user) {
-      console.log('⛔ Aucun utilisateur dans la session.');
       throw new UnauthorizedException('Utilisateur non authentifié');
     }
 
-    console.log('👤 Rôle de l\'utilisateur:', user.role);
-    
-    if (user.role !== Role.ADMIN) {
-      console.log('⛔ Accès refusé: utilisateur sans rôle admin.');
-      throw new ForbiddenException('Vous devez être administrateur pour accéder à cette ressource');
+    if (user.role === Role.ADMIN) {
+      return true; //  Autorise si Admin
     }
 
-    console.log('✅ Accès accordé à l\'administrateur.');
-    return true;
+    throw new ForbiddenException('Vous devez être administrateur pour accéder à cette ressource');
   }
 }
 

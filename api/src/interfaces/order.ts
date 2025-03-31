@@ -1,22 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cart.module.ts                                     :+:      :+:    :+:   */
+/*   order.ts                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mbah <mbah@student.42lyon.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/26 03:43:27 by mbah              #+#    #+#             */
-/*   Updated: 2025/03/30 18:29:50 by mbah             ###   ########.fr       */
+/*   Created: 2025/03/29 01:24:50 by mbah              #+#    #+#             */
+/*   Updated: 2025/03/29 01:25:05 by mbah             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-import { Module } from '@nestjs/common';
-import { CartService } from './cart.service';
-import { CartController } from './cart.controller';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { OrderItemStatus } from "@prisma/client";
 
-@Module({
-	providers: [CartService, PrismaService],
-	controllers: [CartController]
-})
-export class CartModule {}
+export interface OrderItem {
+	id: string;
+	price: number;
+	status: OrderItemStatus;
+	sellerId: string;
+	orderId: string;
+	productId: string;
+	quantity: number;
+	product: { // Relation avec Product
+	  name: string;
+	};
+	seller: { // Relation avec User (Vendeur)
+	  name: string;
+	};
+}

@@ -6,7 +6,7 @@
 /*   By: mbah <mbah@student.42lyon.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 23:06:42 by mbah              #+#    #+#             */
-/*   Updated: 2025/03/23 18:27:07 by mbah             ###   ########.fr       */
+/*   Updated: 2025/03/26 00:16:07 by mbah             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UsersService } from 'src/users/users.service';
 import { AuthService } from './auth.service';
-import { JwtStrategy } from './jwt.strategy';
+import { JwtStrategy } from '../jwt/jwt.strategy';
 import { BcryptUtilsService } from 'src/bcrypt-utils/bcrypt-utils.service';
 import { SendEmailService } from 'src/send-email/send-email.service';
 

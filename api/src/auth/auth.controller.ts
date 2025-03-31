@@ -6,22 +6,24 @@
 /*   By: mbah <mbah@student.42lyon.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 23:06:39 by mbah              #+#    #+#             */
-/*   Updated: 2025/03/23 18:16:58 by mbah             ###   ########.fr       */
+/*   Updated: 2025/03/26 01:46:27 by mbah             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 import { Body, Controller, Get, Post, UseGuards, Request, Req, UnauthorizedException, Res, Param, Query } from '@nestjs/common';
-import { CreateUserDto } from 'src/dto/create-user.dto';
+import { CreateUserDto } from 'src/dto/users/create-user.dto';
 import { UsersService } from 'src/users/users.service';
 import { AuthService } from './auth.service';
-import { JwtAuthGuard } from './jwt-auth.guard';
-import { RequestWithUser } from './jwt.strategy';
-import { LoginDto } from 'src/dto/login-user.dto';
+import { JwtAuthGuard } from '../guards/jwt-auth.guard';
+import { RequestWithUser } from '../jwt/jwt.strategy';
+import { LoginDto } from 'src/dto/auth/login-user.dto';
 import { Role } from '@prisma/client';
 import { Request as RequestExpressSession, Response } from 'express';
-import { SendEmailDto } from 'src/dto/send-email.dto';
+import { SendEmailDto } from 'src/dto/send-email/send-email.dto';
 import { SendEmailService } from 'src/send-email/send-email.service';
-import { ResetPasswordDto } from 'src/dto/reset-password.dto';
+import { ResetPasswordDto } from 'src/dto/auth/reset-password.dto';
+import { AdminGuard } from '../guards/admin.guard';
+import { IsAdmin } from '../decorator/is-admin.decorator';
 
 
 @Controller('auth')
@@ -96,9 +98,11 @@ export class AuthController {
 		return (await this.authService.resetPassword(token, body));
 	}
 
-	/*@Post('me/admin/signup')
-	async signup_admin(@Body() userInfo: CreateUserDto) {
+	@UseGuards(JwtAuthGuard, AdminGuard)
+	@IsAdmin()
+	@Post('me/admin/signup')
+	async signup_admin(@Body() userInfo: CreateUserDto, @Req() req: RequestExpressSession, @Res() res: Response) {
 		userInfo.role = Role.ADMIN;
-		return (await this.authService.signup(userInfo));
-	}*/
+		return (await this.authService.signup(userInfo, req, res));
+	}
 }

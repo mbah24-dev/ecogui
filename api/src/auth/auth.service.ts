@@ -14,12 +14,12 @@ import { Req, Body } from '@nestjs/common';
 import { HttpException, HttpStatus, Injectable, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
 import { Role } from '@prisma/client';
 import { BcryptUtilsService } from 'src/bcrypt-utils/bcrypt-utils.service';
-import { CreateUserDto } from 'src/dto/create-user.dto';
-import { LoginDto } from 'src/dto/login-user.dto';
+import { CreateUserDto } from 'src/dto/users/create-user.dto';
+import { LoginDto } from 'src/dto/auth/login-user.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UsersService } from 'src/users/users.service';
 import { Request as RequestExpressSession, Response } from 'express'
-import { ResetPasswordDto } from 'src/dto/reset-password.dto';
+import { ResetPasswordDto } from 'src/dto/auth/reset-password.dto';
 import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
@@ -67,6 +67,11 @@ export class AuthService {
 			role: foundUser.role,
 			name: foundUser.name
 		};
+
+		await this.prismaService.user.update({
+			where: { id: foundUser.id},
+			data: { isOnline: true }
+		})
 	
 		// 6️⃣ Retourne le token et les infos de l'utilisateur
 		return res.json({
@@ -82,7 +87,7 @@ export class AuthService {
 			where: { email: signupBody.email }
 		})
 		if (alreadyHaveAccount) {
-			throw new HttpException('Vous avez deja un compte, Penser a changer votre statut', HttpStatus.UNAUTHORIZED);
+			throw new HttpException('Vous avez deja un compte, Penser a changer votre email', HttpStatus.UNAUTHORIZED);
 		}
 		const addUserObject = await this.userService.create_user(signupBody);
 		const token = (this.bcryptUtils.generateToken({
@@ -102,6 +107,10 @@ export class AuthService {
 			role: foundUser.role,
 			name: foundUser.name
 		};
+		await this.prismaService.user.update({
+			where: { id: foundUser.id},
+			data: { isOnline: true }
+		})
 		return res.json({
 			message: 'Inscription réussie',
 			accessToken: token,
@@ -110,6 +119,12 @@ export class AuthService {
 	}
 
 	async signout(@Req() req: RequestExpressSession, res: Response) {
+		if (req.session.user) {
+			await this.prismaService.user.update({
+				where: { id: req.session.user.id } ,
+				data: { isOnline: false }
+			})
+		}
 		req.session.destroy((err) => {
 		  if (err)
 			throw new InternalServerErrorException('Erreur lors de la déconnexion');

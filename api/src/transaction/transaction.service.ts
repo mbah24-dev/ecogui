@@ -12,7 +12,6 @@ import { buyerOrderConfirmationTemplate } from 'src/send-email/template/buyer-or
 export class TransactionService {
 	constructor(
 		private readonly prismaService: PrismaService,
-		private readonly cartService: CartService,
 		private readonly transactionUtils: TransactionUtils,
 		private readonly sendEmailService: SendEmailService) {}
 
@@ -26,7 +25,7 @@ export class TransactionService {
 		
 		const order = await this.prismaService.$transaction(async (prisma) => {
 			const createdOrder = await prisma.order.create({
-			data: { buyerId: userId, totalPrice: cart.total }
+				data: { buyerId: userId, totalPrice: cart.total }
 			});
 
 			await this.transactionUtils.add_cart_items_to_order_items(cart, prisma, createdOrder);
@@ -38,7 +37,7 @@ export class TransactionService {
 		const sellers = new Set<string>();
 		cart.items.forEach(item => {
 			if (item.product.sellerId) {
-			sellers.add(item.product.sellerId);
+				sellers.add(item.product.sellerId);
 			}
 		});
 
@@ -52,9 +51,9 @@ export class TransactionService {
 				sellerId: item.product?.sellerId
 			})),
 			totalPrice: cart.total
-		};		
+		};
 	
-		return { orderDetails, sellers };
+		return ({ orderDetails, sellers });
 	}
 
 	async notify_sellers_about_new_order(orderDetails: any, sellers: Set<string>) {
