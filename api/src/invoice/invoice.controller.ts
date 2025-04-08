@@ -12,10 +12,10 @@ import * as path from 'path';
 export class InvoiceController {
 	constructor(private readonly invoiceService: InvoiceService) {}
 
-	/*@Post('generate/:orderId')
+	@Post('generate/:orderId')
 	async generate_invoice(@Param('orderId') orderId: string) {
 		return (await this.invoiceService.generateInvoice(orderId));
-	}*/
+	}
 
 	@UseGuards(JwtAuthGuard)
 	@Get('download/:invoiceId')

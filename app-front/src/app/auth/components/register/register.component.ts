@@ -40,7 +40,11 @@ export class RegisterComponent implements OnInit {
         Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/) // ✅ Regex mise à jour
       ]],
       c_password: ['', [Validators.required]],
-      name: ['', [Validators.required, Validators.minLength(5)]]
+      name: ['', [
+        Validators.required,
+        Validators.minLength(5),
+        Validators.pattern(/^[a-zA-ZÀ-ÖØ-öø-ÿ' -]{2,}(?: [a-zA-ZÀ-ÖØ-öø-ÿ' -]{2,})+$/)
+      ]]
     });
 
     this.addValidationListeners(); // ✅ Ajout des écouteurs d'événements
@@ -137,7 +141,8 @@ export class RegisterComponent implements OnInit {
     }
 
     if (input.name === 'name') {
-      return value.length >= 5;
+      const nameRegex = /^[a-zA-ZÀ-ÖØ-öø-ÿ' -]{2,}(?: [a-zA-ZÀ-ÖØ-öø-ÿ' -]{2,})+$/;
+      return nameRegex.test(value);
     }
 
     return value !== '';
