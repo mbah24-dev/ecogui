@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  # Service pour l'API (NestJS)
+  api:
+    build:
+      context: ./api
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./api/.env  # Spécifie que le fichier .env se trouve dans le dossier api
+    environment:
+      DATABASE_URL: ${DIRECT_URL}  # Utilise la variable d'environnement pour la connexion à la base de données
+      JWT_SECRET: ${JWT_SECRET}
+      BCONNECT_EMAIL: ${BCONNECT_EMAIL}
+      EMAIL_USER: ${EMAIL_USER}
+      EMAIL_PASS: ${EMAIL_PASS}
+      TVA: ${TVA}
+      FEES: ${FEES}
+   
+
+  # Service pour le frontend (Angular)
+  frontend:
+    build:
+      context: ./app-front
+    ports:
+      - "4200:80"
+
+  # Service pour la base de données PostgreSQL (pour local dev avec Supabase)
+  # db:
+  #  image: postgres:latest
+  #  environment:
+   #   POSTGRES_USER: postgres
+   #   POSTGRES_PASSWORD: yourpassword
+   #   POSTGRES_DB: postgres
+   # volumes:
+   #   - postgres_data:/var/lib/postgresql/data
+   # ports:
+   #   - "5432:5432"
+
+volumes:
+  postgres_data:
