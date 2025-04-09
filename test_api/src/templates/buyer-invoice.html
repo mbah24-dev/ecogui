@@ -1,0 +1,105 @@
+<html>
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .invoice-container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #007BFF;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .buyer-info, .company-info {
+            width: 45%;
+        }
+        .details {
+            margin-bottom: 20px;
+        }
+        .details table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .details th, .details td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .total {
+            text-align: right;
+            margin-top: 20px;
+        }
+        .total p {
+            margin: 5px 0;
+        }
+        .signature {
+            margin-top: 30px;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+    <div class="invoice-container">
+        <div class="header">
+            <div class="buyer-info">
+                <h3>Facture N° {{ orderId }}</h3>
+                <p><strong>Date de la commande:</strong> {{ orderDate }}</p>
+                <p><strong>Nom:</strong> {{ name }}</p>
+                <p><strong>Email:</strong> {{ email }}</p>
+                <p><strong>Téléphone:</strong> {{ tel }}</p>
+                <p><strong>Adresse:</strong> {{ address.city }}, {{ address.country }}, {{ address.commune }}</p>
+            </div>
+            <div class="company-info">
+                <h3>WolfCenter</h3>
+                <p><strong>Adresse:</strong> Conakry, Guinée</p>
+                <p><strong>Email:</strong> contact@wolfcenter.com</p>
+                <p><strong>Téléphone:</strong> +224 123 456 789</p>
+            </div>
+        </div>
+        <div class="details">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Produit</th>
+                        <th>Quantité</th>
+                        <th>Prix Unitaire</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each products}}
+                    <tr>
+                        <td>{{ name }}</td>
+                        <td>{{ quantity }}</td>
+                        <td>{{ price }} GNF</td>
+                        <td>{{ total }} GNF</td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+        <div class="total">
+            <p><strong>Sous-total:</strong> {{ totalPrice }} GNF</p>
+            <p><strong>TVA (18%):</strong> {{ tax }} GNF</p>
+            <p><strong>Total à payer:</strong> {{ totalToPaid }} GNF</p>
+        </div>
+        <div class="signature">
+            <p><strong>Signature:</strong> ______________________</p>
+        </div>
+        <p style="text-align: center; margin-top: 20px;"><strong>Merci d'avoir commandé chez WolfCenter !</strong></p>
+    </div>
+</body>
+</html>

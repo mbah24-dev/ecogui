@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mise à jour de votre commande</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            color: #2c3e50;
+            text-align: center;
+        }
+        h3 {
+            color: #3498db;
+        }
+        h3.red {
+            color: #e74c3c;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        th {
+            background-color: #3498db;
+            color: white;
+        }
+        td {
+            text-align: right;
+        }
+        p {
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        .footer {
+            color: #7f8c8d;
+            font-size: 12px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <h2>⚠️ Mise à jour de votre commande</h2>
+        <p>Bonjour <strong>John Doe</strong>,</p>
+        <p>Nous vous informons que certains produits de votre commande n'ont pas pu être traités comme prévu. Voici les détails :</p>
+
+        <h3>❌ Produits annulés :</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Produit</th>
+                    <th>Quantité</th>
+                    <th>Prix</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Produit A1</td>
+                    <td>2</td>
+                    <td>15.99 €</td>
+                </tr>
+                <tr>
+                    <td>Produit A2</td>
+                    <td>1</td>
+                    <td>20.99 €</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 class="red">❌ Produits refusés par les vendeurs :</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Produit</th>
+                    <th>Quantité</th>
+                    <th>Prix</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Produit B1</td>
+                    <td>1</td>
+                    <td>18.50 €</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 style="text-align: right;">💰 Montant du remboursement : 37.48 €</h3>
+
+        <p>⏳ Nous vous avons déjà initié un remboursement pour les produits annulés et refusés. Vous recevrez le montant sur votre mode de paiement d'origine sous peu.</p>
+
+        <hr style="border: none; border-top: 1px solid #ddd; margin: 20px 0;">
+
+        <p>Merci pour votre compréhension et votre patience.</p>
+        <p>Nous restons à votre disposition pour toute question.</p>
+
+        <p class="footer">Ceci est un email automatique, merci de ne pas y répondre.</p>
+    </div>
+</body>
+</html>
