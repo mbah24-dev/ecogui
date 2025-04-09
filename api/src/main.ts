@@ -6,7 +6,7 @@
 /*   By: mbah <mbah@student.42lyon.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 22:20:39 by mbah              #+#    #+#             */
-/*   Updated: 2025/03/26 17:13:49 by mbah             ###   ########.fr       */
+/*   Updated: 2025/04/09 03:58:07 by mbah             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ async function bootstrap() {
       resave: false,
       saveUninitialized: false,
       cookie: {
-        secure: false, // ⚠️ Mettre `true` en prod (HTTPS obligatoire)
+        secure: process.env.NODE_ENV === 'production', // ⚠️ Mettre `true` en prod (HTTPS obligatoire)
         httpOnly: true,
         maxAge: 7 * 24 * 60 * 60 * 1000, // 7d
       },
@@ -51,5 +51,3 @@ async function bootstrap() {
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();
-
-
