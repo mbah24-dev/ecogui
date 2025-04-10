@@ -89,8 +89,6 @@ export class TransactionService {
 		}
 	}
 	
-	
-	  
 	async create_order(userId: string) {
 		const { orderDetails, sellers } = await this.create_order_and_get_details(userId);
 		await this.notify_sellers_about_new_order(orderDetails, sellers);
@@ -164,7 +162,7 @@ export class TransactionService {
 			where: { buyerId: userId },
 			include: { items: { include: { product: true } } }
 		});
-		if (!orders.length) throw new HttpException('Aucune commande trouvée.', HttpStatus.BAD_REQUEST);
+		if (!orders|| !orders.length) throw new HttpException('Aucune commande trouvée.', HttpStatus.BAD_REQUEST);
 		return (orders);
 	}
 

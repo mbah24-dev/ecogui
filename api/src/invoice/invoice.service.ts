@@ -82,9 +82,7 @@ export class InvoiceService {
 				(sum, product) => sum + (product.price * product.quantity),
 				0
 			);
-
 			const serviceFee = ((sellerTotal * Number(process.env.FEES)) / (100));
-
 			return {
 				id: seller.id,
 				name: seller.name,
@@ -99,7 +97,6 @@ export class InvoiceService {
 				seller_address: seller.addresses[0] || null
 			};
 		});
-
 		return (sellerDataArray);
 	}
 
@@ -107,15 +104,10 @@ export class InvoiceService {
 		const existingInvoices = await this.prismaService.invoice.findMany({
 			where: { orderId }
 		});
-	
-		if (existingInvoices.length > 0) {
+		if (existingInvoices.length > 0)
 			throw new HttpException('Une facture pour cette commande existe déjà', HttpStatus.CONFLICT);
-		}
-
         const { orderDetails, sellers } = await this.get_order_data(orderId);
-
         await this.createPdf('buyer-invoice', orderDetails, `buyer_${orderId}.pdf`);
-
 		await this.prismaService.invoice.create({
 			data: {
 				pdfUrl: `buyer_${orderId}.pdf`,
@@ -123,7 +115,6 @@ export class InvoiceService {
 				orderId
 			}
 		});
-
         const sellerData = await this.get_seller_order_data(orderDetails, sellers);
         for (const seller of sellerData) {
             await this.createPdf('seller-invoice', seller, `seller_${seller.orderId}_${seller.id}_${seller.name}.pdf`);
@@ -135,8 +126,7 @@ export class InvoiceService {
 				}
 			});
         }
-
-        return { message: 'Factures générées avec succès' };
+        return ({ message: 'Factures générées avec succès' });
     }
 
     async createPdf(templateName: string, data: any, outputFileName: string) {
@@ -148,10 +138,7 @@ export class InvoiceService {
         const template = Handlebars.compile(templateHtml);
         const htmlContent = template(data);
 
-        const browser = await puppeteer.launch({
-			headless: true,
-			args: ['--no-sandbox', '--disable-setuid-sandbox']
-		});		  
+        const browser = await puppeteer.launch();
         const page = await browser.newPage();
         await page.setContent(htmlContent, { waitUntil: 'networkidle0' });
 
@@ -160,7 +147,6 @@ export class InvoiceService {
             format: 'A4',
             printBackground: true
         });
-
         await browser.close();
     }
 
@@ -168,9 +154,7 @@ export class InvoiceService {
 		const user = await this.prismaService.user.findUnique({
 			where: { id: userId }
 		});
-	
 		if (!user) throw new HttpException('Aucun utilisateur trouvé', HttpStatus.NOT_FOUND);
-	
 		if (user.role === Role.BUYER) {
 			const orders = await this.prismaService.order.findMany({
 				where: { buyerId: userId },
@@ -182,9 +166,8 @@ export class InvoiceService {
 
 			return (orders.flatMap(order => order.invoices.filter(inv => inv.pdfUrl?.startsWith(`buyer_`))));
 		}
-	
 		if (user.role === Role.SELLER) {
-			// Récupérer uniquement les factures du seller en se basant sur l'ID du vendeur dans le `pdfUrl`
+			// Récupére uniquement les factures du seller en se basant sur l'ID du vendeur dans le `pdfUrl`
 			const invoices = await this.prismaService.invoice.findMany({
 				where: {
 					pdfUrl: { contains: `_${userId}_` },
@@ -196,7 +179,6 @@ export class InvoiceService {
 	
 			return (invoices);
 		}
-	
 		throw new HttpException('Rôle non valide', HttpStatus.BAD_REQUEST);
 	}
 	
@@ -208,9 +190,7 @@ export class InvoiceService {
 				}
 			}
 		});
-	
 		if (!invoices.length) throw new HttpException('Aucune facture trouvée', HttpStatus.NOT_FOUND);
-	
 		return invoices.map(invoice => ({
 			id: invoice.id,
 			totalAmount: invoice.totalAmount,
@@ -225,22 +205,24 @@ export class InvoiceService {
 		}));
 	}
 
-	async get_invoice_by_id(invoiceId: string) {
+	async get_invoice_by_id(userId: string, invoiceId: string) {
 		const invoice = await this.prismaService.invoice.findUnique({
 			where: { id: invoiceId },
 			include: { order: { include: { buyer: true } } }
 		});
-	
 		if (!invoice) throw new HttpException('Aucune facture trouvée', HttpStatus.NOT_FOUND);
-	
+
+		const user_invoices = await this.get_user_invoices(userId);
+		const invoice_associate = user_invoices.find(invoice => invoice.id === invoiceId);
+		if (!invoice_associate) throw new HttpException('Accès refusé a cette facture', HttpStatus.NOT_FOUND);
 		return {
-			id: invoice.id,
-			totalAmount: invoice.totalAmount,
-			pdfUrl: invoice.pdfUrl,
-			status: invoice.status,
-			createdAt: invoice.createdAt,
+			id: invoice_associate.id,
+			totalAmount: invoice_associate.totalAmount,
+			pdfUrl: invoice_associate.pdfUrl,
+			status: invoice_associate.status,
+			createdAt: invoice_associate.createdAt,
 			order: {
-				id: invoice.order.id,
+				id: invoice_associate.orderId,
 				buyerName: invoice.order.buyer.name,
 				buyerEmail: invoice.order.buyer.email
 			}
@@ -251,22 +233,16 @@ export class InvoiceService {
 		const user = await this.prismaService.user.findUnique({
 			where: { id: userId }
 		});
-	
 		if (!user) throw new HttpException('Utilisateur introuvable', HttpStatus.NOT_FOUND);
-	
 		const order = await this.prismaService.order.findUnique({
 			where: { id: orderId },
 			include: { invoices: true }
 		});
-	
 		if (!order) throw new HttpException('Commande introuvable', HttpStatus.NOT_FOUND);
-	
 		const invoice = order.invoices.find(inv => (inv.pdfUrl) ?
 			user.role === Role.BUYER ? inv.pdfUrl.startsWith(`buyer_`) : inv.pdfUrl.includes(`_${userId}_`) : {}
 		);
-	
 		if (!invoice) throw new HttpException('Aucune facture trouvée', HttpStatus.NOT_FOUND);
-	
 		return (invoice);
 	}
 	
@@ -285,84 +261,29 @@ export class InvoiceService {
 	}
 
 	async get_invoices_by_status(userId: string, statusFilter: InvoiceStatus) {
-		const user = await this.prismaService.user.findUnique({
-			where: { id: userId }
-		});
-	
-		if (!user) throw new HttpException('Utilisateur introuvable', HttpStatus.NOT_FOUND);
-	
-		let invoices;
-	
-		if (user.role === Role.BUYER) {
-			invoices = await this.prismaService.invoice.findMany({
-				where: {
-					order: { buyerId: userId },
-					status: statusFilter
-				}
-			});
-		} else if (user.role === Role.SELLER) {
-			invoices = await this.prismaService.invoice.findMany({
-				where: {
-					pdfUrl: { contains: `_${userId}_` },
-					status: statusFilter
-				}
-			});
-		} else {
-			throw new HttpException('Rôle non valide', HttpStatus.BAD_REQUEST);
-		}
-	
-		if (!invoices.length) throw new HttpException('Aucune facture trouvée', HttpStatus.NOT_FOUND);
-	
-		return invoices;
+		if (!Object.values(InvoiceStatus).includes(statusFilter))
+			throw new HttpException('Le filtre est invalide', HttpStatus.NOT_FOUND);
+		const user_invoices = await this.get_user_invoices(userId);
+		const invoices = user_invoices.filter((invoice) => invoice.status === statusFilter);
+		if (!invoices || !invoices.length)
+			throw new HttpException('Aucune facture trouvée', HttpStatus.NOT_FOUND);
+		return (invoices);
 	}
 
-	/**  
-	 * A corriger demain: un buyer arrive a download les facture d'un seul a partir de l'id de la facture, 
-	 * il devrait pas avoir l'accèe
-	*/
 	async getInvoiceFilePath(userId: string, userRole: string, invoiceId: string) {
 		const invoice = await this.prismaService.invoice.findUnique({
 			where: { id: invoiceId },
 			include: { order: { include: { buyer: true, items: true } } },
 		});
-	
-		if (!invoice) {
+		if (!invoice)
 			throw new HttpException('Facture introuvable', HttpStatus.NOT_FOUND);
-		}
-	
-		const order = invoice.order;
-		if (!order) {
-			throw new HttpException('Commande introuvable', HttpStatus.NOT_FOUND);
-		}
-	
-		// Vérification des droits d'accès
-		if (userRole !== Role.ADMIN) {
-			if (userRole === Role.BUYER) {
-				console.log('buyer');
-				if (order.buyerId !== userId) {
-					throw new HttpException('Accès refusé à cette facture', HttpStatus.FORBIDDEN);
-				}
-			} else if (userRole === Role.SELLER) {
-				console.log('seller');
-				const isSellerInOrder = order.items.some(item => item.sellerId === userId);
-				if (!isSellerInOrder) {
-					throw new HttpException('Accès refusé à cette facture', HttpStatus.FORBIDDEN);
-				}
-			} else {
-				throw new HttpException('Accès refusé', HttpStatus.FORBIDDEN);
-			}
-		}
-	
-		if (!invoice.pdfUrl) {
-			throw new HttpException('La facture ne contient pas de fichier PDF', HttpStatus.BAD_REQUEST);
-		}
-	
-		const filePath = path.join(__dirname, `../../../src/invoice_archive/${invoice.pdfUrl}`);
-	
-		if (!fs.existsSync(filePath)) {
+		const user_invoices = await this.get_user_invoices(userId);
+		const invoice_associate = user_invoices.find(invoice => invoice.id === invoiceId);
+		if (!invoice_associate)
+			throw new HttpException('Accès refusé à cette facture', HttpStatus.NOT_FOUND);
+		const filePath = path.join(__dirname, `../../../src/invoice_archive/${invoice_associate.pdfUrl}`);
+		if (!fs.existsSync(filePath))
 			throw new HttpException('Fichier introuvable', HttpStatus.NOT_FOUND);
-		}
-	
 		return (filePath);
 	}
 }

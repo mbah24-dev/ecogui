@@ -6,7 +6,7 @@
 /*   By: mbah <mbah@student.42lyon.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 23:31:45 by mbah              #+#    #+#             */
-/*   Updated: 2025/03/29 23:56:02 by mbah             ###   ########.fr       */
+/*   Updated: 2025/04/10 04:36:21 by mbah             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,12 @@ import { Order, OrderItemStatus, OrderStatus } from "@prisma/client";
 import { SendEmailService } from "src/send-email/send-email.service";
 import { buyerOrderUpdateTemplate } from "src/send-email/template/buyer-order-updated";
 import { OrderItem } from "src/interfaces/order";
+import { TransactionUtils } from "./transaction-utils.service";
 
 @Injectable()
 export class OrdersValidationService {
 	constructor(
-		private readonly transactionService: TransactionService,
+		private readonly transactionUtils: TransactionUtils,
 		private readonly prismaService: PrismaService,
 		private readonly sendEmailService: SendEmailService
 	) {}
@@ -73,6 +74,9 @@ export class OrdersValidationService {
 				where: { id: orderId },
 				data: { status: (allItemsConfirmed) ? OrderStatus.CONFIRMED : OrderStatus.PARTIAL },
 			});
+			// TODO
+			// Generer automatiquement la facture (fonction dispo dans invoiceService);
+			// Envoyer la facture de l'acheteur par email
 			await this.notify_user_second_confirmation_reminder(order.id);
 		}
 		else
@@ -121,6 +125,9 @@ export class OrdersValidationService {
 			rejectedProducts,
 			refundAmount } = await this.get_confirmed_and_rejected_products(order);
 		
+		for (const item of rejectedProducts) {
+			await this.transactionUtils.update_product_stock(item.product, this.prismaService, item.quantity, '+');
+		}
 		await this.sendEmailService.send_email(
 			0,
 			buyerInfo.email,

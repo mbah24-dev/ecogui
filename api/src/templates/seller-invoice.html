@@ -2,63 +2,200 @@
 <head>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
             margin: 0;
-            padding: 20px;
+            padding: 50px;
             background-color: #eef7fb;
         }
         .invoice-container {
-            max-width: 800px;
+            max-width: 950px;
             margin: auto;
             background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0, 123, 255, 0.3);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.1);
+            border-top: 8px solid #007BFF; /* Changement de couleur pour un bleu */
+            position: relative;
+            overflow: hidden;
+        }
+        /* Background texture */
+        .invoice-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://www.transparenttextures.com/patterns/whitestripes.png');
+            opacity: 0.05;
+            pointer-events: none;
         }
         .header {
             display: flex;
             justify-content: space-between;
+            margin-bottom: 30px;
             align-items: center;
-            border-bottom: 3px solid #007BFF;
-            padding-bottom: 10px;
-            margin-bottom: 20px;
         }
-        .seller-info, .company-info {
+        .header .company-info {
+            width: 50%;
+        }
+        .header .seller-info {
             width: 45%;
+            text-align: right;
+        }
+        .company-info h1 {
+            font-size: 40px;
+            color: #007BFF; /* Changement de couleur pour un bleu */
+            font-weight: bold;
+            margin-bottom: 0;
+        }
+        .company-info p {
+            font-size: 16px;
+            color: #333;
+            margin: 5px 0;
+        }
+        .company-info p strong {
+            color: #007BFF; /* Changement de couleur pour un bleu */
+        }
+        .seller-info h3 {
+            font-size: 26px;
+            color: #333;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        .seller-info p {
+            font-size: 16px;
+            margin: 5px 0;
+            color: #333;
+        }
+        .seller-info p strong {
+            color: #007BFF; /* Changement de couleur pour un bleu */
         }
         .details {
-            margin-bottom: 20px;
+            background-color: #fafafa;
+            padding: 30px;
+            margin-bottom: 40px;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
         }
         .details table {
             width: 100%;
             border-collapse: collapse;
         }
         .details th, .details td {
+            padding: 14px 18px;
+            text-align: center;
+            font-size: 16px;
             border: 1px solid #ddd;
-            padding: 10px;
-            text-align: left;
+        }
+        .details th {
+            background-color: #007BFF; /* Changement de couleur pour un bleu */
+            color: white;
+            font-weight: 600;
+        }
+        .details td {
+            color: #333;
+        }
+        .details tr:nth-child(even) {
+            background-color: #f1f1f1;
         }
         .total {
-            text-align: right;
-            margin-top: 20px;
-            font-size: 16px;
+            background-color: #e1f5fe; /* Bleuté léger pour l'élément total */
+            padding: 25px;
+            border-radius: 12px;
+            font-size: 22px;
+            font-weight: bold;
+            color: #333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+        .total p {
+            margin: 5px 0;
+            padding: 8px 0;
+        }
+        .total p strong {
+            color: #007BFF; /* Changement de couleur pour un bleu */
         }
         .signature {
-            margin-top: 30px;
             text-align: right;
+            font-size: 18px;
+            color: #333;
+            margin-top: 50px;
+        }
+        .signature p {
+            margin: 0;
             font-style: italic;
+            font-family: 'Brush Script MT', cursive;
+            font-size: 26px;
+            color: #007BFF; /* Changement de couleur pour un bleu */
         }
         .footer {
             text-align: center;
-            margin-top: 20px;
-            font-weight: bold;
-            color: #007BFF;
+            margin-top: 40px;
+            font-size: 16px;
+            color: #777;
+        }
+        .footer p {
+            margin: 5px 0;
+        }
+        .footer a {
+            text-decoration: none;
+            color: #007BFF; /* Changement de couleur pour un bleu */
+        }
+        /* New creative elements */
+        .status-bar {
+            background-color: #007BFF; /* Changement de couleur pour un bleu */
+            height: 8px;
+            width: 100%;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        .status-bar .status {
+            background-color: #e0e0e0;
+            height: 100%;
+            width: 50%; /* Example of a 50% progress bar */
+            border-radius: 8px;
+            transition: width 0.3s ease;
+        }
+        .status-bar .status.completed {
+            width: 100%;
+            background-color: #007BFF; /* Changement de couleur pour un bleu */
+        }
+
+        /* Adding icon styles */
+        .icon {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+
+        /* Animations and hover effects */
+        .details table th, .details table td {
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .details table th:hover, .details table td:hover {
+            background-color: #e1f5fe;
+            color: #333;
         }
     </style>
 </head>
 <body>
     <div class="invoice-container">
+        <!-- Status bar showing process (sale progress) -->
+        <div class="status-bar">
+            <div class="status completed"></div>
+        </div>
+
         <div class="header">
+            <div class="company-info">
+                <h1>WolfCenter</h1>
+                <p><strong>Adresse:</strong> Conakry, Guinée</p>
+                <p><strong>Email:</strong> contact@wolfcenter.com</p>
+                <p><strong>Téléphone:</strong> +224 123 456 789</p>
+            </div>
             <div class="seller-info">
                 <h3>Justificatif de Gain N° {{ orderId }}</h3>
                 <p><strong>Date de la vente:</strong> {{ orderDate }}</p>
@@ -67,13 +204,8 @@
                 <p><strong>Téléphone:</strong> {{ tel }}</p>
                 <p><strong>Adresse:</strong> {{ sellerAddress.city }}, {{ sellerAddress.country }}, {{ sellerAddress.commune }}</p>
             </div>
-            <div class="company-info">
-                <h3>WolfCenter</h3>
-                <p><strong>Adresse:</strong> Conakry, Guinée</p>
-                <p><strong>Email:</strong> contact@wolfcenter.com</p>
-                <p><strong>Téléphone:</strong> +224 123 456 789</p>
-            </div>
         </div>
+
         <div class="details">
             <table>
                 <thead>
@@ -94,15 +226,21 @@
                 </tbody>
             </table>
         </div>
+
         <div class="total">
             <p><strong>Total des ventes:</strong> {{ totalSales }} GNF</p>
             <p><strong>Frais de service:</strong> {{ serviceFee }} GNF</p>
             <p><strong>Montant final reçu:</strong> {{ netAmount }} GNF</p>
         </div>
+
         <div class="signature">
-            <p><strong>Signature:</strong> ______________________</p>
+            <p><strong>WolfCenter</strong></p>
         </div>
-        <p class="footer">Merci de vendre sur WolfCenter ! 🚀</p>
+
+        <div class="footer">
+            <p>Merci de vendre sur WolfCenter ! 🚀</p>
+            <p><a href="mailto:support@wolfcenter.com">Nous contacter</a> | <a href="https://wolfcenter.com">Visitez notre site</a></p>
+        </div>
     </div>
 </body>
 </html>

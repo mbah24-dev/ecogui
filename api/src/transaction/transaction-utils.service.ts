@@ -6,7 +6,7 @@
 /*   By: mbah <mbah@student.42lyon.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 14:06:41 by mbah              #+#    #+#             */
-/*   Updated: 2025/03/29 14:01:15 by mbah             ###   ########.fr       */
+/*   Updated: 2025/04/10 04:34:11 by mbah             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,22 +18,27 @@ import { PrismaService } from "src/prisma/prisma.service";
 export class TransactionUtils {
 	constructor(private readonly prismaService: PrismaService) {}
 
-	async update_product_stock(product: any, prisma: any, quantity: number, op: string) {
+	async update_product_stock(product: any, prisma: any, quantity: number, op: '+' | '-') {
 		try {
+			const newStock = op === '-' 
+				? Math.max(product.stock - quantity, 0)
+				: product.stock + quantity;
+	
+			const newStatus = newStock === 0 
+				? ProductStatus.SOLD_OUT 
+				: ProductStatus.AVAILABLE;
+	
 			await prisma.product.update({
 				where: { id: product.id },
 				data: {
-				  stock: (op === '-') ? product.stock - quantity : product.stock + quantity,
-				  status: (op === '-') ? 
-				  		product.stock - quantity === 0 ? 
-						ProductStatus.SOLD_OUT : product.status :
-						ProductStatus.AVAILABLE
+					stock: newStock,
+					status: newStatus
 				}
-			  });
+			});
 		} catch (error) {
-			throw new HttpException('Impossible de mettre a jour le stock', HttpStatus.BAD_REQUEST);
+			throw new HttpException('Impossible de mettre à jour le stock', HttpStatus.BAD_REQUEST);
 		}
-	}
+	}	
 	
 	async add_cart_items_to_order_items(user_cart: any, prisma: any, order: any) {
 		 for (const item of user_cart.items) {

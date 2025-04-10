@@ -12,6 +12,7 @@ import * as path from 'path';
 export class InvoiceController {
 	constructor(private readonly invoiceService: InvoiceService) {}
 
+	@UseGuards(JwtAuthGuard, AdminGuard)
 	@Post('generate/:orderId')
 	async generate_invoice(@Param('orderId') orderId: string) {
 		return (await this.invoiceService.generateInvoice(orderId));
@@ -30,7 +31,7 @@ export class InvoiceController {
 
 		try {
 			const filePath = await this.invoiceService.getInvoiceFilePath(
-				req.session.user.id, 
+				req.session.user.id,
 				req.session.user.role, 
 				invoiceId
 			);
@@ -64,11 +65,11 @@ export class InvoiceController {
 			if (!req.session.user) {
 				return res.status(401).json({ message: 'Utilisateur non connecté' });
 			}
-			return (res.json(await this.invoiceService.get_invoice_by_id(inv_id)));
+			return (res.json(await this.invoiceService.get_invoice_by_id(req.session.user.id, inv_id)));
 	}
 
 	@UseGuards(JwtAuthGuard, AdminGuard)
-	@Put('validate/invoice/:invoiceId')
+	@Put('validate/:invoiceId')
 	async markInvoiceAsPaid(
 		@Req() req: RequestExpressSession,
 		@Res() res: Response,
