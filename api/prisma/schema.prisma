@@ -11,7 +11,7 @@ generator client {
 datasource db {
   provider  = "postgresql"
   url       = env("DATABASE_URL")
-  //directUrl = env("DIRECT_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 /**
@@ -66,7 +66,7 @@ model Product {
   reviews     Review[]
   cartItems   CartItem[]
   images      ProductImage[]
-  views       Int            @default(0) // Nombre de vues
+  buyCount    Int            @default(0) // Nombre de vues
   createdAt   DateTime       @default(now())
   updatedAt   DateTime       @updatedAt
 }
