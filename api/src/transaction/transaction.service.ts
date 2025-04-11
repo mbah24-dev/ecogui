@@ -124,19 +124,34 @@ export class TransactionService {
 			where: { id: orderId },
 			include: { items: true }
 		});
-		if (!order || order.buyerId !== userId) throw new HttpException('Commande non trouvée.', HttpStatus.BAD_REQUEST);
-
+	
+		if (!order || order.buyerId !== userId) {
+			throw new HttpException('Commande non trouvée.', HttpStatus.BAD_REQUEST);
+		}
+	
+		// Récupère la durée limite depuis l'env
+		const returnLimitHours = parseInt(process.env.RETURN_LIMIT_HOURS || '48', 10);
+		const now = new Date();
+		const orderCreatedAt = order.createdAt;
+		const diffInMs = now.getTime() - orderCreatedAt.getTime();
+		const diffInHours = diffInMs / (1000 * 60 * 60);
+	
+		if (diffInHours > returnLimitHours) {
+			throw new HttpException(`Le délai de retour est dépassé (${returnLimitHours}h).`, HttpStatus.FORBIDDEN);
+		}
+	
 		return this.prismaService.$transaction(async (prisma) => {
-			await Promise.all(order.items.map(item => 
+			await Promise.all(order.items.map(item =>
 				this.transactionUtils.update_product_stock(item.productId, prisma, item.quantity, '+')
 			));
-
-			return (prisma.order.update({
+	
+			return prisma.order.update({
 				where: { id: orderId },
-				data: { status: OrderStatus.CANCELED, items: { create: [] } }
-			}));
+				data: { status: OrderStatus.CANCELED }
+			});
 		});
 	}
+	
 
 	async get_orders() {
 		const orders = await this.prismaService.order.findMany({

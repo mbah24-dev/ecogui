@@ -6,7 +6,7 @@
 /*   By: mbah <mbah@student.42lyon.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 23:31:45 by mbah              #+#    #+#             */
-/*   Updated: 2025/04/10 04:36:21 by mbah             ###   ########.fr       */
+/*   Updated: 2025/04/11 01:56:05 by mbah             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,16 @@ import { SendEmailService } from "src/send-email/send-email.service";
 import { buyerOrderUpdateTemplate } from "src/send-email/template/buyer-order-updated";
 import { OrderItem } from "src/interfaces/order";
 import { TransactionUtils } from "./transaction-utils.service";
+import { InvoiceService } from "src/invoice/invoice.service";
+import { REFUSED } from "dns";
 
 @Injectable()
 export class OrdersValidationService {
 	constructor(
 		private readonly transactionUtils: TransactionUtils,
 		private readonly prismaService: PrismaService,
-		private readonly sendEmailService: SendEmailService
+		private readonly sendEmailService: SendEmailService,
+		private readonly invoiceService: InvoiceService
 	) {}
 
 	private async check_if_item_an_order_exist(
@@ -68,19 +71,32 @@ export class OrdersValidationService {
 		const order_update = await this.check_if_item_an_order_exist(productId, sellerId, orderId);
 		const allItemsConfirmed = order_update.items.every(item => item.status === 'CONFIRMED');
 	    const allItemsAnswered = order_update.items.every(item => item.status !== 'PENDING');
+		const allItemsRefused = order_update.items.every(item => item.status === 'REFUSED');
 	
 		if (allItemsAnswered) {
+			let newOrderStatus;
+			
+			if (allItemsConfirmed) {
+				newOrderStatus = OrderStatus.CONFIRMED;
+			} else if (allItemsRefused) {
+				newOrderStatus = OrderStatus.CANCELED;
+			} else {
+				newOrderStatus = OrderStatus.PARTIAL;
+			}
+	
 			await this.prismaService.order.update({
 				where: { id: orderId },
-				data: { status: (allItemsConfirmed) ? OrderStatus.CONFIRMED : OrderStatus.PARTIAL },
+				data: { status: newOrderStatus },
 			});
-			// TODO
-			// Generer automatiquement la facture (fonction dispo dans invoiceService);
-			// Envoyer la facture de l'acheteur par email
+	
+			if (!allItemsRefused) {
+				await this.invoiceService.generateInvoice(order.id);
+			}
+	
 			await this.notify_user_second_confirmation_reminder(order.id);
+		} else {
+			console.log(`Il y a encore des produits en attente de confirmation par les vendeurs. Nombre de produits en attente : ${order_update.items.filter(item => item.status === 'PENDING').length}`);
 		}
-		else
-			console.log("Il y a encore des produits en attente de confirmation par les vendeurs.");
 		return ({ message: 'Merci pour votre réponse. Le produit a été mis à jour avec succès.' });
 	}
 

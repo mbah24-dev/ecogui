@@ -6,7 +6,7 @@
 /*   By: mbah <mbah@student.42lyon.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 03:44:54 by mbah              #+#    #+#             */
-/*   Updated: 2025/03/26 03:45:03 by mbah             ###   ########.fr       */
+/*   Updated: 2025/04/11 02:21:03 by mbah             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,7 +155,6 @@ export class UsersController {
 
 	@UseGuards(JwtAuthGuard, AdminOrSellerGuard)
 	@IsSeller()
-	@IsAdmin()
 	@Get('connected/products/sold')
 	async get_current_user_produtcsSold(@Req() req: RequestExpressSession, @Res() res: Response) {
 		if (!req.session.user) {

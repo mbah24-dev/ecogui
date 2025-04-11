@@ -117,8 +117,7 @@ export class TransactionController {
 	@Get('me/seller/products/in/all_orders/')
 	async retrieve_seller_products_from_orders(
 		@Req() req: RequestExpressSession,
-		@Res() res: Response,
-		@Param('orderId') orderId: OrderStatus) {
+		@Res() res: Response) {
 			if (!req.session.user) {
 				return (res.status(401).json({ message: 'Utilisateur non connecté'}));
 			}

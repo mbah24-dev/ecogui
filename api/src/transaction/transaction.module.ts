@@ -5,6 +5,8 @@ import { TransactionController } from './transaction.controller';
 import { TransactionUtils } from './transaction-utils.service';
 import { SendEmailService } from 'src/send-email/send-email.service';
 import { OrdersValidationService } from './orders-validation.service';
+import { InvoiceService } from 'src/invoice/invoice.service';
+import { AddressService } from 'src/address/address.service';
 
 @Module({
 	providers: [
@@ -12,7 +14,9 @@ import { OrdersValidationService } from './orders-validation.service';
 		PrismaService,
 		TransactionUtils,
 		SendEmailService,
-		OrdersValidationService
+		OrdersValidationService,
+		AddressService,
+		InvoiceService
 	],
 	controllers: [TransactionController]
 })

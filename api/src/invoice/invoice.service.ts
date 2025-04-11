@@ -7,6 +7,7 @@ import * as path from 'path';
 import * as Handlebars from 'handlebars';
 import * as puppeteer from 'puppeteer';
 import { InvoiceStatus, Role } from '@prisma/client';
+import { InvoicesArray } from 'src/types/invoice.types';
 
 @Injectable()
 export class InvoiceService {
@@ -18,33 +19,46 @@ export class InvoiceService {
 	async get_order_data(orderId: string) {
 		const order = await this.prismaService.order.findUnique({
 			where: { id: orderId },
-			include: { buyer: { include: { addresses: true } }, items: true }
+			include: {
+				buyer: { include: { addresses: true } },
+				items: true
+			}
 		});
-
+	
 		if (!order) throw new HttpException('Aucune commande trouvée', HttpStatus.BAD_REQUEST);
-
-		const productIds = order.items.map(item => item.productId);
+	
+		// On filtre les items CONFIRMÉS uniquement
+		const confirmedItems = order.items.filter(item => item.status === 'CONFIRMED');
+	
+		const productIds = confirmedItems.map(item => item.productId);
 		const products = await this.prismaService.product.findMany({
 			where: { id: { in: productIds } },
 		});
-
+	
 		const buyer_address = await this.addressService.get_current_user_address(order.buyerId);
-		const buyer = 	await this.prismaService.user.findUnique({
+		const buyer = await this.prismaService.user.findUnique({
 			where: { id: order.buyerId }
-		})
-		if (!buyer) throw new HttpException('Aucun Acheteur trouvée', HttpStatus.BAD_REQUEST);
-
-		const sellers = new Set(order.items.map(item => item.sellerId).filter(Boolean));
-		const tvaCost = ((order.totalPrice * Number(process.env.TVA)) / (100));
-
+		});
+		if (!buyer) throw new HttpException('Aucun Acheteur trouvé', HttpStatus.BAD_REQUEST);
+	
+		const sellers = new Set(confirmedItems.map(item => item.sellerId).filter(Boolean));
+	
+		// On calcule le total sur les items confirmés seulement
+		const totalPrice = confirmedItems.reduce((acc, item) => {
+			const product = products.find(p => p.id === item.productId);
+			return product ? acc + (item.quantity * product.price) : acc;
+		}, 0);
+	
+		const tvaCost = (totalPrice * Number(process.env.TVA)) / 100;
+	
 		const orderDetails = {
 			name: buyer.name,
 			email: buyer.email,
 			tel: buyer.phoneNumber,
-			orderId: order.id.slice(0, 6),
-			orderDate: new Date(order.createdAt).toISOString().split('T')[0], // Format YYYY-MM-DD
-			products: order.items.map((item) => {
-				const product = products.find(product => product.id === item.productId);
+			orderId: order.id.slice(0, 6).toUpperCase(),
+			orderDate: new Date(order.createdAt).toISOString().split('T')[0],
+			products: confirmedItems.map((item) => {
+				const product = products.find(p => p.id === item.productId);
 				if (!product) return {};
 				return {
 					name: product.name || "Produit inconnu",
@@ -61,12 +75,13 @@ export class InvoiceService {
 				description: buyer_address.description
 			},
 			tax: tvaCost,
-			totalToPaid: tvaCost + order.totalPrice,
-			totalPrice: order.totalPrice
+			totalToPaid: totalPrice + tvaCost,
+			totalPrice
 		};
-
-		return ({ orderDetails, sellers });
+	
+		return { orderDetails, sellers };
 	}
+	
 
 	async get_seller_order_data(orderDetails: any, sellers: Set<string>) {
 		const sellerIds = Array.from(sellers);
@@ -152,35 +167,41 @@ export class InvoiceService {
 
 	async get_user_invoices(userId: string) {
 		const user = await this.prismaService.user.findUnique({
-			where: { id: userId }
+		  where: { id: userId }
 		});
-		if (!user) throw new HttpException('Aucun utilisateur trouvé', HttpStatus.NOT_FOUND);
-		if (user.role === Role.BUYER) {
-			const orders = await this.prismaService.order.findMany({
-				where: { buyerId: userId },
-				include: { invoices: true }
-			});
-	
-			if (!orders || orders.length === 0)
-				throw new HttpException('Aucune commande trouvée', HttpStatus.NOT_FOUND);
-
-			return (orders.flatMap(order => order.invoices.filter(inv => inv.pdfUrl?.startsWith(`buyer_`))));
+		if (!user)
+		  throw new HttpException('Aucun utilisateur trouvé', HttpStatus.NOT_FOUND);
+		let buyerInvoices: InvoicesArray = [];
+		let sellerInvoices: InvoicesArray = [];
+	  
+		if (user.role === Role.BUYER || user.role === Role.BUYER_AND_SELLER) {
+		  const orders = await this.prismaService.order.findMany({
+			where: { buyerId: userId },
+			include: { invoices: true }
+		  });
+	  
+		  buyerInvoices = orders.flatMap(order =>
+			order.invoices.filter(inv => inv.pdfUrl?.startsWith('buyer_'))
+		  );
 		}
-		if (user.role === Role.SELLER) {
-			// Récupére uniquement les factures du seller en se basant sur l'ID du vendeur dans le `pdfUrl`
-			const invoices = await this.prismaService.invoice.findMany({
-				where: {
-					pdfUrl: { contains: `_${userId}_` },
-				}
-			});
-	
-			if (!invoices || invoices.length === 0)
-				throw new HttpException('Aucune facture trouvée pour ce vendeur', HttpStatus.NOT_FOUND);
-	
-			return (invoices);
+	  
+		if (user.role === Role.SELLER || user.role === Role.BUYER_AND_SELLER) {
+		  sellerInvoices = await this.prismaService.invoice.findMany({
+			where: {
+			  pdfUrl: { contains: `_${userId}_` }
+			}
+		  });
 		}
-		throw new HttpException('Rôle non valide', HttpStatus.BAD_REQUEST);
+	  
+		const allInvoices = [...buyerInvoices, ...sellerInvoices];
+	  
+		if (allInvoices.length === 0) {
+		  throw new HttpException('Aucune facture trouvée', HttpStatus.NOT_FOUND);
+		}
+	  
+		return (allInvoices);
 	}
+	  
 	
 	async get_all_invoices() {
 		const invoices = await this.prismaService.invoice.findMany({
@@ -229,22 +250,44 @@ export class InvoiceService {
 		};
 	}
 
-	async get_invoice_by_order_user(orderId: string, userId: string) {
+	async get_invoice_by_user_order(orderId: string, userId: string) {
 		const user = await this.prismaService.user.findUnique({
-			where: { id: userId }
+		  where: { id: userId }
 		});
-		if (!user) throw new HttpException('Utilisateur introuvable', HttpStatus.NOT_FOUND);
+	  
+		if (!user)
+		  throw new HttpException('Utilisateur introuvable', HttpStatus.NOT_FOUND);
 		const order = await this.prismaService.order.findUnique({
-			where: { id: orderId },
-			include: { invoices: true }
+		  where: { id: orderId },
+		  include: { invoices: true }
 		});
-		if (!order) throw new HttpException('Commande introuvable', HttpStatus.NOT_FOUND);
-		const invoice = order.invoices.find(inv => (inv.pdfUrl) ?
-			user.role === Role.BUYER ? inv.pdfUrl.startsWith(`buyer_`) : inv.pdfUrl.includes(`_${userId}_`) : {}
-		);
-		if (!invoice) throw new HttpException('Aucune facture trouvée', HttpStatus.NOT_FOUND);
+		if (!order)
+		  throw new HttpException('Commande introuvable', HttpStatus.NOT_FOUND);
+		let invoice;
+	  
+		switch (user.role) {
+		  case Role.BUYER:
+			invoice = order.invoices.find(inv => inv.pdfUrl?.startsWith('buyer_'));
+			break;
+	  
+		  case Role.SELLER:
+			invoice = order.invoices.find(inv => inv.pdfUrl?.includes(`_${userId}_`));
+			break;
+	  
+		  case Role.BUYER_AND_SELLER:
+			invoice = order.invoices.find(inv =>
+			  inv.pdfUrl?.startsWith('buyer_') || inv.pdfUrl?.includes(`_${userId}_`)
+			);
+			break;
+	  
+		  default:
+			throw new HttpException('Rôle non autorisé pour cette action', HttpStatus.BAD_REQUEST);
+		}
+		if (!invoice)
+		  throw new HttpException('Aucune facture trouvée', HttpStatus.NOT_FOUND);
 		return (invoice);
 	}
+	  
 	
 
 	async markInvoiceAsPaid(invoiceId: string) {

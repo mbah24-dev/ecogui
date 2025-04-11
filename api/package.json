@@ -43,7 +43,9 @@
 		"pdfkit": "^0.16.0",
 		"puppeteer": "^24.4.0",
 		"reflect-metadata": "^0.2.2",
-		"rxjs": "^7.8.1"
+		"rxjs": "^7.8.1",
+		"sharp": "^0.34.1",
+		"uuid": "^11.1.0"
 	},
 	"devDependencies": {
 		"@eslint/eslintrc": "^3.2.0",
@@ -59,6 +61,7 @@
 		"@types/node": "^22.13.13",
 		"@types/nodemailer": "^6.4.17",
 		"@types/supertest": "^6.0.2",
+		"@types/uuid": "^10.0.0",
 		"eslint": "^9.18.0",
 		"eslint-config-prettier": "^10.0.1",
 		"eslint-plugin-prettier": "^5.2.2",

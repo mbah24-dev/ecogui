@@ -6,12 +6,12 @@
 /*   By: mbah <mbah@student.42lyon.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 23:26:22 by mbah              #+#    #+#             */
-/*   Updated: 2025/03/26 03:45:28 by mbah             ###   ########.fr       */
+/*   Updated: 2025/04/11 02:16:12 by mbah             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { Role } from '@prisma/client';
+import { OrderItemStatus, ProductStatus, Role } from '@prisma/client';
 import { BcryptUtilsService } from 'src/bcrypt-utils/bcrypt-utils.service';
 import { CreateUserDto } from 'src/dto/users/create-user.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -121,16 +121,27 @@ export class UsersService {
 				products: { include: { images: true } }
 			}
 		});
+	
 		if (!user || user.products.length === 0)
 			throw new HttpException('Aucun produit trouvé', HttpStatus.NOT_FOUND);
-		return (user.products);
+	
+		// Filtre les produits dont le statut est différent de ProductStatus.ARCHIVED
+		const activeProducts = user.products.filter(product => product.status !== ProductStatus.ARCHIVED);
+	
+		if (activeProducts.length === 0) {
+			throw new HttpException('Aucun produit actif trouvé', HttpStatus.NOT_FOUND);
+		}
+	
+		return activeProducts;
 	}
+	
 
 	async get_current_user_produtcsSold(userId: string) {
 		try {
 			const productsSold = await this._prisma.orderItem.findMany({
 				where: {
-					sellerId: userId
+					sellerId: userId,
+					status: OrderItemStatus.CONFIRMED
 				},
 				include: { 
 					product: true,

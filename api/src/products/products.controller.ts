@@ -6,7 +6,7 @@
 /*   By: mbah <mbah@student.42lyon.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 03:43:12 by mbah              #+#    #+#             */
-/*   Updated: 2025/03/28 00:29:26 by mbah             ###   ########.fr       */
+/*   Updated: 2025/04/11 00:42:37 by mbah             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ export class ProductsController {
 			return res.status(400).json({ message: error.message || 'Erreur inconnue lors de l\'ajout du produit' });
 		}
 	}
-
+	
 	@Get('available/all')
 	async get_all_available_products() {
 		return (await this.productsService.get_all_available_products());

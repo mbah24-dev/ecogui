@@ -102,7 +102,7 @@ export class InvoiceController {
 		if (!req.session.user) {
 			return res.status(401).json({ message: 'Utilisateur non connecté' });
 		}
-		return res.json(await this.invoiceService.get_invoice_by_order_user(orderId, req.session.user.id));
+		return res.json(await this.invoiceService.get_invoice_by_user_order(orderId, req.session.user.id));
 	}
 
 	@UseGuards(JwtAuthGuard)

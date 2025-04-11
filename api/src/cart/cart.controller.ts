@@ -6,7 +6,7 @@
 /*   By: mbah <mbah@student.42lyon.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 01:59:36 by mbah              #+#    #+#             */
-/*   Updated: 2025/03/27 20:25:51 by mbah             ###   ########.fr       */
+/*   Updated: 2025/04/11 00:24:51 by mbah             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ export class CartController {
 	constructor(private readonly cartService: CartService) {}
 
 	@UseGuards(JwtAuthGuard, BuyerGuard)
-	@IsBuyer()
 	@Post('add-item/product=:productId')
 	async add_product_to_cart(
 		@Req() req: RequestExpressSession,
