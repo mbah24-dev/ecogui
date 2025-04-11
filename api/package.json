@@ -21,6 +21,7 @@
 		"seed": "ts-node ./prisma/seed.ts"
 	},
 	"dependencies": {
+		"@faker-js/faker": "^9.6.0",
 		"@nestjs/cli": "^11.0.6",
 		"@nestjs/common": "^11.0.1",
 		"@nestjs/config": "^4.0.1",

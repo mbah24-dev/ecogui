@@ -6,7 +6,7 @@
 /*   By: mbah <mbah@student.42lyon.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 23:26:22 by mbah              #+#    #+#             */
-/*   Updated: 2025/04/11 02:16:12 by mbah             ###   ########.fr       */
+/*   Updated: 2025/04/11 03:24:50 by mbah             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,6 +148,7 @@ export class UsersService {
 					order: true 
 				}
 			})
+			if (!productsSold || !productsSold.length) throw new HttpException('Aucun produit trouvé', HttpStatus.NOT_FOUND);
 			return (productsSold);
 		} catch (error) {
 			throw new HttpException(error.message || 'Aucun produit trouvé', HttpStatus.NOT_FOUND);
