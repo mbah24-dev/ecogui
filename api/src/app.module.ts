@@ -6,7 +6,7 @@
 /*   By: mbah <mbah@student.42lyon.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 22:20:33 by mbah              #+#    #+#             */
-/*   Updated: 2025/03/30 18:41:55 by mbah             ###   ########.fr       */
+/*   Updated: 2025/04/12 01:45:32 by mbah             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,16 @@ import { TransactionModule } from './transaction/transaction.module';
 import { InvoiceModule } from './invoice/invoice.module';
 import { AddressModule } from './address/address.module';
 import { ReviewModule } from './review/review.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 
 @Module({
   imports: [
+	ServeStaticModule.forRoot({
+		rootPath: join(process.cwd(), 'static'),
+		serveRoot: '/static'
+	}),
 	PrismaModule,
 	AuthModule,
 	UsersModule,
