@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -14,41 +8,27 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-/**
- * Les models de ma base de donnée PostgreSQL et les relations qui vont avec
- */
-
 model User {
   id           String      @id @default(uuid())
   email        String      @unique
   password     String
   name         String
   role         Role
-  score		   Int  @default(50)
-  resetToken   String?
-  profilePic   String? // URL de la photo de profil (optionnelle)
-  products     Product[]
-  soldProducts OrderItem[] @relation(name: "SoldProducts")
-  orders       Order[]
-  reviews      Review[]
-  addresses    Address[]
-  cart         Cart?
-  balance      Float       @default(0.0) // Solde du vendeur
-  isOnline     Boolean     @default(false)
-  phoneNumber  String?     @unique // Numéro de téléphone unique
-  countryCode  String?     // Code pays (+33, +1, etc.)
   createdAt    DateTime    @default(now())
   updatedAt    DateTime    @updatedAt
-}
-
-enum Role {
-  BUYER
-  SELLER
-  BUYER_AND_SELLER
-  ADMIN
-  BANNED
-  RESTRICTED
-  ARCHIVED
+  resetToken   String?
+  balance      Float       @default(0.0)
+  profilePic   String?
+  isOnline     Boolean     @default(false)
+  countryCode  String?
+  phoneNumber  String?     @unique
+  score        Int         @default(50)
+  addresses    Address[]
+  cart         Cart?
+  orders       Order[]
+  soldProducts OrderItem[] @relation("SoldProducts")
+  products     Product[]
+  reviews      Review[]
 }
 
 model Product {
@@ -57,33 +37,25 @@ model Product {
   description String
   price       Float
   stock       Int
-  status      ProductStatus  @default(AVAILABLE) // Statut du produit
-  category    Category       @relation(fields: [categoryId], references: [id])
   categoryId  String
-  seller      User           @relation(fields: [sellerId], references: [id])
   sellerId    String
-  orderItems  OrderItem[]
-  reviews     Review[]
-  cartItems   CartItem[]
-  images      ProductImage[]
-  buyCount    Int            @default(0) // Nombre de vues
   createdAt   DateTime       @default(now())
   updatedAt   DateTime       @updatedAt
-}
-
-// Enum pour le statut des produits
-enum ProductStatus {
-  AVAILABLE
-  SOLD_OUT
-  PENDING
-  ARCHIVED
+  status      ProductStatus  @default(AVAILABLE)
+  buyCount    Int            @default(0)
+  cartItems   CartItem[]
+  orderItems  OrderItem?
+  category    Category       @relation(fields: [categoryId], references: [id])
+  seller      User           @relation(fields: [sellerId], references: [id])
+  images      ProductImage[]
+  reviews     Review[]
 }
 
 model ProductImage {
   id        String  @id @default(uuid())
   url       String
-  product   Product @relation(fields: [productId], references: [id])
   productId String
+  product   Product @relation(fields: [productId], references: [id])
 }
 
 model Category {
@@ -94,99 +66,116 @@ model Category {
 
 model Order {
   id         String      @id @default(uuid())
-  buyer      User        @relation(fields: [buyerId], references: [id])
   buyerId    String
-  items      OrderItem[]
   status     OrderStatus @default(PENDING)
   totalPrice Float
-  invoices  Invoice[] 
   createdAt  DateTime    @default(now())
   updatedAt  DateTime    @updatedAt
+  buyer      User        @relation(fields: [buyerId], references: [id])
+  items      OrderItem[]
+  invoices   Invoice[]
 }
 
 model OrderItem {
-  id        String  @id @default(uuid())
-  order     Order   @relation(fields: [orderId], references: [id])
+  id        String          @id @default(uuid())
   orderId   String
-  product   Product @relation(fields: [productId], references: [id])
-  productId String  @unique
-  seller    User    @relation(name: "SoldProducts", fields: [sellerId], references: [id]) // Ajout du vendeur
-  sellerId  String
+  productId String          @unique
   quantity  Int
   price     Float
+  sellerId  String
   status    OrderItemStatus @default(PENDING)
+  order     Order           @relation(fields: [orderId], references: [id])
+  product   Product         @relation(fields: [productId], references: [id])
+  seller    User            @relation("SoldProducts", fields: [sellerId], references: [id])
+}
+
+model Invoice {
+  id          String        @id @default(uuid())
+  orderId     String
+  totalAmount Decimal       @db.Decimal(10, 2)
+  pdfUrl      String?
+  status      InvoiceStatus @default(GENERATED)
+  createdAt   DateTime      @default(now())
+  order       Order         @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@map("invoices")
+}
+
+model Review {
+  id        String   @id @default(uuid())
+  userId    String
+  productId String
+  createdAt DateTime @default(now())
+  message   String
+  rating    Int
+  product   Product  @relation(fields: [productId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+model Address {
+  id          String   @id @default(uuid())
+  userId      String
+  city        String
+  country     String   @default("Guinee")
+  createdAt   DateTime @default(now())
+  commune     String?
+  description String?
+  user        User     @relation(fields: [userId], references: [id])
+}
+
+model Cart {
+  id     String     @id @default(uuid())
+  userId String     @unique
+  total  Float      @default(0.0)
+  user   User       @relation(fields: [userId], references: [id])
+  items  CartItem[]
+}
+
+model CartItem {
+  id        String  @id @default(uuid())
+  cartId    String
+  productId String
+  quantity  Int
+  cart      Cart    @relation(fields: [cartId], references: [id])
+  product   Product @relation(fields: [productId], references: [id])
+}
+
+enum Role {
+  BUYER
+  SELLER
+  ADMIN
+  BANNED
+  RESTRICTED
+  BUYER_AND_SELLER
+  ARCHIVED
+}
+
+enum ProductStatus {
+  AVAILABLE
+  SOLD_OUT
+  PENDING
+  ARCHIVED
 }
 
 enum OrderItemStatus {
-	CONFIRMED
-	PENDING
-	REFUSED
+  CONFIRMED
+  PENDING
+  REFUSED
 }
 
 enum OrderStatus {
-  CONFIRMED
   PENDING
   PAID
   SHIPPED
   DELIVERED
   CANCELED
+  CONFIRMED
   PARTIAL
 }
 
-model Invoice {
-  id          String   @id @default(uuid())
-  order       Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  orderId     String   
-  totalAmount Decimal  @db.Decimal(10,2)
-  pdfUrl      String?  // Stockage de la facture (S3, serveur, etc.)
-  status      InvoiceStatus @default(GENERATED)
-  createdAt   DateTime @default(now())
-
-  @@map("invoices") // Nom de la table dans la DB
-}
-
 enum InvoiceStatus {
-  GENERATED  // Facture générée mais pas encore envoyée
-  SENT       // Facture envoyée au client
-  PAID       // Facture payée
-  CANCELED   // Facture annulée
-}
-
-model Review {
-  id        String   @id @default(uuid())
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String
-  product   Product  @relation(fields: [productId], references: [id])
-  productId String
-  message   String // Avis laissé par l'utilisateur
-  rating    Int // Note sur 10 attribuée au produit
-  createdAt DateTime @default(now())
-}
-
-model Address {
-  id        String   @id @default(uuid())
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String
-  commune    String?
-  city      String
-  country   String @default("Guinee")
-  description String?
-  createdAt DateTime @default(now())
-}
-
-model Cart {
-  id     String     @id @default(uuid())
-  user   User       @relation(fields: [userId], references: [id])
-  userId String     @unique
-  items  CartItem[]
-  total	Float @default(0.0)
-}
-
-model CartItem {
-  id        String  @id @default(uuid())
-  cart      Cart    @relation(fields: [cartId], references: [id])
-  cartId    String  
-  product   Product @relation(fields: [productId], references: [id])
-  productId String  
-  quantity  Int
+  GENERATED
+  SENT
+  PAID
+  CANCELED
 }

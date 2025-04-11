@@ -6,7 +6,7 @@
 /*   By: mbah <mbah@student.42lyon.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 03:43:16 by mbah              #+#    #+#             */
-/*   Updated: 2025/04/11 02:46:49 by mbah             ###   ########.fr       */
+/*   Updated: 2025/04/12 00:46:20 by mbah             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,15 @@ export class ProductsService {
 		private readonly formatImageService: FormatImageService
 	) {}
 
-    async create_product(data: CreateProductDto, sellerId: string) {
-		const { name, description, price, stock, categoryId, images }: CreateProductDto = data;
+    async create_product(data: CreateProductDto, sellerId: string, files: Express.Multer.File[]) {
+		const { name, description, price, stock, categoryId }: CreateProductDto = data;
 	
+		const category = await this.prismaService.category.findUnique({
+			where: { id: categoryId }
+		});
+
+		if (!category) throw new HttpException('Aucune category trouver', HttpStatus.NOT_FOUND);
+		
 		// Vérification de l'existence du produit
 		const existingProduct = await this.prismaService.product.findFirst({
 			where: {
@@ -59,16 +65,26 @@ export class ProductsService {
 				}
 			});
 	
-			await this.formatImageService.upload_images(images, product);
+			await this.formatImageService.upload_images(files, product, prisma);
 			return product;
 		});
 	
 		if (!productCreated) {
 			throw new HttpException('Impossible d\'ajouter ce produit', HttpStatus.BAD_REQUEST);
 		}
+
+		const new_product = await this.prismaService.product.findUnique({
+			where: { id: productCreated.id },
+			include: { images: true }
+		});
 	
-		return (productCreated);
+		return (new_product);
 	}
+
+	// TODO
+	// recuperer une image d'un produits par son id 
+	// supprimer une image d'un produits par son id
+	// modifier une image d'un produits par son id
 
 	async get_all_products() {
 		const products = await this.prismaService.product.findMany({
@@ -218,7 +234,7 @@ export class ProductsService {
 	}
 		
 
-	async update_product(productId: string, sellerId: string, data: UpdateProductDto) {
+	/*async update_product(productId: string, sellerId: string, data: UpdateProductDto) {
 		try {
 			const product = await this.get_product_by_id(productId);
 			if (!product)
@@ -241,7 +257,7 @@ export class ProductsService {
 		} catch (error) {
 			throw new HttpException(error.message || 'Erreur inconnu lors de la mise à jour du produit', HttpStatus.BAD_REQUEST);
 		}
-	}
+	}*/
 
 }
 

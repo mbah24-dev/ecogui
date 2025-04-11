@@ -6,11 +6,11 @@
 /*   By: mbah <mbah@student.42lyon.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 03:43:12 by mbah              #+#    #+#             */
-/*   Updated: 2025/04/11 00:42:37 by mbah             ###   ########.fr       */
+/*   Updated: 2025/04/12 00:36:08 by mbah             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-import { Body, Controller, Post, Get, Req, Res, UseGuards, Param, Delete, Put } from '@nestjs/common';
+import { Body, Controller, Post, Get, Req, Res, UseGuards, Param, Delete, Put, UploadedFiles, UseInterceptors } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
 import { CreateProductDto } from 'src/dto/products-dto/create-product.dto';
@@ -21,24 +21,35 @@ import { UpdateProductDto } from 'src/dto/products-dto/update-product.dto';
 import { AdminOrSellerGuard } from 'src/guards/admin-or-seller.guard';
 import { AdminGuard } from 'src/guards/admin.guard';
 import { AdminOrBuyerGuard } from 'src/guards/admin-or-buyer.guard';
+import { FilesInterceptor } from '@nestjs/platform-express';
 
 @Controller('products')
 export class ProductsController {
 	constructor(private readonly productsService: ProductsService) {}
 
-	@UseGuards(JwtAuthGuard, AdminOrSellerGuard)
-	@IsSeller()
 	@Post('add-product')
-	async create_product(@Body() body: CreateProductDto, @Req() req: RequestExpressSession, @Res() res: Response) {
+	@UseInterceptors(FilesInterceptor('images')) // 'images' est le nom du champ dans le formulaire angular (front)
+	async create_product(
+	  @Body() body: CreateProductDto,
+	  @UploadedFiles() files: Express.Multer.File[], // je recupere les fichiers
+	  @Req() req: RequestExpressSession,
+	  @Res() res: Response
+	) {
 		if (!req.session.user) {
 			return res.status(401).json({ message: 'Utilisateur non connecté' });
 		}
+
+		if (files.length < 2)
+			return res.status(400).json({ message: 'Un produit doit avoir au moins 2 images.' });
+			
 		try {
-			const productCreated = await this.productsService.create_product(body, req.session.user.id);
-			return res.json( productCreated );
+			
+			const productCreated = await this.productsService.create_product(body, req.session.user.id, files);
+			return res.json(productCreated);
 		} catch (error) {
 			return res.status(400).json({ message: error.message || 'Erreur inconnue lors de l\'ajout du produit' });
 		}
+	 
 	}
 	
 	@Get('available/all')
@@ -95,7 +106,7 @@ export class ProductsController {
 		}
 	}
 
-	@UseGuards(JwtAuthGuard, AdminOrSellerGuard)
+	/*@UseGuards(JwtAuthGuard, AdminOrSellerGuard)
 	@IsSeller()
 	@IsAdmin()
 	@Put('id=:productId')
@@ -111,6 +122,6 @@ export class ProductsController {
 		} catch (error) {
 			return (res.status(400).json({ message: error.message || 'Erreur inconnue lors de la mise a jour du produit' }));
 		}
-	}
+	}*/
 
 }

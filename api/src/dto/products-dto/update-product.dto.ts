@@ -6,7 +6,7 @@
 /*   By: mbah <mbah@student.42lyon.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 16:47:10 by mbah              #+#    #+#             */
-/*   Updated: 2025/03/25 21:39:53 by mbah             ###   ########.fr       */
+/*   Updated: 2025/04/11 23:30:21 by mbah             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,9 @@ export class UpdateProductDto {
 	@IsUUID()
 	categoryId:	string;
 
-	@IsOptional()
+	/*@IsOptional()
 	@IsArray()
 	@ArrayMinSize(2, { message: 'Un produit doit avoir au moins 2 images.' })
 	@IsString({ each: true})
-	images: string[]
+	images: string[]*/
 }

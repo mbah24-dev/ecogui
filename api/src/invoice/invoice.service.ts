@@ -8,6 +8,8 @@ import * as Handlebars from 'handlebars';
 import * as puppeteer from 'puppeteer';
 import { InvoiceStatus, Role } from '@prisma/client';
 import { InvoicesArray } from 'src/types/invoice.types';
+import { get_upload_path } from 'src/utility/get_path';
+import { getProjectRoot } from 'src/utility/cwd_and_dirname';
 
 @Injectable()
 export class InvoiceService {
@@ -122,7 +124,7 @@ export class InvoiceService {
 		if (existingInvoices.length > 0)
 			throw new HttpException('Une facture pour cette commande existe déjà', HttpStatus.CONFLICT);
         const { orderDetails, sellers } = await this.get_order_data(orderId);
-        await this.createPdf('buyer-invoice', orderDetails, `buyer_${orderId}.pdf`);
+        await this.createPdf('buyer-invoice', orderDetails, `buyer_${orderId}.pdf`, true);
 		await this.prismaService.invoice.create({
 			data: {
 				pdfUrl: `buyer_${orderId}.pdf`,
@@ -132,7 +134,7 @@ export class InvoiceService {
 		});
         const sellerData = await this.get_seller_order_data(orderDetails, sellers);
         for (const seller of sellerData) {
-            await this.createPdf('seller-invoice', seller, `seller_${seller.orderId}_${seller.id}_${seller.name}.pdf`);
+            await this.createPdf('seller-invoice', seller, `seller_${seller.orderId}_${seller.id}_${seller.name}.pdf`, false);
 			await this.prismaService.invoice.create({
 				data: {
 					pdfUrl: `seller_${seller.orderId}_${seller.id}_${seller.name}.pdf`,
@@ -144,26 +146,33 @@ export class InvoiceService {
         return ({ message: 'Factures générées avec succès' });
     }
 
-    async createPdf(templateName: string, data: any, outputFileName: string) {
-        const templatePath = path.join(__dirname, `../../../src/templates/${templateName}.html`);
-        const outputPath = path.join(__dirname, `../../../src/invoice_archive/${outputFileName}`);
-
-        const templateHtml = fs.readFileSync(templatePath, 'utf8');
-
-        const template = Handlebars.compile(templateHtml);
-        const htmlContent = template(data);
-
-        const browser = await puppeteer.launch();
-        const page = await browser.newPage();
-        await page.setContent(htmlContent, { waitUntil: 'networkidle0' });
-
-        await page.pdf({
-            path: outputPath,
-            format: 'A4',
-            printBackground: true
-        });
-        await browser.close();
-    }
+	async createPdf(templateName: string, data: any, outputFileName: string, isBuyer: Boolean) {
+		const templatePath = path.join(getProjectRoot(), 'src', 'templates', `${templateName}.html`);
+		let outputDir;
+		outputDir = get_upload_path('invoice', 'seller');
+		if (isBuyer)
+			outputDir = get_upload_path('invoice', 'buyer');
+		const outputPath = path.join(outputDir, outputFileName);
+	
+		const templateHtml = fs.readFileSync(templatePath, 'utf8');
+	
+		const template = Handlebars.compile(templateHtml);
+		const htmlContent = template(data);
+	
+		const browser = await puppeteer.launch();
+		const page = await browser.newPage();
+		await page.setContent(htmlContent, { waitUntil: 'networkidle0' });
+	
+		await page.pdf({
+		  path: outputPath,
+		  format: 'A4',
+		  printBackground: true
+		});
+	
+		await browser.close();
+	
+		return (outputPath);
+	}
 
 	async get_user_invoices(userId: string) {
 		const user = await this.prismaService.user.findUnique({

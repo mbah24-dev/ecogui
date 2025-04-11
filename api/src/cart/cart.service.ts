@@ -6,7 +6,7 @@
 /*   By: mbah <mbah@student.42lyon.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 03:42:58 by mbah              #+#    #+#             */
-/*   Updated: 2025/03/27 21:05:07 by mbah             ###   ########.fr       */
+/*   Updated: 2025/04/11 22:50:49 by mbah             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,9 @@ export class CartService {
 
 		if (!product)
 			throw new HttpException('Ce produit est en rupture de stock.', HttpStatus.BAD_REQUEST);
+		
+		if (product.sellerId === userId)
+			throw new HttpException('Vous ne pouvez pas acheter ce produits, car il est a vous', HttpStatus.BAD_REQUEST);
 
 		if (product.status === ProductStatus.PENDING)
 			throw new HttpException('Ce produit n\'a pas encore été validé par l\'admin', HttpStatus.BAD_REQUEST);

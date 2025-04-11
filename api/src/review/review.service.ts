@@ -16,6 +16,9 @@ export class ReviewService {
 		if (!product || product.status !== ProductStatus.AVAILABLE) 
 			throw new HttpException('Aucun produit trouvé', HttpStatus.NOT_FOUND);
 
+		if (product.sellerId === userId)
+			throw new HttpException('Vous ne pouvez pas noté ce produits, car il est a vous', HttpStatus.BAD_REQUEST);
+
 		const existingReview = await this.prismaService.review.findFirst({
 			where: { userId, productId }
 		});
