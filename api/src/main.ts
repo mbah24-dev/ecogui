@@ -6,7 +6,7 @@
 /*   By: mbah <mbah@student.42lyon.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 22:20:39 by mbah              #+#    #+#             */
-/*   Updated: 2025/04/10 01:01:44 by mbah             ###   ########.fr       */
+/*   Updated: 2025/04/12 17:53:48 by mbah             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import * as session from 'express-session';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 
 async function bootstrap() {
@@ -48,6 +49,17 @@ async function bootstrap() {
       transform: true,
     }),
   );
+
+    // Configuration de Swagger
+	const config = new DocumentBuilder()
+    .setTitle('Ecogui API')
+    .setDescription('La documentation de mon api Ecogui')
+    .setVersion('1.0')
+    .addTag('transaction')  // Ajout des tags pour la classification des routes
+    .addBearerAuth() 
+    .build();
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api-docs', app, document);  // 'api-docs' est l'URL de la documentation
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();

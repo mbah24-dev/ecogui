@@ -60,7 +60,7 @@ export class SendEmailService {
 		  });
 	  
 		  await transporter.sendMail({
-			from: 'noreply@bconnect.com',
+			from: 'noreply@ecogui.com',
 			to,
 			subject,
 			html: resetPasswordTemplate(resetLink, name),
@@ -103,7 +103,7 @@ export class SendEmailService {
 		// Envoi de l'email
 		try {
 			await transporter.sendMail({
-				from: 'noreply@bconnect.com',
+				from: 'noreply@ecogui.com',
 				to,
 				subject,
 				html: htmlContent,
@@ -140,7 +140,7 @@ export class SendEmailService {
 		// Envoi de l'email
 		try {
 		  await transporter.sendMail({
-			from: 'noreply@bconnect.com',
+			from: 'noreply@ecogui.com',
 			to,
 			subject,
 			html: htmlContent,

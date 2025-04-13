@@ -1,22 +1,18 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   add-product-to-cart.dto.ts                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mbah <mbah@student.42lyon.fr>              +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/26 00:57:22 by mbah              #+#    #+#             */
-/*   Updated: 2025/03/26 01:06:16 by mbah             ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 import { IsInt, IsUUID, Min } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger'; // Importer ApiProperty pour Swagger
 
 /**
- * represente le model CartItem dans le schema de prisma
+ * Représente le modèle CartItem dans le schéma de Prisma
  */
 export class AddProductToCartDto {
-	@IsInt()
-	@Min(1)
-	quantity: number
+  
+  @ApiProperty({
+    description: 'La quantité du produit à ajouter au panier',
+    type: Number, // Le type de la propriété est un nombre
+    minimum: 1, // Quantité minimale (doit être supérieur ou égal à 1)
+    example: 2, // Exemple de valeur pour la quantité
+  })
+  @IsInt()
+  @Min(1)
+  quantity: number;
 }

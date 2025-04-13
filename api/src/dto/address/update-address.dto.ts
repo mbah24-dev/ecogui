@@ -1,34 +1,48 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   update-address.dto.ts                              :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mbah <mbah@student.42lyon.fr>              +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/30 01:31:05 by mbah              #+#    #+#             */
-/*   Updated: 2025/03/30 01:51:31 by mbah             ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 import { IsEnum, IsNotEmpty, IsOptional, IsString } from "class-validator";
+import { ApiProperty } from "@nestjs/swagger"; // Importer ApiProperty pour Swagger
 import { City, ConakryCommune } from "src/types/address.types";
 
 export class UpdateAddressDto {
-	@IsOptional()
-	@IsEnum(ConakryCommune)
-	commune: ConakryCommune;
+  
+  @ApiProperty({
+    description: 'La commune de l\'adresse (facultatif)',
+    enum: ConakryCommune, // Déclarez l\'enum pour Swagger
+    example: ConakryCommune.Dixinn, // Exemple de valeur à afficher dans la documentation Swagger
+    required: false, // Cette propriété est optionnelle
+  })
+  @IsOptional()
+  @IsEnum(ConakryCommune)
+  commune: ConakryCommune;
 
-	@IsOptional()
-	@IsEnum(City)
-	city: City;
+  @ApiProperty({
+    description: 'La ville de l\'adresse (facultatif)',
+    enum: City, // Déclarez l\'enum pour Swagger
+    example: City.Conakry, // Exemple de valeur à afficher dans la documentation Swagger
+    required: false, // Cette propriété est optionnelle
+  })
+  @IsOptional()
+  @IsEnum(City)
+  city: City;
 
-	@IsOptional()
-	@IsString()
-	@IsNotEmpty()
-	country: string;
+  @ApiProperty({
+    description: 'Le pays de l\'adresse (facultatif)',
+    type: String, // Indiquez le type pour Swagger
+    example: 'Guinée', // Exemple de valeur à afficher dans la documentation Swagger
+    required: false, // Cette propriété est optionnelle
+  })
+  @IsOptional()
+  @IsString()
+  @IsNotEmpty()
+  country: string;
 
-	@IsOptional()
-	@IsString()
-	@IsNotEmpty()
-	description: string;
+  @ApiProperty({
+    description: 'Une description de l\'adresse (facultatif)',
+    type: String, // Indiquez le type pour Swagger
+    example: 'Adresse mise à jour dans le quartier X à Conakry', // Exemple de valeur à afficher dans la documentation Swagger
+    required: false, // Cette propriété est optionnelle
+  })
+  @IsOptional()
+  @IsString()
+  @IsNotEmpty()
+  description: string;
 }

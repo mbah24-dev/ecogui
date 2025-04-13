@@ -93,7 +93,7 @@ async function main() {
       role: 'SELLER',
     },
     {
-      email: 'bconnect.sociale@gmail.com',
+      email: 'ecogui.sociale@gmail.com',
       name: 'BConnect SARL',
       role: 'SELLER',
     },

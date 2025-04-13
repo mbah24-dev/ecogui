@@ -32,7 +32,7 @@ export const resetPasswordTemplate = (resetLink: string, name: string): string =
 		
 		<p style="color: red; font-weight: bold;">⚠️ Si vous n’êtes pas à l’origine de cette demande, ignorez simplement cet email. Votre compte reste sécurisé.</p>
 		
-		<p>Besoin d'aide ? Contactez notre support à <a href="mailto:support@wolfcenter.com">support@wolfcenter.com</a>.</p>
+		<p>Besoin d'aide ? Contactez notre support à <a href="mailto:support@ecogui.com">support@ecogui.com</a>.</p>
 		
 		<p style="color: #7f8c8d; font-size: 12px; text-align: center;">Ceci est un email automatique, merci de ne pas y répondre.</p>
 	  </div>
