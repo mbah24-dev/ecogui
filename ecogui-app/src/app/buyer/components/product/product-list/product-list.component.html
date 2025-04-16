@@ -1,0 +1,78 @@
+<div class="row">
+    <div
+      class="col-sm-6 col-lg-4 col-xxl-3"
+      *ngFor="let product of products"
+    >
+      <mat-card class="trinta-card product-card mb-25 bg-white border-none d-block">
+        <mat-card-header>
+          <mat-card-title>
+            <h5 class="mt-0 mb-0 fw-normal text-primary">
+              {{ product.category }}
+            </h5>
+          </mat-card-title>
+          <mat-card-subtitle>
+            <!-- Icône options supprimée, remplacée par like & cart -->
+            <div class="d-flex gap-2 align-items-center">
+              <!-- ❤️ Bouton like -->
+              <button mat-icon-button (click)="toggleFavorite(product)">
+                <i
+                  class="ri-heart-fill"
+                  [ngClass]="{
+                    'text-danger': product.isFavorite === 1,
+                    'text-muted': product.isFavorite === 0
+                  }"
+                ></i>
+              </button>
+
+              <!-- 🛒 / 🗑️ Panier -->
+              <button mat-icon-button (click)="toggleCart(product)">
+                <i
+                  [class.ri-shopping-cart-line]="product.inCart === 0"
+                  [class.ri-delete-bin-line]="product.inCart === 1"
+                  class="text-muted"
+                ></i>
+              </button>
+            </div>
+          </mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+          <a [routerLink]="['/ecogui/client/product-details', product.id]" class="image">
+            <img [src]="product.image[0]" alt="{{ product.name }}" />
+          </a>
+
+          <div class="content">
+            <h5>
+              <a [routerLink]="['/ecogui/client/product-details', product.id]">
+                {{ product.name }}
+              </a>
+            </h5>
+
+            <!-- Note étoiles -->
+            <div class="ratings lh-1 d-flex align-items-center justify-content-center">
+              <div class="star">
+                <ng-container *ngFor="let star of [1, 2, 3, 4, 5]; let i = index">
+                  <i
+                    [ngClass]="{
+                      'ri-star-fill': i < product.rating,
+                      'ri-star-line': i >= product.rating
+                    }"
+                  ></i>
+                </ng-container>
+              </div>
+              <span class="d-block text-body position-relative">
+                ({{ product.rating }})
+              </span>
+            </div>
+
+            <!-- Prix -->
+            <div class="price lh-1 d-flex justify-content-center align-items-center">
+              <span class="d-block fw-semibold text-black heading-font-family">
+                {{ product.price | number }} GNF
+              </span>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>

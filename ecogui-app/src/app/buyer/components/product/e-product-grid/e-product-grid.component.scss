@@ -1,0 +1,437 @@
+// Products Filter
+.trinta-card {
+    &.products-filter-card {
+        .mat-mdc-card-header {
+            margin-bottom: 15px;
+        }
+        .mat-mdc-card-content {
+            .filters-top {
+                margin-bottom: 25px;
+            }
+            .filters-bottom {
+                .selected-filters {
+                    ul {
+                        li {
+                            font-size: 12px;
+                            border-radius: 2px;
+                            margin-right: 12px;
+                            letter-spacing: 1px;
+                            padding: 3px 26px 3px 10px;
+                            background: rgba(96, 91, 255, 0.10);
+
+                            button {
+                                top: 50%;
+                                right: 8px;
+                                font-size: 17px;
+                                position: absolute;
+                                color: var(--primaryColor);
+                                transform: translateY(-50%);
+                                transition: var(--transition);
+
+                                &:hover {
+                                    color: red;
+                                }
+                            }
+                            &:last-child {
+                                margin-right: 0;
+                            }
+                        }
+                    }
+                    .mat-mdc-button {
+                        text-decoration: underline;
+                        color: var(--blackColor);
+                        letter-spacing: 0.13px;
+                        margin-left: 25px;
+                        min-width: auto;
+                        height: auto;
+                        padding: 0;
+                        font: {
+                            size: 13px;
+                            weight: 600;
+                            family: var(--headingFontFamily);
+                        };
+                    }
+                }
+                .search-btn {
+                    .mat-mdc-button {
+                        height: auto;
+                        min-width: auto;
+                        border-radius: 6px;
+                        padding: 13.5px 40px;
+                        letter-spacing: 0.15px;
+                        color: var(--whiteColor);
+                        background-color: var(--primaryColor);
+                        font: {
+                            size: 15px;
+                            weight: 600;
+                            family: var(--headingFontFamily);
+                        };
+                    }
+                }
+            }
+        }
+    }
+}
+::ng-deep {
+    .trinta-card {
+        &.products-filter-card {
+            .mat-mdc-card-content {
+                .filters-top {
+                    .mat-mdc-form-field {
+                        display: block;
+
+                        .mdc-text-field--filled {
+                            .mat-mdc-floating-label {
+                                mat-label {
+                                    position: relative;
+                                    padding-left: 30px;
+                                    letter-spacing: 0.14px;
+                                    color: var(--blackColor);
+                                    font: {
+                                        size: 14px;
+                                        weight: 600;
+                                        family: var(--headingFontFamily);
+                                    };
+                                    i {
+                                        transform: translateY(-50%);
+                                        font-weight: normal;
+                                        position: absolute;
+                                        color: #a9a9c8;
+                                        font-size: 22px;
+                                        top: 50%;
+                                        left: 0;
+                                    }
+                                }
+                            }
+                            &:not(.mdc-text-field--disabled) {
+                                .mdc-line-ripple {
+                                    &::before {
+                                        border-bottom-color: #eef4fa;
+                                    }
+                                }
+                            }
+                        }
+                        .mdc-text-field {
+                            background-color: transparent;
+                            border: {
+                                top-width: 0;
+                                left-width: 0;
+                                right-width: 0;
+                            };
+                            padding: {
+                                left: 0;
+                                right: 0;
+                            };
+                        }
+                        .mat-mdc-form-field-focus-overlay {
+                            display: none;
+                        }
+                        .mat-mdc-form-field-bottom-align {
+                            &::before {
+                                display: none;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Products Grid
+.trinta-card {
+    &.product-card {
+        padding: 20px 20px 30px;
+
+        .mat-mdc-card-header {
+            margin-bottom: 0;
+
+            .mat-mdc-card-title {
+                h5 {
+                    font: {
+                        size: 13px;
+                        family: var(--fontFamily);
+                    };
+                }
+            }
+        }
+        .mat-mdc-card-content {
+            text-align: center;
+
+            .image {
+                display: flex;
+                min-height: 216px;
+                align-items: center;
+                margin-bottom: 25px;
+                justify-content: center;
+
+                img {
+                    transition: var(--transition);
+                }
+            }
+            .content {
+                h5 {
+                    font-size: 16px;
+                    margin-bottom: 15px;
+                }
+                .ratings {
+                    .star {
+                        margin-right: 3px;
+
+                        i {
+                            font-size: 16px;
+                            color: #ee8336;
+                            margin-right: 2px;
+
+                            &:last-child {
+                                margin-right: 0;
+                            }
+                        }
+                    }
+                    span {
+                        top: 2px;
+                        margin-left: 3px;
+                    }
+                }
+                .price {
+                    margin-top: 20px;
+
+                    span {
+                        margin: {
+                            left: 5px;
+                            right: 5px;
+                        };
+                        &:nth-child(2) {
+                            font-size: 18px;
+                        }
+                    }
+                }
+            }
+        }
+        &:hover {
+            .mat-mdc-card-content {
+                .image {
+                    img {
+                        transform: scale(1.03);
+                    }
+                }
+            }
+        }
+    }
+}
+
+/* Max width 767px */
+@media only screen and (max-width : 767px) {
+
+    // Products Filter
+    .trinta-card {
+        &.products-filter-card {
+            padding: 20px;
+
+            .mat-mdc-card-header {
+                margin-bottom: 5px;
+            }
+            .mat-mdc-card-content {
+                .filters-top {
+                    margin-bottom: 20px;
+                }
+                .filters-bottom {
+                    .selected-filters {
+                        ul {
+                            li {
+                                margin: {
+                                    right: 8px;
+                                    bottom: 8px;
+                                };
+                            }
+                        }
+                        .mat-mdc-button {
+                            margin: {
+                                left: 0;
+                                top: 11px;
+                            };
+                        }
+                    }
+                    .search-btn {
+                        .mat-mdc-button {
+                            padding: 12px 30px;
+                            margin-top: 17px;
+                            font-size: 13px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    ::ng-deep {
+        .trinta-card {
+            &.products-filter-card {
+                .mat-mdc-card-content {
+                    .filters-top {
+                        .mat-mdc-form-field {
+                            .mdc-text-field--filled {
+                                .mat-mdc-floating-label {
+                                    mat-label {
+                                        padding-left: 28px;
+                                        font-size: 13px;
+
+                                        i {
+                                            font-size: 20px;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // Products Grid
+    .trinta-card {
+        &.product-card {
+            padding: 20px;
+
+            .mat-mdc-card-content {
+                .image {
+                    margin-bottom: 20px;
+                }
+                .content {
+                    h5 {
+                        font-size: 14px;
+                        margin-bottom: 13px;
+                    }
+                    .ratings {
+                        .star {
+                            i {
+                                font-size: 14px;
+                            }
+                        }
+                        span {
+                            top: 1px;
+                            margin-left: 0;
+                        }
+                    }
+                    .price {
+                        margin-top: 17px;
+
+                        span {
+                            &:nth-child(2) {
+                                font-size: 16px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+}
+
+/* Min width 576px to Max width 767px */
+@media only screen and (min-width : 576px) and (max-width : 767px) {}
+
+/* Min width 768px to Max width 991px */
+@media only screen and (min-width : 768px) and (max-width : 991px) {
+
+    // Products Filter
+    .trinta-card {
+        &.products-filter-card {
+            padding: 30px 25px;
+
+            .mat-mdc-card-header {
+                margin-bottom: 10px;
+            }
+            .mat-mdc-card-content {
+                .filters-top {
+                    margin-bottom: 25px;
+                }
+                .filters-bottom {
+                    .selected-filters {
+                        ul {
+                            li {
+                                margin-right: 10px;
+                            }
+                        }
+                        .mat-mdc-button {
+                            margin: {
+                                left: 0;
+                                top: 15px;
+                            };
+                        }
+                    }
+                    .search-btn {
+                        .mat-mdc-button {
+                            padding: 13px 35px;
+                            font-size: 14px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    ::ng-deep {
+        .trinta-card {
+            &.products-filter-card {
+                .mat-mdc-card-content {
+                    .filters-top {
+                        .mat-mdc-form-field {
+                            .mdc-text-field--filled {
+                                .mat-mdc-floating-label {
+                                    mat-label {
+                                        font-size: 13px;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // Products Grid
+    .trinta-card {
+        &.product-card {
+            padding: 20px 20px 25px;
+
+            .mat-mdc-card-content {
+                .image {
+                    margin-bottom: 20px;
+                }
+                .content {
+                    h5 {
+                        font-size: 15px;
+                    }
+                    .ratings {
+                        .star {
+                            i {
+                                font-size: 15px;
+                            }
+                        }
+                    }
+                    .price {
+                        margin-top: 17px;
+
+                        span {
+                            &:nth-child(2) {
+                                font-size: 17px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+}
+
+/* Min width 992px to Max width 1199px */
+@media only screen and (min-width : 992px) and (max-width : 1199px) {}
+
+/* Min width 1200px to Max width 1399px */
+@media only screen and (min-width: 1200px) and (max-width: 1399px) {}
+
+/* Min width 1600px */
+@media only screen and (min-width: 1600px) {}
