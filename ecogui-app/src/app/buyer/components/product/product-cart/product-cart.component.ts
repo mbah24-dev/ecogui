@@ -52,7 +52,24 @@ export class ProductCartComponent implements OnInit{
     const shippingFee = 150000;
     const discount = 1000000;
     this.grandTotal = this.total + shippingFee - discount;
+    if (this.grandTotal < 0)
+        this.grandTotal = 0;
   }
+
+    // Méthode pour supprimer un produit du panier
+    removeProduct(productId: number): void {
+        const updatedData = this.dataSource.data.filter(item => item.product.id !== productId);
+        this.dataSource.data = updatedData;
+        this.updateOrderSummary();
+    }
+
+     // Méthode pour recalculer le grand total
+    recalculateGrandTotal(): void {
+        // Calcul du grand total en sommant les totaux de chaque produit
+        this.grandTotal = this.dataSource.data.reduce((acc, item) => acc + item.total, 0);
+        if (this.grandTotal < 0)
+            this.grandTotal = 0;
+    }
 }
 
 export interface PeriodicElement {
