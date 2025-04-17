@@ -12,7 +12,7 @@ import { Product, ProductService } from '../../../services/product.service';
 
 @Component({
     selector: 'app-e-product-details',
-    imports: [CommonModule, RouterLink, MatCardModule, MatButtonModule, FeathericonsModule, CarouselModule, NgFor, MatProgressBarModule, MatMenuModule, ReviewsComponent],
+    imports: [CommonModule, MatCardModule, MatButtonModule, FeathericonsModule, CarouselModule, NgFor, MatProgressBarModule, MatMenuModule, ReviewsComponent],
     templateUrl: './product-details.component.html',
     styleUrl: './product-details.component.scss'
 })
@@ -25,21 +25,27 @@ export class ProductDetailsComponent implements OnInit {
     constructor(
       private route: ActivatedRoute,
       private productService: ProductService
-    ) {}
+    ) {
+
+    }
 
     ngOnInit(): void {
-      const id = Number(this.route.snapshot.paramMap.get('id'));
-      const product = this.productService.getProducts().find(p => p.id === id);
+        this.route.paramMap.subscribe(params => {
+          const id = Number(params.get('id'));
 
-      if (product) {
-        this.product = product;
-        this.productImages = product.image.map(img => ({ url: img }));
-      }
-
-      if (this.product.colorAvailable && this.product.colorAvailable.length > 0) {
-        this.selectedColor = this.product.colorAvailable[0]; // 1ère couleur sélectionnée
-      }
+          this.productService.getLiveProducts().subscribe(products => {
+            const found = products.find(p => p.id === id);
+            if (found) {
+              this.product = found;
+              this.productImages = found.image.map(img => ({ url: img }));
+              this.selectedImage = this.productImages[0]?.url || '';
+              this.selectedColor = found.colorAvailable?.[0] || null;
+            }
+          });
+        });
     }
+
+
 
     selectColor(color: string): void {
         this.selectedColor = color;
@@ -48,5 +54,10 @@ export class ProductDetailsComponent implements OnInit {
     changeimage(image: string) {
         this.selectedImage = image;
     }
+
+    toggleCart(): void {
+        this.productService.toggleCart(this.product);
+    }
+
   }
 

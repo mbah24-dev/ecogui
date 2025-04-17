@@ -1,5 +1,5 @@
-// src/app/services/product.service.ts
 import { Injectable } from '@angular/core';
+import { BehaviorSubject, catchError, combineLatest, map, Observable, of } from 'rxjs';
 
 export interface Product {
   id: number;
@@ -22,7 +22,109 @@ export interface Product {
   providedIn: 'root'
 })
 export class ProductService {
+  // ✅ États internes
+  private _favorites: { [id: number]: boolean } = this.loadFromLS('favorites');
+  private _cart: { [id: number]: boolean } = this.loadFromLS('cart');
+
+  // ✅ Subjects
+  private favoritesSubject = new BehaviorSubject<{ [id: number]: boolean }>(this._favorites);
+  private cartSubject = new BehaviorSubject<{ [id: number]: boolean }>(this._cart);
+
+  // ✅ Observables publics
+  favorites$ = this.favoritesSubject.asObservable();
+  cart$ = this.cartSubject.asObservable();
+
+  constructor() {}
+
+  // ✅ Accès directs
+  getFavorites(): { [key: string]: boolean } {
+    return this._favorites;
+  }
+
+  getCart(): { [key: string]: boolean } {
+    return this._cart;
+  }
+
+  // ✅ Méthodes de gestion
+  toggleFavorite(product: Product) {
+    if (this._favorites[product.id]) {
+      delete this._favorites[product.id];
+    } else {
+      this._favorites[product.id] = true;
+    }
+
+    this.favoritesSubject.next({ ...this._favorites });
+    this.saveToLS('favorites', this._favorites);
+  }
+
+  toggleCart(product: Product) {
+    if (this._cart[product.id]) {
+      delete this._cart[product.id];
+    } else {
+      this._cart[product.id] = true;
+    }
+
+    this.cartSubject.next({ ...this._cart });
+    this.saveToLS('cart', this._cart);
+  }
+
+  clearFavorites() {
+    this._favorites = {};
+    this.favoritesSubject.next({});
+    this.saveToLS('favorites', {});
+  }
+
+  clearCart() {
+    this._cart = {};
+    this.cartSubject.next({});
+    this.saveToLS('cart', {});
+  }
+
+  // ✅ Chargement / Sauvegarde
+  private saveToLS(key: string, value: any) {
+    if (typeof window === 'undefined' || !window.localStorage) return;
+    localStorage.setItem(key, JSON.stringify(value));
+  }
+
+  private loadFromLS(key: string): { [id: number]: boolean } {
+    if (typeof window === 'undefined' || !window.localStorage) return {};
+    return JSON.parse(localStorage.getItem(key) || '{}');
+  }
+
+  // ✅ Accès aux produits enrichis
   getProducts(): Product[] {
+    const products = [...this.allProducts()];
+    const favorites = this._favorites;
+    const cart = this._cart;
+
+    return products.map(p => ({
+      ...p,
+      isFavorite: favorites[p.id] ? 1 : 0,
+      inCart: cart[p.id] ? 1 : 0
+    }));
+  }
+
+  getLiveProducts(): Observable<Product[]> {
+    return combineLatest([
+      this.favorites$,
+      this.cart$
+    ]).pipe(
+      map(([favorites, cart]) =>
+        this.allProducts().map(p => ({
+          ...p,
+          isFavorite: favorites[p.id] ? 1 : 0,
+          inCart: cart[p.id] ? 1 : 0
+        }))
+      ),
+      catchError((error) => {
+        console.error('Erreur de récupération des produits:', error);
+        return of([]);
+      })
+    );
+  }
+
+  // ✅ Liste des produits (mock)
+  allProducts(): Product[] {
     return [
       {
         id: 1,
@@ -30,7 +132,7 @@ export class ProductService {
         category: 'Ordinateur',
         price: 12000000,
         rating: 5,
-        image: ['images/macbook.png', 'images/macbook2.png', 'images/macbook.png'],
+        image: ['images/profile.png', 'images/macbook2.png', 'images/macbook.png'],
         isFavorite: 0,
         inCart: 0,
         description: 'Une version optimisée du MacBook Air avec une puissance professionnelle pour les créatifs et développeurs.',
@@ -42,11 +144,11 @@ export class ProductService {
       },
       {
         id: 2,
-        name: 'iPhone 16 Pro Max',
+        name: 'Montre',
         category: 'Téléphonie',
-        price: 13500000,
+        price: 935000,
         rating: 4.5,
-        image: ['images/iphone14.png', 'images/iphone15.png', 'images/iphone14.png'],
+        image: ['images/montre.png', 'images/iphone15.png', 'images/iphone14.png'],
         isFavorite: 0,
         inCart: 0,
         description: 'Dernière génération de l’iPhone avec appareil photo avancé et autonomie prolongée.',

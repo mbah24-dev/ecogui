@@ -1,0 +1,115 @@
+<div
+    class="sidebar-area bg-white transition"
+    [ngClass]="{'active': isToggled}"
+>
+    <div class="logo bg-white">
+        <a routerLink="/" class="d-flex align-items-center">
+            <img src="images/logo-icon.svg" alt="logo-icon">
+            <span class="fw-extrabold">
+                Ecogui
+            </span>
+        </a>
+    </div>
+    <div
+        class="burger-menu transition cursor-pointer"
+        [ngClass]="{'active': isToggled}"
+        (click)="toggle()"
+    >
+        <span class="top-bar transition bg-dark d-block"></span>
+        <span class="middle-bar transition bg-dark d-block"></span>
+        <span class="bottom-bar transition bg-dark d-block"></span>
+    </div>
+    <ng-scrollbar visibility="hover">
+        <div class="sidebar-inner">
+            <div class="sidebar-menu">
+                <mat-accordion>
+                    <span class="sub-title text-body">
+                        Accueil
+                    </span>
+
+                    <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = true">
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                <i-feather name="home"></i-feather>
+                                <span class="title">
+                                    Dashboard
+                                </span>
+                                <span class="trinta-badge">
+                                    8
+                                </span>
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <ul class="sidebar-sub-menu">
+                            <li class="sidemenu-item">
+                                <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link">
+                                    🛒 Achats
+                                </a>
+                            </li>
+                            <li class="sidemenu-item">
+                                <a routerLink="/orders" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link">
+                                    📦 Mes commandes
+                                </a>
+                            </li>
+                            <li class="sidemenu-item">
+                                <a routerLink="/invoices" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link">
+                                    💳 Factures
+                                </a>
+                            </li>
+                            <li class="sidemenu-item">
+                                <a routerLink="/whishlist" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link">
+                                    ❤️ Favoris
+                                </a>
+                            </li>
+                            <li class="sidemenu-item">
+                                <a routerLink="/shipping" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link">
+                                    🚚 Suivi de livraison
+                                </a>
+                            </li>
+                            <li class="sidemenu-item">
+                                <a routerLink="/address" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link">
+                                    🏠 Mes adresses
+                                </a>
+                            </li>
+                            <li class="sidemenu-item">
+                                <a routerLink="/transactions" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link">
+                                    💰 Moyens de paiement
+                                </a>
+                            </li>
+                            <li class="sidemenu-item">
+                                <a routerLink="/help" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link">
+                                    ❓ Support / Aide
+                                </a>
+                            </li>
+                        </ul>
+                    </mat-expansion-panel>
+
+                    <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = true">
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                <i-feather name="sliders"></i-feather>
+                                <span class="title">
+                                    Authentification
+                                </span>
+                                <span class="trinta-badge">
+                                    3
+                                </span>
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <ul class="sidebar-sub-menu">
+                            <li class="sidemenu-item">
+                                <a routerLink="/authentication" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link">
+                                    🔑  Se connecter
+                                </a>
+                            </li>
+                            <li class="sidemenu-item">
+                                <a routerLink="/authentication/sign-up" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link">
+                                    👤  Créer un compte
+                                </a>
+                            </li>
+                        </ul>
+                    </mat-expansion-panel>
+                </mat-accordion>
+            </div>
+        </div>
+    </ng-scrollbar>
+</div>

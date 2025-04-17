@@ -111,9 +111,9 @@
                     </ul>
                     <div class="d-md-flex align-items-center">
                         <div class="box d-flex align-items-center ms-4">
-                            <button class="btn">
-                                <i-feather name="shopping-cart" class="me-2"></i-feather>
-                                Ajouter au panier
+                            <button class="btn" (click)="toggleCart()">
+                                <i-feather [name]="product.inCart === 1 ? 'trash-2' : 'shopping-cart'" class="me-2"></i-feather>
+                                {{ product.inCart === 1 ? 'Supprimer du panier' : 'Ajouter au panier' }}
                             </button>
                         </div>
                     </div>
@@ -125,4 +125,3 @@
 
 <!-- Reviews -->
 <app-reviews [product]="product" />
-

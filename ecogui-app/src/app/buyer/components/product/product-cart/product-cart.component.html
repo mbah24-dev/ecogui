@@ -1,0 +1,182 @@
+<div class="row">
+    <div class="col-lg-8">
+      <mat-card class="trinta-card shopping-cart-card mb-25 bg-white border-none d-block">
+        <mat-card-header>
+          <mat-card-title>
+            <h5 class="mt-0 mb-0">
+              Panier d'achat
+            </h5>
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="shopping-cart-table">
+            <div class="table-responsive">
+              <table mat-table [dataSource]="dataSource">
+
+                <!-- Product Column -->
+                <ng-container matColumnDef="product">
+                  <th mat-header-cell *matHeaderCellDef class="pl-0">
+                    Produit
+                  </th>
+                  <td mat-cell *matCellDef="let element" class="pl-0">
+                    <div class="product-info d-flex align-items-center">
+                      <a routerLink="/" class="image d-block">
+                        <img [src]="element.product.img" alt="image-produit">
+                      </a>
+                      <div class="info">
+                        <a [routerLink]="['/ecogui/client/product-details', element.product.id ]" class="d-block fw-semibold">
+                          {{element.product.title}}
+                        </a>
+                        <span class="d-block text-body">
+                          {{element.product.date}}
+                        </span>
+                      </div>
+                    </div>
+                  </td>
+                </ng-container>
+
+                <!-- Price Column -->
+                <ng-container matColumnDef="price">
+                  <th mat-header-cell *matHeaderCellDef>
+                    Prix
+                  </th>
+                  <td mat-cell *matCellDef="let element">
+                    {{element.price | number:'1.0-2':'fr' }} GNF
+                  </td>
+                </ng-container>
+
+                <!-- Size Column -->
+                <ng-container matColumnDef="size">
+                  <th mat-header-cell *matHeaderCellDef>
+                    Taille
+                  </th>
+                  <td mat-cell *matCellDef="let element">
+                    {{element.size}} <!-- Dynamically show size from element -->
+                  </td>
+                </ng-container>
+
+                <!-- Quantity Column -->
+                <ng-container matColumnDef="quantity">
+                  <th mat-header-cell *matHeaderCellDef> Quantité </th>
+                  <td mat-cell *matCellDef="let element">
+                    <mat-form-field appearance="outline">
+                      <mat-select [(ngModel)]="element.quantity" (selectionChange)="updateTotal()">
+                        <mat-option *ngFor="let qty of getQuantityOptions(5)" [value]="qty">
+                          {{ qty }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </td>
+                </ng-container>
+
+                <!-- Total Column -->
+                <ng-container matColumnDef="total">
+                  <th mat-header-cell *matHeaderCellDef> Total </th>
+                  <td mat-cell *matCellDef="let element">
+                    {{ element.total | number:'1.0-2':'fr' }} GNF<!-- Display total in GNF currency -->
+                  </td>
+                </ng-container>
+
+                <!-- Action Column -->
+                <ng-container matColumnDef="action">
+                  <th mat-header-cell *matHeaderCellDef class="text-end pr-0"></th>
+                  <td mat-cell *matCellDef="let element" class="text-end pr-0">
+                    <button mat-button>
+                      <i-feather name="{{element.action}}"></i-feather>
+                    </button>
+                  </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+              </table>
+            </div>
+          </div>
+
+          <!-- Notes section -->
+          <form class="add-note">
+            <label class="d-block fw-medium">
+              Ajouter une note :
+            </label>
+            <textarea class="d-block w-100" cols="30" rows="4" placeholder="Écrire une note..."></textarea>
+            <div class="checkout-btn">
+              <button mat-button type="button">
+                Valider la commande
+              </button>
+            </div>
+          </form>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <div class="col-lg-4">
+      <mat-card class="trinta-card order-summary-card mb-25 bg-white border-none d-block">
+        <mat-card-header>
+          <mat-card-title>
+            <h5 class="mt-0 mb-0">
+              Résumé de la commande
+            </h5>
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <ul class="p-0 m-0 list-unstyled">
+            <li class="d-flex justify-content-between text-dark">
+              <span class="d-block fw-medium">
+                Description
+              </span>
+              <span class="d-block fw-medium">
+                Prix
+              </span>
+            </li>
+            <li class="d-flex justify-content-between text-black">
+              <span class="d-block">
+                Total général :
+              </span>
+              <span class="d-block">
+                {{ total | number:'1.0-2':'fr' }}  GNF <!-- Dynamic total calculation -->
+              </span>
+            </li>
+            <li class="d-flex justify-content-between text-black">
+              <span class="d-block">
+                Frais de livraison :
+              </span>
+              <span class="d-block">
+                150 000 GNF
+              </span>
+            </li>
+            <li class="d-flex justify-content-between text-black">
+              <span class="d-block">
+                Remise :
+              </span>
+              <span class="d-block">
+                1 000 000 GNF
+              </span>
+            </li>
+            <li class="d-flex justify-content-between text-dark">
+              <span class="d-block fw-medium">
+                Total :
+              </span>
+              <span class="d-block fw-medium">
+                {{ grandTotal | number:'1.0-2':'fr' }} GNF <!-- Display grand total after fees and discount -->
+              </span>
+            </li>
+          </ul>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="trinta-card shopping-cart-card mb-25 bg-white border-none d-block">
+        <mat-card-content>
+          <div class="coupon-info">
+            Utilisez le code promo <strong class="fw-semibold">Ecogui-224</strong> et bénéficiez de 20% de réduction !
+          </div>
+          <form class="coupon-code position-relative">
+            <input type="text" class="d-block w-100" placeholder="Code promo...">
+            <button mat-button type="button">
+              GO
+            </button>
+          </form>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>

@@ -6,72 +6,59 @@ import { MatCardModule } from '@angular/material/card';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSelectModule } from '@angular/material/select';
 import { RouterLink } from '@angular/router';
-import { CommonModule } from '@angular/common';
+import { CommonModule, registerLocaleData } from '@angular/common';
+import localeFr from '@angular/common/locales/fr';
 
 
 @Component({
   selector: 'app-product-list',
   templateUrl: './product-list.component.html',
-  styleUrl: '../e-product-grid/e-product-grid.component.scss',
+  styleUrl: './product-list.component.scss',
   imports: [MatCardModule, MatMenuModule, MatButtonModule, RouterLink, MatSelectModule, FormsModule, ReactiveFormsModule, CommonModule]
 })
 export class ProductListComponent implements OnInit {
-  products: Product[] = [];
+    products: Product[] = [];
 
-  constructor(private productService: ProductService) {}
+    constructor(private productService: ProductService) {}
 
-  ngOnInit(): void {
-    this.products = this.productService.getProducts();
+    ngOnInit(): void {
+      this.loadProducts();
+      registerLocaleData(localeFr);
 
-    if (this.isBrowser()) {
-      const favorites = JSON.parse(localStorage.getItem('favorites') || '{}');
-      const cartItems = JSON.parse(localStorage.getItem('cart') || '{}');
+      this.productService.favorites$.subscribe(() => {
+        this.updateProductStates();
+      });
+
+      this.productService.cart$.subscribe(() => {
+        this.updateProductStates();
+      });
+    }
+
+    loadProducts() {
+      this.products = this.productService.getProducts();
+      this.updateProductStates();
+    }
+
+    updateProductStates() {
+      const favs = this.productService.getFavorites();
+      const cart = this.productService.getCart();
 
       this.products = this.products.map(p => ({
         ...p,
-        isFavorite: favorites[p.id] ? 1 : 0,
-        inCart: cartItems[p.id] ? 1 : 0
+        isFavorite: favs[p.id] ? 1 : 0,
+        inCart: cart[p.id] ? 1 : 0
       }));
     }
-  }
 
+    toggleFavorite(product: Product) {
+      this.productService.toggleFavorite(product);
+    }
 
+    toggleCart(product: Product) {
+      this.productService.toggleCart(product);
+    }
 
-  toggleFavorite(product: Product) {
-    product.isFavorite = product.isFavorite ? 0 : 1;
-
-    if (this.isBrowser()) {
-      const favorites = JSON.parse(localStorage.getItem('favorites') || '{}');
-
-      if (product.isFavorite) {
-        favorites[product.id] = true;
-      } else {
-        delete favorites[product.id];
-      }
-
-      localStorage.setItem('favorites', JSON.stringify(favorites));
+    isBrowser(): boolean {
+      return typeof window !== 'undefined' && typeof window.localStorage !== 'undefined';
     }
   }
-
-
-  toggleCart(product: Product) {
-    product.inCart = product.inCart ? 0 : 1;
-    if (this.isBrowser())
-    {
-        const cart = JSON.parse(localStorage.getItem('cart') || '{}');
-
-        if (product.inCart) {
-        cart[product.id] = true;
-        } else {
-        delete cart[product.id];
-        }
-
-        localStorage.setItem('cart', JSON.stringify(cart));
-    }
-  }
-
-  isBrowser(): boolean {
-    return typeof window !== 'undefined' && typeof window.localStorage !== 'undefined';
-  }
-
-}

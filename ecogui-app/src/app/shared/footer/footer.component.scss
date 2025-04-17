@@ -1,0 +1,132 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   footer.component.scss                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mbah <mbah@student.42lyon.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/14 17:17:05 by mbah              #+#    #+#             */
+/*   Updated: 2025/04/16 00:08:52 by mbah             ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+.footer-area {
+    padding: 15.5px 20px;
+
+    p {
+        a {
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+    }
+}
+
+/* Max width 767px */
+@media only screen and (max-width : 767px) {
+
+    .footer-area {
+        padding: 15px 20px;
+    }
+
+}
+
+.ecogui-footer {
+    padding: 4rem 2rem 2rem;
+    font-family: 'Poppins', sans-serif;
+    border-top: 2px solid #e0e0e0;
+
+    .footer-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 3rem;
+
+      .footer-branding {
+        .footer-logo {
+          width: 160px;
+          margin-bottom: 1rem;
+        }
+
+        .footer-desc {
+          font-size: 1rem;
+          line-height: 1.6;
+        }
+      }
+
+      .footer-links {
+        h4 {
+          font-size: 1.1rem;
+          margin-bottom: 1rem;
+          font-weight: 600;
+        }
+
+        ul {
+          list-style: none;
+          padding: 0;
+
+          li {
+            margin-bottom: 0.5rem;
+
+            a {
+              text-decoration: none;
+              transition: color 0.3s ease;
+
+              &:hover {
+                color: #00a86b;
+              }
+            }
+          }
+        }
+
+        .social-icons {
+          display: flex;
+          gap: 1rem;
+          margin-top: 0.5rem;
+
+          a {
+            font-size: 1.4rem;
+            transition: color 0.3s ease;
+
+            &:hover {
+              color: #00a86b;
+            }
+          }
+        }
+      }
+    }
+
+    .footer-bottom {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid #ccc;
+      text-align: center;
+      font-size: 0.95rem;
+
+      a {
+        color: #00a86b;
+        font-weight: 500;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+
+
+/* Min width 576px to Max width 767px */
+@media only screen and (min-width : 576px) and (max-width : 767px) {}
+
+/* Min width 768px to Max width 991px */
+@media only screen and (min-width : 768px) and (max-width : 991px) {}
+
+/* Min width 992px to Max width 1199px */
+@media only screen and (min-width : 992px) and (max-width : 1199px) {}
+
+/* Min width 1200px to Max width 1399px */
+@media only screen and (min-width: 1200px) and (max-width: 1399px) {}
+
+/* Min width 1600px */
+@media only screen and (min-width: 1600px) {}

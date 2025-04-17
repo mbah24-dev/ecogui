@@ -6,7 +6,7 @@
 /*   By: mbah <mbah@student.42lyon.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:20:00 by mbah              #+#    #+#             */
-/*   Updated: 2025/04/14 17:20:10 by mbah             ###   ########.fr       */
+/*   Updated: 2025/04/16 19:22:55 by mbah             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@ export class ToggleService {
     constructor() {
         // Dark Mode: Only access localStorage in the browser
         if (this.isBrowser()) {
-        const storedTheme = localStorage.getItem('isDarkTheme');
-        this.isDarkTheme.next(storedTheme ? JSON.parse(storedTheme) : false);
+            const storedTheme = localStorage.getItem('isDarkTheme');
+            this.isDarkTheme.next(storedTheme ? JSON.parse(storedTheme) : false);
         }
     }
 

@@ -29,113 +29,12 @@
                     <i-feather name="moon"></i-feather>
                 </button>
             </li>
-            <li>
-                <button mat-button [matMenuTriggerFor]="messagesMenu" class="messages-menu-btn">
-                    <i-feather name="heart"></i-feather>
-                    <span class="trinta-badge fw-bold text-center text-white rounded-circle d-flex align-items-center justify-content-center">
-                        3
-                    </span>
-                </button>
-                <mat-menu class="messages-menu-dropdown" #messagesMenu="matMenu" xPosition="before">
-                    <div class="title d-flex align-items-center justify-content-between">
-                        <span class="fw-medium fs-16">
-                            Favoris
-                            <span class="text-body fw-normal fs-15">
-                                (3)
-                            </span>
-                        </span>
-                        <a routerLink="/chat" class="link-btn fw-medium text-primary">
-                            Supprimer
-                        </a>
-                    </div>
-                    <ul class="menu-body pl-0 mt-0 list-unstyled">
-                        <li class="position-relative">
-                            <img src="images/users/user1.jpg" class="rounded-circle position-absolute" alt="user">
-                            <span class="sub-title d-block fw-medium">
-                                T-shirt nike
-                            </span>
-                            <span class="message d-block text-body">
-                                T-shirt nike taille L , couleur rouge
-                            </span>
-                            <a routerLink="/chat" class="d-block left-0 top-0 bottom-0 right-0 z-1 position-absolute"></a>
-                            <span class="unread d-inline-block rounded-circle bg-primary position-absolute"></span>
-                        </li>
-                        <li class="position-relative">
-                            <img src="images/users/user2.jpg" class="rounded-circle position-absolute" alt="user">
-                            <span class="sub-title d-block fw-medium">
-                                T-shirt nike
-                            </span>
-                            <span class="message d-block text-body">
-                                T-shirt nike taille S , couleur noir
-                            </span>
-                            <a routerLink="/chat" class="d-block left-0 top-0 bottom-0 right-0 z-1 position-absolute"></a>
-                        </li>
-                        <li class="position-relative">
-                            <img src="images/users/user3.jpg" class="rounded-circle position-absolute" alt="user">
-                            <span class="sub-title d-block fw-medium">
-                                T-shirt nike
-                            </span>
-                            <span class="message d-block text-body">
-                                T-shirt nike taille XS , couleur jaune
-                            </span>
-                            <a routerLink="/chat" class="d-block left-0 top-0 bottom-0 right-0 z-1 position-absolute"></a>
-                        </li>
-                    </ul>
-                    <div class="menu-footer text-center">
-                        <a routerLink="/chat" class="text-primary text-decoration-underline d-inline-block fw-medium">
-                            Voir tout
-                        </a>
-                    </div>
-                </mat-menu>
-            </li>
-            <li>
-                <button mat-button [matMenuTriggerFor]="notificationsMenu" class="notifications-menu-btn">
-                    <i-feather name="shopping-cart"></i-feather>
-                    <span class="trinta-badge fw-bold bg-primary text-center text-white rounded-circle d-flex align-items-center justify-content-center">
-                        2
-                    </span>
-                </button>
-                <mat-menu class="notifications-menu-dropdown" #notificationsMenu="matMenu" xPosition="before">
-                    <div class="title d-flex align-items-center justify-content-between">
-                        <span class="fw-medium fs-16">
-                            Panier
-                            <span class="text-body fw-normal fs-15">
-                                (03)
-                            </span>
-                        </span>
-                        <a routerLink="/notifications" class="link-btn fw-medium text-primary">
-                            Tout supprimer
-                        </a>
-                    </div>
-                    <ul class="menu-body p-0 mt-0 list-unstyled">
-                        <li class="position-relative">
-                            <div class="icon rounded-circle d-flex align-items-center justify-content-center position-absolute text-center transition">
-                                JR
-                            </div>
-                            <span class="sub-title d-block">
-                                Jordan Retro 4 <strong class="text-body fw-normal"> qt: <span> 2 </span></strong>
-                            </span>
-                            <a routerLink="/notifications" class="d-block left-0 top-0 bottom-0 right-0 z-1 position-absolute"></a>
-                            <span class="unread d-inline-block rounded-circle bg-primary position-absolute"></span>
-                        </li>
-                        <li class="position-relative">
-                            <div class="icon rounded-circle d-flex align-items-center justify-content-center position-absolute text-center transition">
-                                IP
-                            </div>
-                            <span class="sub-title d-block">
-                                Iphone 15 <strong class="text-body fw-normal">qt: <span> 1 </span></strong>
-                            </span>
-                            <a routerLink="/notifications" class="d-block left-0 top-0 bottom-0 right-0 z-1 position-absolute"></a>
-                            <span class="unread d-inline-block rounded-circle bg-primary position-absolute"></span>
-                        </li>
-                    </ul>
-                    <div class="menu-footer text-center">
-                        <a routerLink="/notifications" class="text-primary text-decoration-underline d-inline-block fw-medium">
-                            Voir le panier
-                        </a>
-                    </div>
-                </mat-menu>
-            </li>
+
+            <!-- whishlist -->
+            <app-whishlist [products]="(products$ | async) || []" />
+
+            <!-- cart-preview -->
+            <app-cart-preview [products]="(products$ | async) || []" />
 
             <li>
                 <button mat-button [matMenuTriggerFor]="languageMenu" class="language-menu-btn">
