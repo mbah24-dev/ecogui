@@ -14,4 +14,4 @@ import { ProductFilterComponent } from "./product-filter/product-filter.componen
     templateUrl: './product.component.html',
     styleUrl: './product.component.scss'
 })
-export class EProductsGridComponent {}
+export class ProductsGridComponent {}

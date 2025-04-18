@@ -12,7 +12,7 @@ import { FeathericonsModule } from '../../../../shared/icons/feathericons/feathe
 
 @Component({
     selector: 'app-invoice-information',
-    imports: [ NgIf, MatCardModule, MatButtonModule, FormsModule, MatFormFieldModule, MatInputModule, FeathericonsModule, NgxEditorModule, MatSelectModule],
+    imports: [MatCardModule, MatButtonModule, FormsModule, MatFormFieldModule, MatInputModule, FeathericonsModule, NgxEditorModule, MatSelectModule],
     templateUrl: './invoice-information.component.html',
     styleUrl: './invoice-information.component.scss'
 })
