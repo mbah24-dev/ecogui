@@ -1,0 +1,111 @@
+<mat-card class="trinta-card billing-info-card mb-25 bg-white border-none d-block">
+        <mat-card-header>
+            <mat-card-title>
+                <h5 class="mt-0 mb-0">
+                    Informations de facturation
+                </h5>
+            </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <form>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <label class="label d-block fw-medium mb-10">
+                            Prénom
+                        </label>
+                        <mat-form-field>
+                            <i-feather name="user"></i-feather>
+                            <mat-label>Veuillez saisir votre prénom</mat-label>
+                            <input matInput>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-6">
+                        <label class="label d-block fw-medium mb-10">
+                            Nom de famille
+                        </label>
+                        <mat-form-field>
+                            <i-feather name="user"></i-feather>
+                            <mat-label>Veuillez saisir votre nom de famille</mat-label>
+                            <input matInput>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-6">
+                        <label class="label d-block fw-medium mb-10">
+                            Adresse e-mail
+                        </label>
+                        <mat-form-field>
+                            <i-feather name="mail"></i-feather>
+                            <mat-label>Veuillez saisir votre adresse e-mail</mat-label>
+                            <input matInput>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-6">
+                        <label class="label d-block fw-medium mb-10">
+                            Numéro de téléphone
+                        </label>
+                        <mat-form-field>
+                            <i-feather name="phone"></i-feather>
+                            <mat-label>Veuillez entrer votre numéro de téléphone</mat-label>
+                            <input matInput>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-12">
+                        <label class="label d-block fw-medium mb-10">
+                            Adresse complète
+                        </label>
+                        <mat-form-field>
+                            <i-feather name="map-pin"></i-feather>
+                            <mat-label>Veuillez saisir votre adresse complète</mat-label>
+                            <input matInput>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-12">
+                        <label class="label d-block fw-medium mb-10">
+                            Informations complémentaires
+                        </label>
+                        <mat-form-field>
+                            <i-feather name="map-pin"></i-feather>
+                            <mat-label>Indiquez toute information utile pour le livreur</mat-label>
+                            <input matInput>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-4">
+                        <label class="label d-block fw-medium mb-10">
+                            Ville
+                        </label>
+                        <mat-form-field>
+                            <i-feather name="loader"></i-feather>
+                            <mat-label>Nom de la ville</mat-label>
+                            <input matInput>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-4">
+                        <label class="label d-block fw-medium mb-10">
+                            Commune
+                        </label>
+                        <mat-form-field>
+                            <i-feather name="more-vertical"></i-feather>
+                            <mat-label>Nom de votre commune</mat-label>
+                            <input matInput>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-12">
+                        <label class="label d-block fw-medium mb-10">
+                            Remarques concernant la commande
+                        </label>
+                        <div class="NgxEditor__Wrapper mb-0">
+                            <ng-container *ngIf="editor">
+                                <ngx-editor-menu [editor]="editor" [toolbar]="toolbar"></ngx-editor-menu>
+                                <ngx-editor [editor]="editor"></ngx-editor>
+                            </ng-container>
+                        </div>
+                    </div>
+                </div>
+                <div class="procced-shipping-btn">
+                    <button mat-button type="button">
+                        Procéder au paiement
+                    </button>
+                </div>
+            </form>
+        </mat-card-content>
+</mat-card>

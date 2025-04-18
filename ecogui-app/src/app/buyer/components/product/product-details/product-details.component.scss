@@ -283,6 +283,14 @@
     }
   }
 
+  .color-item-for-color {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 2px solid #ddd;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
 
 
 /* Min width 576px to Max width 767px */

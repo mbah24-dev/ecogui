@@ -10,6 +10,7 @@ import { NotFoundComponent } from './shared/not-found/not-found.component';
 import { ProductDetailsComponent } from './buyer/components/product/product-details/product-details.component';
 import { EProductsGridComponent } from './buyer/components/product/product.component';
 import { ProductCartComponent } from './buyer/components/product/product-cart/product-cart.component';
+import { ProductCheckoutComponent } from './buyer/components/product/product-checkout/product-checkout.component';
 
 export const routes: Routes = [
     {path: '', component: EProductsGridComponent},
@@ -27,6 +28,7 @@ export const routes: Routes = [
     },
     {path: 'ecogui/client/cart', component: ProductCartComponent},
     {path: 'ecogui/client/product-details/:id', component: ProductDetailsComponent},
+    {path: 'ecogui/client/checkout', component: ProductCheckoutComponent},
     /* Les autres chemins ici */
 
     {path: '**', component: NotFoundComponent},

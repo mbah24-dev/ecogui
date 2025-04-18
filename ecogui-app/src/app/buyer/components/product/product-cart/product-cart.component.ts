@@ -1,3 +1,4 @@
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { Component, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -12,110 +13,59 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { NgFor, CommonModule, registerLocaleData } from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
+import { CartItem, Product, ProductService } from '../../../services/product.service';
+import { isPlatformBrowser } from '@angular/common';
+import { Inject, PLATFORM_ID } from '@angular/core';
+
+
 @Component({
-  selector: 'app-e-cart',
-  imports: [NgFor, CommonModule, MatCardModule, MatMenuModule, MatButtonModule, RouterLink, MatTableModule, MatPaginatorModule, FeathericonsModule, MatFormFieldModule, MatInputModule, FormsModule, MatSelectModule],
+  selector: 'app-cart',
+  imports: [NgFor, MatTooltipModule,  CommonModule, MatCardModule, MatMenuModule, MatButtonModule, RouterLink, MatTableModule, MatPaginatorModule, FeathericonsModule, MatFormFieldModule, MatInputModule, FormsModule, MatSelectModule],
   templateUrl: './product-cart.component.html',
   styleUrls: ['./product-cart.component.scss']
 })
-export class ProductCartComponent implements OnInit{
 
-  displayedColumns: string[] = ['product', 'price', 'size', 'quantity', 'total', 'action'];
-  dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
+export class ProductCartComponent implements OnInit {
+    displayedColumns: string[] = ['product', 'price', 'color', 'size', 'quantity', 'total', 'action'];
+    dataSource = new MatTableDataSource<CartItem>([]);
+    total = 0;
+    grandTotal = 0;
 
-  // Déclarer les variables pour total et grandTotal
-  total: number = 0;
-  grandTotal: number = 0;
+    constructor(private productService: ProductService,
+        @Inject(PLATFORM_ID) private platformId: Object
+    ) {}
 
-  ngOnInit(): void {
-    registerLocaleData(localeFr);
-    this.total = this.dataSource.data.reduce((sum, item) => sum + item.total, 0);
-    const shippingFee = 150000;
-    const discount = 1000000;
-    this.grandTotal = this.total + shippingFee - discount;
-  }
+    ngOnInit(): void {
+      registerLocaleData(localeFr);
 
-  getQuantityOptions(max: number): number[] {
-    return Array.from({length: max}, (_, i) => i + 1);
-  }
+      const cartItems = this.productService.getCartItems();
+      this.dataSource.data = cartItems;
+      this.updateOrderSummary();
+    }
 
-  updateTotal() {
-    this.dataSource.data.forEach(item => {
-      item.total = item.price * item.quantity;
-    });
+    getQuantityOptions(max: number): number[] {
+      return Array.from({ length: max }, (_, i) => i + 1);
+    }
 
-    this.updateOrderSummary();
-  }
+    onQuantityChange(item: CartItem, quantity: number) {
+      item.quantity = quantity;
+      item.total = item.price * quantity;
+      this.productService.updateCartItemQuantity(item.id, quantity);
+      this.updateOrderSummary();
+    }
 
-  updateOrderSummary() {
-    this.total = this.dataSource.data.reduce((sum, item) => sum + item.total, 0);
-    const shippingFee = 150000;
-    const discount = 1000000;
-    this.grandTotal = this.total + shippingFee - discount;
-    if (this.grandTotal < 0)
-        this.grandTotal = 0;
-  }
+    updateOrderSummary() {
+      this.total = this.dataSource.data.reduce((sum, item) => sum + item.total, 0);
+      const shippingFee = 0;
+      const discount = 0;
+      this.grandTotal = Math.max(this.total + shippingFee - discount, 0);
+      if (isPlatformBrowser(this.platformId))
+        localStorage.setItem('grandTotal', JSON.stringify(this.grandTotal));
+    }
 
-    // Méthode pour supprimer un produit du panier
     removeProduct(productId: number): void {
-        const updatedData = this.dataSource.data.filter(item => item.product.id !== productId);
-        this.dataSource.data = updatedData;
-        this.updateOrderSummary();
+      this.productService.toggleCart({ id: productId } as any);
+      this.dataSource.data = this.productService.getCartItems();
+      this.updateOrderSummary();
     }
-
-     // Méthode pour recalculer le grand total
-    recalculateGrandTotal(): void {
-        // Calcul du grand total en sommant les totaux de chaque produit
-        this.grandTotal = this.dataSource.data.reduce((acc, item) => acc + item.total, 0);
-        if (this.grandTotal < 0)
-            this.grandTotal = 0;
-    }
-}
-
-export interface PeriodicElement {
-  product: any;
-  price: number;
-  size: string;
-  quantity: number;
-  total: number;
-  action: string;
-}
-
-const ELEMENT_DATA: PeriodicElement[] = [
-  {
-    product: {
-      id: 2,
-      img: 'images/macbook2.png',
-      title: 'MacBook Pro M2',
-    },
-    price: 20000000,
-    size: '16"',
-    quantity: 1,
-    total: 20000000,
-    action: 'trash-2'
-  },
-  {
-    product: {
-      id: 1,
-      img: 'images/montre.png',
-      title: 'Montre connectée Galaxy Fit',
-    },
-    price: 1750000,
-    size: 'Standard',
-    quantity: 1,
-    total: 1750000,
-    action: 'trash-2'
-  },
-  {
-    product: {
-      id: 4,
-      img: 'images/iphone14.png',
-      title: 'iPhone 14 Pro Max',
-    },
-    price: 15500000,
-    size: '6.7"',
-    quantity: 1,
-    total: 15500000,
-    action: 'trash-2'
   }
-];

@@ -81,7 +81,7 @@
                               Prix :
                             </span>
                             <span class="d-block text-black ms-1">
-                              {{ product.price | number }} GNF
+                              {{ product.price | number:'1.0-2':'fr' }} GNF
                             </span>
                         </li>
                         <li class="d-flex align-items-center fs-14">
@@ -94,11 +94,18 @@
                         </li>
                         <li class="d-flex align-items-center fs-14">
                             <span class="d-block fw-medium">
-                              Taille :
+                                Taille :
                             </span>
-                            <span class="d-block text-black ms-1">
-                              {{ product.size }}
-                            </span>
+                            <div class="colors d-flex flex-wrap gap-2 mt-2">
+                                <div
+                                  class="color-item"
+                                  *ngFor="let size of product.sizeAvailable"
+                                  [ngClass]="{ 'selected': size === sizeSelected }"
+                                  (click)="selectSize(size)"
+                                >
+                                  <span>{{ size }}</span>
+                                </div>
+                            </div>
                         </li>
                         <li class="d-flex align-items-center fs-14">
                             <span class="d-block fw-medium">

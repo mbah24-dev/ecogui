@@ -12,40 +12,56 @@ export interface Product {
   inCart: number;
   description: string;
   stock: number;
-  size: string;
+  sizeAvailable: string[];
   totalReview: number;
   seller: string;
   colorAvailable: string[];
 }
 
+export interface CartItem extends Product {
+  quantity: number;
+  total: number;
+  action: string;
+  size: string;
+  color: string;
+}
+
+type FavoriteMap = { [id: number]: boolean };
+type CartItemMap = {
+    [id: number]: {
+      size: string;
+      color: string;
+      qty: number;
+    };
+};
+
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ProductService {
-  // ✅ États internes
-  private _favorites: { [id: number]: boolean } = this.loadFromLS('favorites');
-  private _cart: { [id: number]: boolean } = this.loadFromLS('cart');
+  private readonly FAVORITES_KEY = 'favorites';
+  private readonly CART_KEY = 'cart';
+  private readonly ORDER_KEY = 'order';
 
-  // ✅ Subjects
-  private favoritesSubject = new BehaviorSubject<{ [id: number]: boolean }>(this._favorites);
-  private cartSubject = new BehaviorSubject<{ [id: number]: boolean }>(this._cart);
+  private _favorites: FavoriteMap = this.loadFromLS(this.FAVORITES_KEY);
+  private _cart: CartItemMap = this.loadFromLS(this.CART_KEY);
+  private _order: CartItemMap = this.loadFromLS(this.ORDER_KEY);
 
-  // ✅ Observables publics
+  private favoritesSubject = new BehaviorSubject<FavoriteMap>(this._favorites);
+  private cartSubject = new BehaviorSubject<CartItemMap>(this._cart);
+  private orderSubject = new BehaviorSubject<CartItemMap>(this._order);
+
   favorites$ = this.favoritesSubject.asObservable();
   cart$ = this.cartSubject.asObservable();
+  order$ = this.orderSubject.asObservable();
 
   constructor() {}
 
-  // ✅ Accès directs
-  getFavorites(): { [key: string]: boolean } {
+  // --- Favoris ---
+  getFavorites(): FavoriteMap {
     return this._favorites;
   }
 
-  getCart(): { [key: string]: boolean } {
-    return this._cart;
-  }
-
-  // ✅ Méthodes de gestion
   toggleFavorite(product: Product) {
     if (this._favorites[product.id]) {
       delete this._favorites[product.id];
@@ -54,77 +70,125 @@ export class ProductService {
     }
 
     this.favoritesSubject.next({ ...this._favorites });
-    this.saveToLS('favorites', this._favorites);
-  }
-
-  toggleCart(product: Product) {
-    if (this._cart[product.id]) {
-      delete this._cart[product.id];
-    } else {
-      this._cart[product.id] = true;
-    }
-
-    this.cartSubject.next({ ...this._cart });
-    this.saveToLS('cart', this._cart);
+    this.saveToLS(this.FAVORITES_KEY, this._favorites);
   }
 
   clearFavorites() {
     this._favorites = {};
     this.favoritesSubject.next({});
-    this.saveToLS('favorites', {});
+    this.saveToLS(this.FAVORITES_KEY, {});
   }
+
+  // --- Panier ---
+  getCart(): CartItemMap {
+    return this._cart;
+  }
+
+  toggleCart(product: Product, selectedSize?: string | null, selectedColor?: string | null) {
+    if (this._cart[product.id]) {
+      delete this._cart[product.id];
+    } else {
+      this._cart[product.id] = {
+        size: selectedSize || product.sizeAvailable?.[0] || '',
+        color: selectedColor || product.colorAvailable?.[0] || '',
+        qty: 1,
+      };
+    }
+
+    this.cartSubject.next({ ...this._cart });
+    this.saveToLS(this.CART_KEY, this._cart);
+  }
+
+  updateCartItemQuantity(productId: number, quantity: number) {
+    if (this._cart[productId]) {
+      this._cart[productId].qty = quantity;
+      this.cartSubject.next({ ...this._cart });
+      this.saveToLS(this.CART_KEY, this._cart);
+    }
+  }
+
 
   clearCart() {
     this._cart = {};
     this.cartSubject.next({});
-    this.saveToLS('cart', {});
+    this.saveToLS(this.CART_KEY, {});
   }
 
-  // ✅ Chargement / Sauvegarde
-  private saveToLS(key: string, value: any) {
-    if (typeof window === 'undefined' || !window.localStorage) return;
-    localStorage.setItem(key, JSON.stringify(value));
+  getCartItems(): CartItem[] {
+    const baseProducts = this.allProducts();
+    return Object.entries(this._cart).map(([idStr, { size, color, qty }]) => {
+      const id = +idStr;
+      const product = baseProducts.find(p => p.id === id);
+      if (!product) return null!;
+      const qty_temp = qty ?? 1;
+      return {
+        ...product,
+        quantity: qty_temp,
+        total: product.price * qty_temp,
+        action: 'trash-2',
+        size,
+        color,
+      };
+    }).filter(Boolean);
   }
 
-  private loadFromLS(key: string): { [id: number]: boolean } {
-    if (typeof window === 'undefined' || !window.localStorage) return {};
-    return JSON.parse(localStorage.getItem(key) || '{}');
-  }
 
-  // ✅ Accès aux produits enrichis
+  // --- Produits ---
   getProducts(): Product[] {
-    const products = [...this.allProducts()];
     const favorites = this._favorites;
     const cart = this._cart;
-
-    return products.map(p => ({
+    return this.allProducts().map(p => ({
       ...p,
       isFavorite: favorites[p.id] ? 1 : 0,
-      inCart: cart[p.id] ? 1 : 0
+      inCart: cart[p.id] ? 1 : 0,
     }));
   }
 
   getLiveProducts(): Observable<Product[]> {
-    return combineLatest([
-      this.favorites$,
-      this.cart$
-    ]).pipe(
+    return combineLatest([this.favorites$, this.cart$]).pipe(
       map(([favorites, cart]) =>
         this.allProducts().map(p => ({
           ...p,
           isFavorite: favorites[p.id] ? 1 : 0,
-          inCart: cart[p.id] ? 1 : 0
+          inCart: cart[p.id] ? 1 : 0,
         }))
       ),
-      catchError((error) => {
-        console.error('Erreur de récupération des produits:', error);
+      catchError(err => {
+        console.error('Erreur lors du chargement des produits', err);
         return of([]);
       })
     );
   }
 
-  // ✅ Liste des produits (mock)
-  allProducts(): Product[] {
+  // --- Local Storage ---
+  private saveToLS(key: string, value: any) {
+    if (typeof window === 'undefined') return;
+    localStorage.setItem(key, JSON.stringify(value));
+  }
+
+  private loadFromLS(key: string): any {
+    if (typeof window === 'undefined') return {};
+    try {
+      return JSON.parse(localStorage.getItem(key) || '{}');
+    } catch {
+      return {};
+    }
+  }
+
+  getCartItemsWithTotal(): CartItem[] {
+    return this.getCartItems().map(item => ({
+      ...item,
+      total: item.price * item.quantity,
+    }));
+  }
+
+  getCartGrandTotal(): number {
+    return this.getCartItems().reduce((sum, item) => sum + item.price * item.quantity, 0);
+  }
+
+
+ // ✅ Liste des produits (mock)
+ allProducts(): Product[] {
     return [
       {
         id: 1,
@@ -137,10 +201,10 @@ export class ProductService {
         inCart: 0,
         description: 'Une version optimisée du MacBook Air avec une puissance professionnelle pour les créatifs et développeurs.',
         stock: 20,
-        size: '13 pouces',
+        sizeAvailable: ['13 pouce'],
         totalReview: 1290,
         seller: 'TechGuinée',
-        colorAvailable: ['Silver', 'Space Gray']
+        colorAvailable: ['Silver']
       },
       {
         id: 2,
@@ -153,10 +217,10 @@ export class ProductService {
         inCart: 0,
         description: 'Dernière génération de l’iPhone avec appareil photo avancé et autonomie prolongée.',
         stock: 14,
-        size: '6.7 pouces',
+        sizeAvailable: ['regulier'],
         totalReview: 854,
         seller: 'Guitech Mobile',
-        colorAvailable: ['Noir Sidéral', 'Bleu Nuit', 'Or']
+        colorAvailable: ['Noir Sidéral']
       },
       {
         id: 3,
@@ -169,7 +233,7 @@ export class ProductService {
         inCart: 0,
         description: 'MacBook ultraléger, idéal pour les déplacements fréquents sans compromis sur la performance.',
         stock: 10,
-        size: '14 pouces',
+        sizeAvailable: ['13 pouce'],
         totalReview: 472,
         seller: 'IT World Conakry',
         colorAvailable: ['Silver']
@@ -185,10 +249,10 @@ export class ProductService {
         inCart: 0,
         description: 'Un iPhone équilibré entre performance, design et prix abordable.',
         stock: 35,
-        size: '6.1 pouces',
+        sizeAvailable: ['regulier'],
         totalReview: 1300,
         seller: 'Phone City',
-        colorAvailable: ['Rouge', 'Noir', 'Blanc']
+        colorAvailable: ['Rouge']
       },
       {
         id: 5,
@@ -201,10 +265,10 @@ export class ProductService {
         inCart: 0,
         description: 'La version compacte et légère de l’iPhone 14 pour un usage pratique au quotidien.',
         stock: 40,
-        size: '5.8 pouces',
+        sizeAvailable: ['regulier'],
         totalReview: 922,
         seller: 'QuickPhone',
-        colorAvailable: ['Blanc', 'Bleu']
+        colorAvailable: ['Blanc']
       },
       {
         id: 6,
@@ -217,7 +281,7 @@ export class ProductService {
         inCart: 0,
         description: 'MacBook abordable et performant, idéal pour les étudiants et les jeunes professionnels.',
         stock: 28,
-        size: '13 pouces',
+        sizeAvailable: ['15 pouce'],
         totalReview: 761,
         seller: 'EDUtech',
         colorAvailable: ['Silver']
@@ -233,10 +297,10 @@ export class ProductService {
         inCart: 0,
         description: 'Une version mini de l’iPhone 15 pour ceux qui aiment la discrétion sans perdre la puissance.',
         stock: 22,
-        size: '5.4 pouces',
+        sizeAvailable: ['regulier'],
         totalReview: 1104,
         seller: 'Mobile Zone',
-        colorAvailable: ['Vert', 'Noir']
+        colorAvailable: ['Vert']
       },
       {
         id: 8,
@@ -249,7 +313,7 @@ export class ProductService {
         inCart: 0,
         description: 'Conçu pour les créateurs de contenu, le Creator Series offre performance graphique et autonomie.',
         stock: 17,
-        size: '15 pouces',
+        sizeAvailable: ['15 pouce'],
         totalReview: 682,
         seller: 'ProTech',
         colorAvailable: ['Space Gray']
@@ -265,10 +329,10 @@ export class ProductService {
         inCart: 0,
         description: 'Version économique de l’iPhone SE avec un design moderne et de bonnes performances.',
         stock: 50,
-        size: '4.7 pouces',
+        sizeAvailable: ['regulier'],
         totalReview: 1800,
         seller: 'Smart Zone',
-        colorAvailable: ['Rouge', 'Blanc']
+        colorAvailable: ['Blanc']
       }
     ];
   }

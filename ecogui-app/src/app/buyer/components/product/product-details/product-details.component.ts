@@ -3,12 +3,14 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CarouselModule } from 'ngx-owl-carousel-o';
-import { CommonModule, NgFor } from '@angular/common';
+import { CommonModule, NgFor, registerLocaleData } from '@angular/common';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatMenuModule } from '@angular/material/menu';
 import { FeathericonsModule } from '../../../../shared/icons/feathericons/feathericons.module';
 import { ReviewsComponent } from './reviews/reviews.component';
 import { Product, ProductService } from '../../../services/product.service';
+import localeFr from '@angular/common/locales/fr';
+import { ColorService } from '../../../services/color.service';
 
 @Component({
     selector: 'app-e-product-details',
@@ -21,15 +23,18 @@ export class ProductDetailsComponent implements OnInit {
     productImages: { url: string }[] = [];
     selectedImage!: string;
     selectedColor: string | null = null;
+    sizeSelected: string | null = null;
 
     constructor(
       private route: ActivatedRoute,
-      private productService: ProductService
+      private productService: ProductService,
+      private colorService: ColorService
     ) {
 
     }
 
     ngOnInit(): void {
+        registerLocaleData(localeFr);
         this.route.paramMap.subscribe(params => {
           const id = Number(params.get('id'));
 
@@ -40,15 +45,18 @@ export class ProductDetailsComponent implements OnInit {
               this.productImages = found.image.map(img => ({ url: img }));
               this.selectedImage = this.productImages[0]?.url || '';
               this.selectedColor = found.colorAvailable?.[0] || null;
+              this.sizeSelected = found.sizeAvailable?.[0] || null;
             }
           });
         });
     }
 
-
-
     selectColor(color: string): void {
         this.selectedColor = color;
+    }
+
+    selectSize(size: string): void {
+        this.sizeSelected = size;
     }
 
     changeimage(image: string) {
@@ -56,8 +64,11 @@ export class ProductDetailsComponent implements OnInit {
     }
 
     toggleCart(): void {
-        this.productService.toggleCart(this.product);
+        this.productService.toggleCart(this.product, this.sizeSelected, this.selectedColor);
     }
 
+    isValidColor(color: string): boolean {
+        return (this.colorService.isValidCssColor(color));
+    }
   }
 
