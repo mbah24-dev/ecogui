@@ -1,0 +1,98 @@
+.trinta-card {
+    &.shipping-information-card {
+        min-height: 295px;
+
+        .mat-mdc-card-header {
+            margin-bottom: 22px;
+        }
+        .mat-mdc-card-content {
+            h6 {
+                font-size: 15px;
+                margin-bottom: 20px;
+            }
+            ul {
+                li {
+                    margin-bottom: 14px;
+                    padding-left: 91px;
+                    line-height: 1.8;
+
+                    span {
+                        top: 0;
+                        left: 0;
+                        position: absolute;
+                    }
+                    &:last-child {
+                        margin-bottom: 0;
+                    }
+                }
+            }
+        }
+    }
+}
+
+/* Max width 767px */
+@media only screen and (max-width : 767px) {
+
+    .trinta-card {
+        &.shipping-information-card {
+            min-height: auto;
+
+            .mat-mdc-card-header {
+                margin-bottom: 20px;
+            }
+            .mat-mdc-card-content {
+                h6 {
+                    font-size: 14px;
+                    margin-bottom: 18px;
+                }
+                ul {
+                    li {
+                        margin-bottom: 10px;
+                        padding-left: 76px;
+                    }
+                }
+            }
+        }
+    }
+
+}
+
+/* Min width 576px to Max width 767px */
+@media only screen and (min-width : 576px) and (max-width : 767px) {}
+
+/* Min width 768px to Max width 991px */
+@media only screen and (min-width : 768px) and (max-width : 991px) {
+
+    .trinta-card {
+        &.shipping-information-card {
+            min-height: 276px;
+
+            .mat-mdc-card-content {
+                ul {
+                    li {
+                        margin-bottom: 10px;
+                        padding-left: 81px;
+                    }
+                }
+            }
+        }
+    }
+
+}
+
+/* Min width 992px to Max width 1199px */
+@media only screen and (min-width : 992px) and (max-width : 1199px) {}
+
+/* Min width 1200px to Max width 1399px */
+@media only screen and (min-width: 1200px) and (max-width: 1399px) {}
+
+/* Min width 1600px */
+@media only screen and (min-width: 1600px) {
+
+    .trinta-card {
+        &.shipping-information-card {
+            min-height: 285px;
+        }
+    }
+
+}

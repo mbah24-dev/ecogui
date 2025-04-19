@@ -1,0 +1,81 @@
+.trinta-card {
+    &.order-summary-card {
+        padding-bottom: 94px;
+
+        .mat-mdc-card-content {
+            ul {
+                li {
+                    border-bottom: 1px solid #edeff5;
+                    padding: {
+                        top: 17px;
+                        bottom: 17px;
+                    };
+                    &:first-child {
+                        padding-top: 0;
+                        border-bottom-width: 2px;
+                    }
+                    &:last-child {
+                        padding-bottom: 0;
+                        border-bottom-width: 0;
+                    }
+                }
+            }
+        }
+    }
+}
+
+/* Max width 767px */
+@media only screen and (max-width : 767px) {
+
+    .trinta-card {
+        &.order-summary-card {
+            padding-bottom: 20px;
+
+            .mat-mdc-card-content {
+                ul {
+                    li {
+                        padding: {
+                            top: 14px;
+                            bottom: 14px;
+                        };
+                    }
+                }
+            }
+        }
+    }
+
+}
+
+/* Min width 576px to Max width 767px */
+@media only screen and (min-width : 576px) and (max-width : 767px) {}
+
+/* Min width 768px to Max width 991px */
+@media only screen and (min-width : 768px) and (max-width : 991px) {
+
+    .trinta-card {
+        &.order-summary-card {
+            padding-bottom: 25px;
+
+            .mat-mdc-card-content {
+                ul {
+                    li {
+                        padding: {
+                            top: 15px;
+                            bottom: 15px;
+                        };
+                    }
+                }
+            }
+        }
+    }
+
+}
+
+/* Min width 992px to Max width 1199px */
+@media only screen and (min-width : 992px) and (max-width : 1199px) {}
+
+/* Min width 1200px to Max width 1399px */
+@media only screen and (min-width: 1200px) and (max-width: 1399px) {}
+
+/* Min width 1600px */
+@media only screen and (min-width: 1600px) {}

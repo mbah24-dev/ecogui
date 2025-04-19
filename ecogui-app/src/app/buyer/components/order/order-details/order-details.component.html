@@ -1,0 +1,79 @@
+<!-- Détails de la commande -->
+<mat-card class="trinta-card order-details-card mb-25 border-none d-block">
+    <mat-card-header>
+      <mat-card-title>
+        <h5 class="mt-0 mb-0 text-white">
+          Détails de la commande
+        </h5>
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="d-md-flex align-items-center justify-content-between">
+        <div class="info">
+          <span class="d-block fw-medium text-body">
+            N° de commande
+          </span>
+          <h5 class="mb-0 fw-medium text-white">
+            CMD-1001
+          </h5>
+        </div>
+        <div class="tracking-info text-md-center">
+          <ul class="p-0 m-0 list-unstyled">
+            <!-- La classe packed permet de changer le status de la commande dans les differents etapes -->
+            <li class=" packed order-placed position-relative d-md-inline-block">
+              <div class="icon rounded-circle d-flex align-items-center justify-content-center">
+                <i class="ri-check-line"></i>
+              </div>
+              <span class="d-block text-white fw-medium">
+                Commandé
+              </span>
+            </li>
+            <li class=" position-relative d-md-inline-block">
+              <div class="icon rounded-circle d-flex align-items-center justify-content-center">
+                <i class="ri-survey-line"></i>
+              </div>
+              <span class="d-block text-white fw-medium">
+                Préparée
+              </span>
+            </li>
+            <li class="shipped position-relative d-md-inline-block">
+              <div class="icon rounded-circle d-flex align-items-center justify-content-center">
+                <i class="ri-truck-line"></i>
+              </div>
+              <span class="d-block text-white fw-medium">
+                Expédiée
+              </span>
+            </li>
+            <li class="delivered position-relative d-md-inline-block">
+              <div class="icon rounded-circle d-flex align-items-center justify-content-center">
+                <i class="ri-check-double-line"></i>
+              </div>
+              <span class="d-block text-white fw-medium">
+                Livrée
+              </span>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <div class="row">
+    <div class="col-lg-8">
+      <!-- Articles de la commande -->
+      <app-items-from-order />
+    </div>
+    <div class="col-lg-4">
+      <!-- Résumé de la commande -->
+      <app-order-summary />
+    </div>
+    <div class="col-xxl-4 col-md-6">
+      <!-- Informations de facturation -->
+      <app-billing-information />
+    </div>
+    <div class="col-xxl-4 col-md-6">
+        <!-- Informations de facturation -->
+        <app-order-action />
+    </div>
+  </div>

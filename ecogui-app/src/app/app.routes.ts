@@ -8,12 +8,23 @@ import { LogoutComponent } from './shared/authentication/logout/logout.component
 import { ResetPasswordComponent } from './shared/authentication/reset-password/reset-password.component';
 import { NotFoundComponent } from './shared/not-found/not-found.component';
 import { ProductDetailsComponent } from './buyer/components/product/product-details/product-details.component';
-import { EProductsGridComponent } from './buyer/components/product/product.component';
+import { ProductsGridComponent } from './buyer/components/product/product.component';
 import { ProductCartComponent } from './buyer/components/product/product-cart/product-cart.component';
 import { ProductCheckoutComponent } from './buyer/components/product/product-checkout/product-checkout.component';
+import { OrderComponent } from './buyer/components/order/order.component';
+import { OrderDetailsComponent } from './buyer/components/order/order-details/order-details.component';
+import { ClientOrderComponent } from './buyer/components/order/client-order/client-order.component';
 
 export const routes: Routes = [
-    {path: '', component: EProductsGridComponent},
+    {path: '', component: ProductsGridComponent},
+    {
+        path: 'orders',
+        component: OrderComponent,
+        children: [
+            {path: '', component: ClientOrderComponent},
+            {path: 'details', component: OrderDetailsComponent},
+        ]
+    },
     {
         path: 'authentication',
         component: AuthenticationComponent,
