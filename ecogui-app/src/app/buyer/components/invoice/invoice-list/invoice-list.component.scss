@@ -1,0 +1,193 @@
+.trinta-card {
+    &.invoices-list-card {
+        .invoices-list-table {
+            .mat-mdc-table {
+                width: 100%;
+                overflow: hidden;
+                background-color: transparent;
+
+                .mat-mdc-header-row {
+                    height: auto;
+                    line-height: initial;
+                    letter-spacing: 0.14px;
+                    color: var(--darkColor);
+                    background: transparent;
+                    font: {
+                        weight: 500;
+                        size: var(--fontSize);
+                        family: var(--fontFamily);
+                    };
+                    .mat-mdc-header-cell {
+                        border: none;
+                        overflow: unset;
+                        text-align: start;
+                        white-space: nowrap;
+                        line-height: initial;
+                        padding: 0 15px 15px;
+                        letter-spacing: normal;
+                        background: transparent;
+                        border-bottom: 2px solid #edeff5;
+                    }
+                }
+                .mat-mdc-row, .mdc-data-table__content {
+                    line-height: initial;
+                    background: transparent;
+                    font: {
+                        weight: normal;
+                        size: var(--fontSize);
+                        family: var(--fontFamily);
+                    };
+                }
+                .mat-mdc-row {
+                    height: auto;
+                    color: var(--blackColor);
+                }
+                .mat-mdc-cell {
+                    border: none;
+                    overflow: hidden;
+                    text-align: start;
+                    padding: 18px 15px;
+                    white-space: nowrap;
+                    line-height: initial;
+                    letter-spacing: 0.14px;
+                    background: transparent;
+                    border-bottom: 1px solid #edeff5;
+
+                    .client-info {
+                        .image {
+                            width: 53px;
+                            height: 53px;
+                            border-radius: 50%;
+                            margin-right: 15px;
+
+                            img {
+                                border-radius: 50%;
+                            }
+                        }
+                        .info {
+                            h6 {
+                                margin-bottom: 7px;
+                                font-size: 15px;
+                            }
+                        }
+                    }
+                    .trinta-badge {
+                        font-size: 12px;
+                        border-radius: 2px;
+                        padding: 1.5px 7px;
+                        letter-spacing: 1px;
+                        color: var(--primaryColor);
+                        background: rgba(55, 97, 238, 0.10);
+
+                        &.due {
+                            color: var(--dangerColor);
+                            background: rgba(238, 54, 140, 0.10);
+                        }
+                        &.waiting {
+                            color: #ee8336;
+                            background: rgba(238, 131, 54, 0.10);
+                        }
+                    }
+                    .action {
+                        .mat-mdc-button {
+                            font-size: 20px;
+                            color: #818093;
+                            margin-right: 15px;
+
+                            &:last-child {
+                                margin-right: 0;
+                            }
+                        }
+                    }
+                }
+            }
+            .mat-mdc-paginator {
+                padding-top: 15px;
+            }
+        }
+    }
+}
+
+/* Max width 767px */
+@media only screen and (max-width : 767px) {
+
+    .trinta-card {
+        &.invoices-list-card {
+            .invoices-list-table {
+                .mat-mdc-table {
+                    .mat-mdc-header-row {
+                        font-size: 13px;
+                    }
+                    .mat-mdc-row, .mdc-data-table__content {
+                        font-size: 13px;
+                    }
+                    .mat-mdc-cell {
+                        padding: 15px;
+
+                        .client-info {
+                            .image {
+                                margin-right: 12px;
+                            }
+                            .info {
+                                h6 {
+                                    font-size: 13px;
+                                }
+                            }
+                        }
+                        .trinta-badge {
+                            font-size: 11px;
+                        }
+                        .action {
+                            .mat-mdc-button {
+                                font-size: 15px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+}
+
+/* Min width 576px to Max width 767px */
+@media only screen and (min-width : 576px) and (max-width : 767px) {}
+
+/* Min width 768px to Max width 991px */
+@media only screen and (min-width : 768px) and (max-width : 991px) {
+
+    .trinta-card {
+        &.invoices-list-card {
+            .invoices-list-table {
+                .mat-mdc-table {
+                    .mat-mdc-cell {
+                        padding: 15px;
+
+                        .client-info {
+                            .info {
+                                h6 {
+                                    font-size: 14px;
+                                }
+                            }
+                        }
+                        .action {
+                            .mat-mdc-button {
+                                font-size: 17px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+}
+
+/* Min width 992px to Max width 1199px */
+@media only screen and (min-width : 992px) and (max-width : 1199px) {}
+
+/* Min width 1200px to Max width 1399px */
+@media only screen and (min-width: 1200px) and (max-width: 1399px) {}
+
+/* Min width 1600px */
+@media only screen and (min-width: 1600px) {}

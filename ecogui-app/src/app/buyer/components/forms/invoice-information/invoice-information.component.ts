@@ -1,49 +1,46 @@
-
-import { Component, Inject, PLATFORM_ID } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
+import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
-import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { FormsModule } from '@angular/forms';
-import { NgxEditorModule, Editor, Toolbar } from 'ngx-editor';
+import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { isPlatformBrowser, NgIf } from '@angular/common';
 import { FeathericonsModule } from '../../../../shared/icons/feathericons/feathericons.module';
+import { CommonModule } from '@angular/common';
 
 @Component({
-    selector: 'app-invoice-information',
-    imports: [MatCardModule, MatButtonModule, FormsModule, MatFormFieldModule, MatInputModule, FeathericonsModule, NgxEditorModule, MatSelectModule],
-    templateUrl: './invoice-information.component.html',
-    styleUrl: './invoice-information.component.scss'
+  selector: 'app-invoice-information',
+  standalone: true,
+  imports: [
+    ReactiveFormsModule,
+    MatCardModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    FeathericonsModule,
+    CommonModule
+  ],
+  templateUrl: './invoice-information.component.html',
+  styleUrl: './invoice-information.component.scss'
 })
-export class InvoiceInformationComponent {
+export class InvoiceInformationComponent implements OnInit, OnDestroy {
+  form!: FormGroup;
 
-    editor!: Editor | null;  // Make it nullable
-    toolbar: Toolbar = [
-        ['bold', 'italic'],
-        ['underline', 'strike'],
-        ['code', 'blockquote'],
-        ['ordered_list', 'bullet_list'],
-        [{ heading: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] }],
-        ['link', 'image'],
-        ['text_color', 'background_color'],
-        ['align_left', 'align_center', 'align_right', 'align_justify'],
-    ];
+  constructor(private fb: FormBuilder) {}
 
-    constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
+  ngOnInit(): void {
+    this.form = this.fb.group({
+      prenom: ['', Validators.required],
+      nom: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      telephone: ['', Validators.required],
+      adresse: ['', Validators.required],
+      info: [''],
+      ville: ['', Validators.required],
+      commune: ['', Validators.required],
+    });
+  }
 
-    ngOnInit(): void {
-        if (isPlatformBrowser(this.platformId)) {
-            // Initialize the editor only in the browser
-            this.editor = new Editor();
-        }
-    }
-
-    ngOnDestroy(): void {
-        if (isPlatformBrowser(this.platformId) && this.editor) {
-        this.editor.destroy();
-        }
-    }
-
+  ngOnDestroy(): void {}
 }
-

@@ -1,3 +1,4 @@
+import { InvoiceListComponent } from './buyer/components/invoice/invoice-list/invoice-list.component';
 import { Routes } from '@angular/router';
 import { SignInComponent } from './shared/authentication/sign-in/sign-in.component';
 import { SignUpComponent } from './shared/authentication/sign-up/sign-up.component';
@@ -14,6 +15,13 @@ import { ProductCheckoutComponent } from './buyer/components/product/product-che
 import { OrderComponent } from './buyer/components/order/order.component';
 import { OrderDetailsComponent } from './buyer/components/order/order-details/order-details.component';
 import { ClientOrderComponent } from './buyer/components/order/client-order/client-order.component';
+import { InvoiceComponent } from './buyer/components/invoice/invoice.component';
+import { InvoiceDetailsComponent } from './buyer/components/invoice/invoice-details/invoice-details.component';
+import { AccountSettingsComponent } from './shared/settings/account-settings/account-settings.component';
+import { ChangePasswordComponent } from './shared/settings/change-password/change-password.component';
+import { PrivacyPolicyComponent } from './shared/settings/privacy-policy/privacy-policy.component';
+import { SettingsComponent } from './shared/settings/settings.component';
+import { TermsConditionsComponent } from './shared/settings/terms-conditions/terms-conditions.component';
 
 export const routes: Routes = [
     {path: '', component: ProductsGridComponent},
@@ -23,6 +31,24 @@ export const routes: Routes = [
         children: [
             {path: '', component: ClientOrderComponent},
             {path: 'details', component: OrderDetailsComponent},
+        ]
+    },
+    {
+        path: 'invoices',
+        component: InvoiceComponent,
+        children: [
+            {path: '', component: InvoiceListComponent},
+            {path: 'details', component: InvoiceDetailsComponent}
+        ]
+    },
+    {
+        path: 'settings',
+        component: SettingsComponent,
+        children: [
+            {path: '', component: AccountSettingsComponent},
+            {path: 'change-password', component: ChangePasswordComponent},
+            {path: 'privacy-policy', component: PrivacyPolicyComponent},
+            {path: 'terms-conditions', component: TermsConditionsComponent}
         ]
     },
     {
