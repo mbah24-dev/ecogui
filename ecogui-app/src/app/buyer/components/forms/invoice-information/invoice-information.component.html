@@ -84,9 +84,13 @@
                 </div>
 
                 <!-- Submit -->
-                <button mat-raised-button color="primary" class="mt-3" type="submit" [disabled]="billingForm.invalid">
+                <button mat-raised-button color="primary"
+                class="mt-3" type="submit"
+                [ngClass]="{ 'hide-this': displayProgressSpiner}"
+                [disabled]="billingForm.invalid">
                    Finaliser la commande
                 </button>
+                <mat-spinner [ngClass]="{ 'hide-this': !displayProgressSpiner}"></mat-spinner>
               </form>
 
         </mat-card-content>

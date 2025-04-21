@@ -1,4 +1,11 @@
 <!-- Product Details Card -->
+<app-alert-notification
+*ngIf="showAlert"
+[message]="alertMsg"
+[type]="alertType"
+(closeAlert)="showAlert = false"
+>
+</app-alert-notification>
 <mat-card class="trinta-card product-details-card mb-25 bg-white border-none d-block">
     <mat-card-content>
         <div class="row align-items-center">

@@ -6,7 +6,7 @@
 /*   By: mbah <mbah@student.42lyon.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:33:31 by mbah              #+#    #+#             */
-/*   Updated: 2025/04/14 17:35:08 by mbah             ###   ########.fr       */
+/*   Updated: 2025/04/21 15:58:04 by mbah             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ import { ToggleService } from './shared/header/toggle.service';
 import { SidebarComponent } from './shared/sidebar/sidebar.component';
 import { CommonModule, Location, LocationStrategy, PathLocationStrategy } from '@angular/common';
 import { RouterOutlet, Router, NavigationCancel, NavigationEnd } from '@angular/router';
+import { AlertNotificationComponent } from "./shared/alert-notification/alert-notification.component";
 
 @Component({
     selector: 'app-root',
@@ -38,6 +39,9 @@ export class AppComponent {
     title = 'Ecogui - Ecommerce App';
     routerSubscription: any;
     location: any;
+    showAlert = false;
+    alertMsg = '';
+    alertType: 'success' | 'error' | 'info' = 'success';
 
     constructor(
         public router: Router,

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, catchError, combineLatest, map, Observable, of } from 'rxjs';
+import { BehaviorSubject, catchError, combineLatest, map, Observable, of, Subject } from 'rxjs';
 
 export interface Product {
   id: number;
@@ -16,6 +16,11 @@ export interface Product {
   totalReview: number;
   seller: string;
   colorAvailable: string[];
+}
+
+export interface Alert {
+    message: string;
+    type: 'success' | 'error' | 'info';
 }
 
 export interface CartItem extends Product {
@@ -39,6 +44,16 @@ type CartItemMap = {
   providedIn: 'root',
 })
 export class ProductService {
+
+  /** Alert  */
+  private alertSubject = new Subject<Alert>();
+  alert$ = this.alertSubject.asObservable();
+
+  /** fonction a appeler pour afficher une notif */
+  public triggerAlert(message: string, type: 'success' | 'error' | 'info' = 'success') {
+    this.alertSubject.next({ message, type });
+  }
+
   private readonly FAVORITES_KEY = 'favorites';
   private readonly CART_KEY = 'cart';
   private readonly ORDER_KEY = 'order';
@@ -65,7 +80,9 @@ export class ProductService {
   toggleFavorite(product: Product) {
     if (this._favorites[product.id]) {
       delete this._favorites[product.id];
+      this.triggerAlert('Produit supprimé des favoris !');
     } else {
+      this.triggerAlert('Produit ajouté aux favoris !');
       this._favorites[product.id] = true;
     }
 
@@ -74,6 +91,7 @@ export class ProductService {
   }
 
   clearFavorites() {
+    this.triggerAlert('Liste des souhaits vider !');
     this._favorites = {};
     this.favoritesSubject.next({});
     this.saveToLS(this.FAVORITES_KEY, {});
@@ -87,12 +105,14 @@ export class ProductService {
   toggleCart(product: Product, selectedSize?: string | null, selectedColor?: string | null) {
     if (this._cart[product.id]) {
       delete this._cart[product.id];
+      this.triggerAlert('Produit supprimé du panier !');
     } else {
       this._cart[product.id] = {
         size: selectedSize || product.sizeAvailable?.[0] || '',
         color: selectedColor || product.colorAvailable?.[0] || '',
         qty: 1,
       };
+      this.triggerAlert('Produit ajouté du panier !');
     }
 
     this.cartSubject.next({ ...this._cart });
@@ -101,6 +121,7 @@ export class ProductService {
 
   updateCartItemQuantity(productId: number, quantity: number) {
     if (this._cart[productId]) {
+      this.triggerAlert('Quantiter mis à jour !');
       this._cart[productId].qty = quantity;
       this.cartSubject.next({ ...this._cart });
       this.saveToLS(this.CART_KEY, this._cart);
@@ -109,6 +130,7 @@ export class ProductService {
 
 
   clearCart() {
+    this.triggerAlert('Votre panier a été vider !');
     this._cart = {};
     this.cartSubject.next({});
     this.saveToLS(this.CART_KEY, {});

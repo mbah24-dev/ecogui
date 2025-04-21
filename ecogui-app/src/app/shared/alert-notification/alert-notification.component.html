@@ -1,0 +1,5 @@
+<div class="alert-notification"
+     [ngClass]="[type, visible ? 'show' : 'hide']"
+     (click)="close()">
+  {{ message }}
+</div>

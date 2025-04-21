@@ -19,11 +19,45 @@
             </form>
         </div>
         <ul class="header-right-side d-flex align-items-center m-0 p-0 list-unstyled">
+
+            <!-- AUTH DEBUT -->
             <li>
+                <button mat-icon-button [matMenuTriggerFor]="messagesMenu" class="auth-menu-btn">
+                  <i-feather name="lock" class="feather-icon"></i-feather>
+                </button>
+
+                <mat-menu #messagesMenu="matMenu" class="auth-menu-dropdown" xPosition="before">
+                  <div class="auth-menu-content px-4 py-3">
+                    <p class="menu-title fw-semibold mb-3 text-center">Bienvenue 👋</p>
+
+                    <button
+                      mat-flat-button
+                      color="primary"
+                      class="w-100 mb-2 auth-action-btn"
+                      routerLink="/authentication"
+                    >
+                      Se connecter
+                    </button>
+
+                    <button
+                      mat-stroked-button
+                      color="primary"
+                      class="w-100 auth-action-btn"
+                      routerLink="/authentication/sign-up"
+                    >
+                      Inscrivez-vous
+                    </button>
+                  </div>
+                </mat-menu>
+            </li>
+
+
+            <!-- AUTH FIN-->
+            <li >
                 <button
                     mat-button
                     (click)="toggleTheme()"
-                    class="dark-swtich-btn"
+                    class="dark-swtich-btn whishlist-tag"
                     [class.active]="toggleService.isDark()"
                 >
                     <i-feather name="moon"></i-feather>
@@ -31,35 +65,15 @@
             </li>
 
             <!-- whishlist -->
-            <app-whishlist [products]="(products$ | async) || []" />
+            <app-whishlist [products]="(products$ | async) || []" class="whishlist-tag"/>
 
             <!-- cart-preview -->
-            <app-cart-preview [products]="(products$ | async) || []" />
+            <app-cart-preview [products]="(products$ | async) || []" class="whishlist-tag" />
 
             <li>
-                <button mat-button [matMenuTriggerFor]="languageMenu" class="language-menu-btn">
-                    <img src="images/flags/fra.svg" alt="flag"> FRA
+                <button mat-button class="language-menu-btn">
+                    <img src="images/gn-flag.png" alt="flag"> GN
                 </button>
-                <mat-menu class="language-menu-dropdown" #languageMenu="matMenu" xPosition="before">
-                    <span class="title fw-medium fs-16 d-block">
-                        Choisir la langue
-                    </span>
-                    <ul class="menu-body pl-0 mb-0 mt-0 list-unstyled">
-                        <li>
-                            <button mat-button>
-                                <img src="images/flags/eng.svg" alt="English flag">
-                                ENG
-                            </button>
-                        </li>
-                        <li>
-                            <button mat-button>
-                                <img src="images/flags/fra.svg" alt="French flag">
-                                FRA
-                            </button>
-                        </li>
-                    </ul>
-                </mat-menu>
-
             </li>
             <li>
                 <button mat-button [matMenuTriggerFor]="profileMenu" class="profile-menu-btn">

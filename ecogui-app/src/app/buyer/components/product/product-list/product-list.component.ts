@@ -8,31 +8,45 @@ import { MatSelectModule } from '@angular/material/select';
 import { RouterLink } from '@angular/router';
 import { CommonModule, registerLocaleData } from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
+import { AlertNotificationComponent } from "../../../../shared/alert-notification/alert-notification.component";
 
 
 @Component({
   selector: 'app-product-list',
   templateUrl: './product-list.component.html',
   styleUrl: './product-list.component.scss',
-  imports: [MatCardModule, MatMenuModule, MatButtonModule, RouterLink, MatSelectModule, FormsModule, ReactiveFormsModule, CommonModule]
+  imports: [MatCardModule, MatMenuModule, MatButtonModule, RouterLink, MatSelectModule, FormsModule, ReactiveFormsModule, CommonModule, AlertNotificationComponent]
 })
 export class ProductListComponent implements OnInit {
     products: Product[] = [];
+    showAlert!: boolean;
+    alertMsg!: string;
+    alertType!: 'success' | 'error' | 'info'
 
     constructor(private productService: ProductService) {}
 
     ngOnInit(): void {
-      this.loadProducts();
-      registerLocaleData(localeFr);
+        this.loadProducts();
+        registerLocaleData(localeFr);
 
-      this.productService.favorites$.subscribe(() => {
-        this.updateProductStates();
-      });
+        this.productService.alert$.subscribe(alert => {
+          this.alertMsg = alert.message;
+          this.alertType = alert.type;
+          this.showAlert = true;
 
-      this.productService.cart$.subscribe(() => {
-        this.updateProductStates();
-      });
+          // Disparition automatique apres 4s
+          setTimeout(() => this.showAlert = false, 4000);
+        });
+
+        this.productService.favorites$.subscribe(() => {
+          this.updateProductStates();
+        });
+
+        this.productService.cart$.subscribe(() => {
+          this.updateProductStates();
+        });
     }
+
 
     loadProducts() {
       this.products = this.productService.getProducts();

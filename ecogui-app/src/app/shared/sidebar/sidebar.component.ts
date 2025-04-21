@@ -8,7 +8,7 @@ import { FeathericonsModule } from '../icons/feathericons/feathericons.module';
 
 @Component({
     selector: 'app-sidebar',
-    imports: [NgScrollbarModule, MatExpansionModule, RouterLinkActive, RouterModule, RouterLink, NgClass, FeathericonsModule],
+    imports: [NgScrollbarModule, MatExpansionModule, RouterModule, RouterLink, NgClass, FeathericonsModule],
     templateUrl: './sidebar.component.html',
     styleUrl: './sidebar.component.scss'
 })

@@ -754,6 +754,45 @@
 
 }
 
+.auth-menu-btn {
+    padding: 8px;
+    border-radius: 50%;
+    transition: background 0.25s ease;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.07);
+    }
+
+    .feather-icon {
+      stroke-width: 2;
+      color: #444;
+    }
+  }
+
+  .auth-menu-dropdown .mat-menu-content {
+    padding: 0 !important;
+  }
+
+  .auth-menu-content {
+    width: 230px;
+
+    .menu-title {
+      font-size: 16px;
+      color: #222;
+    }
+
+    .auth-action-btn {
+      text-transform: none;
+      font-weight: 500;
+      font-size: 14px;
+      border-radius: 8px;
+    }
+  }
+
+
+.whishlist-tag{
+    margin-right: 10px;
+}
 /* Min width 576px to Max width 767px */
 @media only screen and (min-width : 576px) and (max-width : 767px) {}
 

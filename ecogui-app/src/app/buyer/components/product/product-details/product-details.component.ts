@@ -11,10 +11,11 @@ import { ReviewsComponent } from './reviews/reviews.component';
 import { Product, ProductService } from '../../../services/product.service';
 import localeFr from '@angular/common/locales/fr';
 import { ColorService } from '../../../services/color.service';
+import { AlertNotificationComponent } from "../../../../shared/alert-notification/alert-notification.component";
 
 @Component({
     selector: 'app-e-product-details',
-    imports: [CommonModule, MatCardModule, MatButtonModule, FeathericonsModule, CarouselModule, NgFor, MatProgressBarModule, MatMenuModule, ReviewsComponent],
+    imports: [CommonModule, MatCardModule, MatButtonModule, FeathericonsModule, CarouselModule, NgFor, MatProgressBarModule, MatMenuModule, ReviewsComponent, AlertNotificationComponent],
     templateUrl: './product-details.component.html',
     styleUrl: './product-details.component.scss'
 })
@@ -24,6 +25,9 @@ export class ProductDetailsComponent implements OnInit {
     selectedImage!: string;
     selectedColor: string | null = null;
     sizeSelected: string | null = null;
+    showAlert!: boolean;
+    alertMsg!: string;
+    alertType!: 'success' | 'error' | 'info';
 
     constructor(
       private route: ActivatedRoute,
@@ -48,6 +52,14 @@ export class ProductDetailsComponent implements OnInit {
               this.sizeSelected = found.sizeAvailable?.[0] || null;
             }
           });
+        });
+        this.productService.alert$.subscribe(alert => {
+            this.alertMsg = alert.message;
+            this.alertType = alert.type;
+            this.showAlert = true;
+
+            // Disparition automatique apres 4s
+            setTimeout(() => this.showAlert = false, 4000);
         });
     }
 

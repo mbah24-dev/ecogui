@@ -35,33 +35,6 @@
                           </mat-panel-title>
                         </mat-expansion-panel-header>
                     </mat-expansion-panel>
-
-
-                    <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = true">
-                        <mat-expansion-panel-header>
-                            <mat-panel-title>
-                                <i-feather name="sliders"></i-feather>
-                                <span class="title">
-                                    Authentification
-                                </span>
-                                <span class="trinta-badge">
-                                    2
-                                </span>
-                            </mat-panel-title>
-                        </mat-expansion-panel-header>
-                        <ul class="sidebar-sub-menu">
-                            <li class="sidemenu-item unstyle-list">
-                                <a routerLink="/authentication" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link">
-                                    🔑  Se connecter
-                                </a>
-                            </li>
-                            <li class="sidemenu-item unstyle-list">
-                                <a routerLink="/authentication/sign-up" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link">
-                                    👤  Créer un compte
-                                </a>
-                            </li>
-                        </ul>
-                    </mat-expansion-panel>
                 </mat-accordion>
             </div>
         </div>

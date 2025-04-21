@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
+import { Component, Inject, OnInit, OnDestroy, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -8,6 +8,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { FeathericonsModule } from '../../../../shared/icons/feathericons/feathericons.module';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { ProductService } from '../../../services/product.service';
 
 @Component({
   selector: 'app-invoice-information',
@@ -20,15 +22,23 @@ import { Router } from '@angular/router';
     MatInputModule,
     MatSelectModule,
     FeathericonsModule,
-    CommonModule
+    CommonModule,
+    MatProgressSpinner
   ],
   templateUrl: './invoice-information.component.html',
   styleUrl: './invoice-information.component.scss'
 })
 export class InvoiceInformationComponent  {
+    displayProgressSpiner: boolean = false;
+    @Input() duration: number = 4000;
+    showAlert!: boolean;
+    alertMsg!: string;
+    alertType!: 'success' | 'error' | 'info';
+
     constructor(
         private fb: FormBuilder,
         private router: Router,
+        private productService: ProductService
     ) {
         this.billingForm = this.fb.group({
             fullName: ['', [Validators.required, Validators.pattern(/^[A-Za-zÀ-ÖØ-öø-ÿ\s'-]{2,60}$/)]],
@@ -48,7 +58,20 @@ export class InvoiceInformationComponent  {
     billingForm!: FormGroup;
     onSubmit() {
         if (this.billingForm.valid) {
-            this.router.navigate(['/']);
+            this.displayProgressSpiner = true;
+            setTimeout(() => {
+                this.router.navigate(['/profile/orders/details'], {
+                    state: {
+                      alert: {
+                        message: 'Vous avez payé avec succès ✅',
+                        type: 'success'
+                      }
+                    }
+                });
+                this.productService.clearCart();
+                this.displayProgressSpiner = false;
+            }, this.duration);
+
         } else {
             console.log('Form is invalid. Please check the fields.');
         }

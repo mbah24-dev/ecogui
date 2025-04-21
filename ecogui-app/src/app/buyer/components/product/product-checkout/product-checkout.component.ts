@@ -10,6 +10,7 @@ import localeFr from '@angular/common/locales/fr';
 import { Subscription } from 'rxjs';
 import { isPlatformBrowser } from '@angular/common';
 import { Inject, PLATFORM_ID } from '@angular/core';
+import { AlertNotificationComponent } from "../../../../shared/alert-notification/alert-notification.component";
 
 @Component({
     selector: 'app-shopping-cart',
@@ -21,6 +22,7 @@ export class ProductCheckoutComponent implements OnInit, OnDestroy {
     displayedColumns: string[] = ['product', 'price'];
     dataSource = new MatTableDataSource<CartItem>();
     grandTotal = 0;
+
     private cartSubscription!: Subscription;
 
     constructor(private productService: ProductService,
@@ -29,6 +31,7 @@ export class ProductCheckoutComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
       registerLocaleData(localeFr);
+
 
       this.cartSubscription = this.productService.cart$.subscribe(() => {
         const updatedItems = this.productService.getCartItems();
