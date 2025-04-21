@@ -9,4 +9,5 @@ import { FeathericonsModule } from '../icons/feathericons/feathericons.module';
 })
 export class FooterComponent {
     public currentYear = new Date().getFullYear();
+    public email: string = 'support@ecogui.com';
 }

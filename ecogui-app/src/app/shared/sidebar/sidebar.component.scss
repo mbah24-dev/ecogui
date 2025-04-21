@@ -425,6 +425,12 @@
     }
 }
 
+.unstyle-list {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+}
+
 /* Max width 767px */
 @media only screen and (max-width : 767px) {
 

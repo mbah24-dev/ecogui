@@ -196,7 +196,7 @@ export class ProductService {
         category: 'Ordinateur',
         price: 12000000,
         rating: 5,
-        image: ['images/profile.png', 'images/macbook2.png', 'images/macbook.png'],
+        image: ['images/macbook.png', 'images/macbook2.png', 'images/macbook.png'],
         isFavorite: 0,
         inCart: 0,
         description: 'Une version optimisée du MacBook Air avec une puissance professionnelle pour les créatifs et développeurs.',

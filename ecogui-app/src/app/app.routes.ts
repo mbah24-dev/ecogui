@@ -1,4 +1,3 @@
-import { InvoiceListComponent } from './buyer/components/invoice/invoice-list/invoice-list.component';
 import { Routes } from '@angular/router';
 import { SignInComponent } from './shared/authentication/sign-in/sign-in.component';
 import { SignUpComponent } from './shared/authentication/sign-up/sign-up.component';
@@ -12,35 +11,23 @@ import { ProductDetailsComponent } from './buyer/components/product/product-deta
 import { ProductsGridComponent } from './buyer/components/product/product.component';
 import { ProductCartComponent } from './buyer/components/product/product-cart/product-cart.component';
 import { ProductCheckoutComponent } from './buyer/components/product/product-checkout/product-checkout.component';
-import { OrderComponent } from './buyer/components/order/order.component';
-import { OrderDetailsComponent } from './buyer/components/order/order-details/order-details.component';
-import { ClientOrderComponent } from './buyer/components/order/client-order/client-order.component';
-import { InvoiceComponent } from './buyer/components/invoice/invoice.component';
-import { InvoiceDetailsComponent } from './buyer/components/invoice/invoice-details/invoice-details.component';
 import { AccountSettingsComponent } from './shared/settings/account-settings/account-settings.component';
 import { ChangePasswordComponent } from './shared/settings/change-password/change-password.component';
 import { PrivacyPolicyComponent } from './shared/settings/privacy-policy/privacy-policy.component';
 import { SettingsComponent } from './shared/settings/settings.component';
 import { TermsConditionsComponent } from './shared/settings/terms-conditions/terms-conditions.component';
+import { ProfileComponent } from './buyer/components/profile/profile.component';
+import { InvoiceDetailsComponent } from './buyer/components/profile/invoice/invoice-details/invoice-details.component';
+import { InvoiceListComponent } from './buyer/components/profile/invoice/invoice-list/invoice-list.component';
+import { InvoiceComponent } from './buyer/components/profile/invoice/invoice.component';
+import { ClientOrderComponent } from './buyer/components/profile/order/client-order/client-order.component';
+import { OrderDetailsComponent } from './buyer/components/profile/order/order-details/order-details.component';
+import { OrderComponent } from './buyer/components/profile/order/order.component';
+import { FaqComponent } from './shared/faq/faq.component';
+import { ContactComponent } from './shared/contact/contact.component';
 
 export const routes: Routes = [
     {path: '', component: ProductsGridComponent},
-    {
-        path: 'orders',
-        component: OrderComponent,
-        children: [
-            {path: '', component: ClientOrderComponent},
-            {path: 'details', component: OrderDetailsComponent},
-        ]
-    },
-    {
-        path: 'invoices',
-        component: InvoiceComponent,
-        children: [
-            {path: '', component: InvoiceListComponent},
-            {path: 'details', component: InvoiceDetailsComponent}
-        ]
-    },
     {
         path: 'settings',
         component: SettingsComponent,
@@ -49,6 +36,30 @@ export const routes: Routes = [
             {path: 'change-password', component: ChangePasswordComponent},
             {path: 'privacy-policy', component: PrivacyPolicyComponent},
             {path: 'terms-conditions', component: TermsConditionsComponent}
+        ]
+    },
+    {
+        path: 'profile',
+        component: ProfileComponent,
+        children: [
+            {
+                path: 'orders',
+                component: OrderComponent,
+                children: [
+                    {path: '', component: ClientOrderComponent},
+                    {path: 'details', component: OrderDetailsComponent},
+                ]
+            },
+            {
+                path: 'invoices',
+                component: InvoiceComponent,
+                children: [
+                    {path: '', component: InvoiceListComponent},
+                    {path: 'details', component: InvoiceDetailsComponent}
+                ]
+            },
+            {path: 'faq', component: FaqComponent},
+            {path: 'contact', component: ContactComponent},
         ]
     },
     {

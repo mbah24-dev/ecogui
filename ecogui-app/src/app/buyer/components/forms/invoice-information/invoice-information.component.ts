@@ -7,6 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { FeathericonsModule } from '../../../../shared/icons/feathericons/feathericons.module';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-invoice-information',
@@ -24,23 +25,32 @@ import { CommonModule } from '@angular/common';
   templateUrl: './invoice-information.component.html',
   styleUrl: './invoice-information.component.scss'
 })
-export class InvoiceInformationComponent implements OnInit, OnDestroy {
-  form!: FormGroup;
+export class InvoiceInformationComponent  {
+    constructor(
+        private fb: FormBuilder,
+        private router: Router,
+    ) {
+        this.billingForm = this.fb.group({
+            fullName: ['', [Validators.required, Validators.pattern(/^[A-Za-zÀ-ÖØ-öø-ÿ\s'-]{2,60}$/)]],
+            commune: ['', [Validators.required, Validators.pattern(/^[A-Za-zÀ-ÖØ-öø-ÿ\s'-]{2,40}$/)]],
+            city: ['', [Validators.required, Validators.pattern(/^[A-Za-zÀ-ÖØ-öø-ÿ\s'-]{2,40}$/)]],
+            address: [''],
+            phone: ['', [Validators.required, Validators.pattern(/^(\+224|00224)?\s?\d{3}[\s.-]?\d{2}[\s.-]?\d{2}[\s.-]?\d{2}$/)]],
+            email: ['', [Validators.required, Validators.email]],
+          });
 
-  constructor(private fb: FormBuilder) {}
+    }
 
-  ngOnInit(): void {
-    this.form = this.fb.group({
-      prenom: ['', Validators.required],
-      nom: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      telephone: ['', Validators.required],
-      adresse: ['', Validators.required],
-      info: [''],
-      ville: ['', Validators.required],
-      commune: ['', Validators.required],
-    });
-  }
+    // Password Hide
+    hide = true;
 
-  ngOnDestroy(): void {}
+    // Form
+    billingForm!: FormGroup;
+    onSubmit() {
+        if (this.billingForm.valid) {
+            this.router.navigate(['/']);
+        } else {
+            console.log('Form is invalid. Please check the fields.');
+        }
+    }
 }

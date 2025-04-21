@@ -23,45 +23,19 @@
         <div class="sidebar-inner">
             <div class="sidebar-menu">
                 <mat-accordion>
-                    <span class="sub-title text-body">
+                    <span class="sub-title text-body title">
                         Accueil
                     </span>
 
-                    <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = true">
+                    <mat-expansion-panel disabled>
                         <mat-expansion-panel-header>
-                            <mat-panel-title>
-                                <i-feather name="home"></i-feather>
-                                <span class="title">
-                                    Dashboard
-                                </span>
-                                <span class="trinta-badge">
-                                    4
-                                </span>
-                            </mat-panel-title>
+                          <mat-panel-title class="d-flex align-items-center">
+                            <i-feather name="home" class="me-2"></i-feather>
+                            <a routerLink="/" class="text-decoration-none text-dark w-100 title">Accueil</a>
+                          </mat-panel-title>
                         </mat-expansion-panel-header>
-                        <ul class="sidebar-sub-menu">
-                            <li class="sidemenu-item">
-                                <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link">
-                                    🛒 Achats
-                                </a>
-                            </li>
-                            <li class="sidemenu-item">
-                                <a routerLink="orders" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link">
-                                    📦 Mes commandes
-                                </a>
-                            </li>
-                            <li class="sidemenu-item">
-                                <a routerLink="/invoices" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link">
-                                    💳 Factures
-                                </a>
-                            </li>
-                            <li class="sidemenu-item">
-                                <a routerLink="/help" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link">
-                                    ❓ Support / Aide
-                                </a>
-                            </li>
-                        </ul>
                     </mat-expansion-panel>
+
 
                     <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = true">
                         <mat-expansion-panel-header>
@@ -71,17 +45,17 @@
                                     Authentification
                                 </span>
                                 <span class="trinta-badge">
-                                    3
+                                    2
                                 </span>
                             </mat-panel-title>
                         </mat-expansion-panel-header>
                         <ul class="sidebar-sub-menu">
-                            <li class="sidemenu-item">
+                            <li class="sidemenu-item unstyle-list">
                                 <a routerLink="/authentication" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link">
                                     🔑  Se connecter
                                 </a>
                             </li>
-                            <li class="sidemenu-item">
+                            <li class="sidemenu-item unstyle-list">
                                 <a routerLink="/authentication/sign-up" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link">
                                     👤  Créer un compte
                                 </a>
