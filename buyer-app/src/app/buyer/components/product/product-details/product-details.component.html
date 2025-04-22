@@ -1,0 +1,141 @@
+<!-- Product Details Card -->
+<app-alert-notification
+*ngIf="showAlert"
+[message]="alertMsg"
+[type]="alertType"
+(closeAlert)="showAlert = false"
+>
+</app-alert-notification>
+<mat-card class="trinta-card product-details-card mb-25 bg-white border-none d-block">
+    <mat-card-content>
+        <div class="row align-items-center">
+            <div class="col-xxxl-5 col-lg-6 col-md-12">
+                <div class="product-details-image">
+                    <div class="product-gallery__featured">
+                        <owl-carousel-o [options]="{items: 1, dots: false}" #owlCar>
+                            <ng-container *ngFor="let image of productImages">
+                                <ng-template carouselSlide [id]="image.url">
+                                    <img [src]="image.url" [alt]="image.url" class="border-radius">
+                                </ng-template>
+                            </ng-container>
+                        </owl-carousel-o>
+                    </div>
+                    <div class="product-gallery__carousel">
+                        <owl-carousel-o [options]="{dots: false, margin: 10, autoWidth: true}">
+                            <ng-container *ngFor="let image of productImages; let i = index">
+                                <ng-template carouselSlide [id]="image.url+i" [width]="100">
+                                    <a (click)="owlCar.to(image.url); changeimage(image.url+i)" class="border-radius">
+                                        <img [src]="image.url" [alt]="image.url" class="border-radius">
+                                    </a>
+                                </ng-template>
+                            </ng-container>
+                        </owl-carousel-o>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xxxl-7 col-lg-6 col-md-12">
+                <div class="product-details-content">
+                    <div class="title d-flex align-items-center justify-content-between">
+                        <h3 class="mb-0">
+                            {{ product.name }}
+                        </h3>
+                    </div>
+                    <span class="category text-body d-block">
+                        {{ product.category }}
+                    </span>
+                    <div class="ratings lh-1 d-flex align-items-center">
+                        <i class="ri-star-fill"></i>
+                        <i class="ri-star-fill"></i>
+                        <i class="ri-star-fill"></i>
+                        <i class="ri-star-fill"></i>
+                        <i class="ri-star-line"></i>
+                        <span class="d-block fs-14 text-primary">
+                            {{ product.totalReview }}
+                        </span>
+                    </div>
+                    <span class="sub-title d-block fs-14 fw-medium">
+                        Description :
+                    </span>
+                    <p class="fs-15 text-black">
+                        {{ product.description }}
+                    </p>
+                    <ul class="list p-0 list-unstyled">
+                        <li class="d-flex align-items-center fs-14">
+                            <span class="d-block fw-medium">
+                                Color :
+                            </span>
+                            <div class="colors d-flex flex-wrap gap-2 mt-2">
+                                <div
+                                  class="color-item"
+                                  *ngFor="let color of product.colorAvailable"
+                                  [ngClass]="{ 'selected': color === selectedColor }"
+                                  (click)="selectColor(color)"
+                                >
+                                  <span>{{ color }}</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="d-flex align-items-center fs-14">
+                            <span class="d-block fw-medium">
+                              Disponibilité :
+                            </span>
+                            <span class="d-block availability ms-1">
+                              En stock <span class="fw-semibold fs-15">{{ product.stock }}</span> pièces
+                            </span>
+                        </li>
+                        <li class="d-flex align-items-center fs-14">
+                            <span class="d-block fw-medium">
+                              Prix :
+                            </span>
+                            <span class="d-block text-black ms-1">
+                              {{ product.price | number:'1.0-2':'fr' }} GNF
+                            </span>
+                        </li>
+                        <li class="d-flex align-items-center fs-14">
+                            <span class="d-block fw-medium">
+                                Category :
+                            </span>
+                            <span class="text-black">
+                                {{ product.category }}
+                            </span>
+                        </li>
+                        <li class="d-flex align-items-center fs-14">
+                            <span class="d-block fw-medium">
+                                Taille :
+                            </span>
+                            <div class="colors d-flex flex-wrap gap-2 mt-2">
+                                <div
+                                  class="color-item"
+                                  *ngFor="let size of product.sizeAvailable"
+                                  [ngClass]="{ 'selected': size === sizeSelected }"
+                                  (click)="selectSize(size)"
+                                >
+                                  <span>{{ size }}</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="d-flex align-items-center fs-14">
+                            <span class="d-block fw-medium">
+                              Vendeur :
+                            </span>
+                            <span class="d-block text-black ms-1">
+                              {{ product.seller }}
+                            </span>
+                        </li>
+                    </ul>
+                    <div class="d-md-flex align-items-center bg-transparent">
+                        <div class="box d-flex align-items-center ms-4 bg-transparent">
+                            <button class="btn" (click)="toggleCart()">
+                                <i-feather [name]="product.inCart === 1 ? 'trash-2' : 'shopping-cart'" class="me-2"></i-feather>
+                                {{ product.inCart === 1 ? 'Supprimer du panier' : 'Ajouter au panier' }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </mat-card-content>
+</mat-card>
+
+<!-- Reviews -->
+<app-reviews [product]="product" />

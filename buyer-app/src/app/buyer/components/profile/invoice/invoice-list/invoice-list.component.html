@@ -1,0 +1,88 @@
+<mat-card class="trinta-card invoices-list-card mb-25 bg-white border-none d-block">
+    <mat-card-header>
+      <mat-card-title>
+        <h5 class="mt-0 mb-0">
+          Liste des factures
+        </h5>
+      </mat-card-title>
+      <mat-card-subtitle>
+        <button type="button" mat-button class="card-header-menu-btn" [matMenuTriggerFor]="cardHeaderMenu">
+          Cette semaine
+        </button>
+        <mat-menu #cardHeaderMenu="matMenu" class="card-header-menu" xPosition="before">
+          <button mat-menu-item>
+            Aujourd’hui
+          </button>
+          <button mat-menu-item>
+            Cette semaine
+          </button>
+          <button mat-menu-item>
+            Ce mois
+          </button>
+          <button mat-menu-item>
+            Cette année
+          </button>
+        </mat-menu>
+      </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="invoices-list-table">
+        <div class="table-responsive">
+          <table mat-table [dataSource]="dataSource">
+
+            <!-- Tracking No Column -->
+            <ng-container matColumnDef="invoiceId">
+              <th mat-header-cell *matHeaderCellDef class="pl-0 text-primary">
+                N° de facture
+              </th>
+              <td mat-cell *matCellDef="let element" class="pl-0 text-primary fw-medium">
+                {{element.invoiceId}}
+              </td>
+            </ng-container>
+
+            <!-- Issues Date Column -->
+            <ng-container matColumnDef="issuesDate">
+              <th mat-header-cell *matHeaderCellDef>
+                Date d’émission
+              </th>
+              <td mat-cell *matCellDef="let element">
+                {{element.issuesDate}}
+              </td>
+            </ng-container>
+
+            <!-- Amount Column -->
+            <ng-container matColumnDef="amount">
+              <th mat-header-cell *matHeaderCellDef>
+                Montant total
+              </th>
+              <td mat-cell *matCellDef="let element" class="text-primary">
+                {{element.amount}}
+              </td>
+            </ng-container>
+
+            <!-- Action Column -->
+            <ng-container matColumnDef="action">
+              <th mat-header-cell *matHeaderCellDef class="text-end pr-0">
+                Action
+              </th>
+              <td mat-cell *matCellDef="let element" class="text-end pr-0">
+                <div class="action">
+                  <button type="button" mat-button class="p-0 min-w-auto lh-1 h-auto">
+                    <i class="{{element.action.download}}"></i>
+                  </button>
+                  <button routerLink="/profile/invoices/details" type="button" mat-button class="p-0 min-w-auto lh-1 h-auto" >
+                    <i class="{{element.action.view}}"></i>
+                  </button>
+                </div>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+          </table>
+        </div>
+        <mat-paginator [pageSizeOptions]="[9, 18, 27]"></mat-paginator>
+      </div>
+    </mat-card-content>
+  </mat-card>

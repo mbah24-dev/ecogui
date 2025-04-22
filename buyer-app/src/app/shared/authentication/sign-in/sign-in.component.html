@@ -1,0 +1,78 @@
+<div class="sign-in-area">
+    <div class="d-table">
+        <div class="d-table-cell">
+            <div class="trinta-form ml-auto mr-auto bg-white border-radius">
+                <div class="title text-center">
+                    <h3>
+                        Connexion
+                    </h3>
+                    <p class="text-black fs-15">
+                        Vous n’avez pas encore de compte ?
+                        <a routerLink="/authentication/sign-up" class="text-primary fw-medium">Inscrivez-vous ici</a>
+                    </p>
+                </div>
+                <div class="signin-with-socials">
+                    <button type="button" mat-button>
+                        <img src="images/icons/google2.svg" alt="google">
+                        Se connecter avec Google
+                    </button>
+                    <div class="or text-center position-relative z-1 text-body">
+                        <span class="d-inline-block bg-white">
+                            OU
+                        </span>
+                    </div>
+                </div>
+                <form [formGroup]="authForm" (ngSubmit)="onSubmit()">
+                    <div class="form-group">
+                        <label class="label d-block fw-medium mb-10">
+                            Adresse e-mail
+                        </label>
+                        <mat-form-field>
+                            <i-feather name="mail"></i-feather>
+                            <mat-label>Entrez votre adresse e-mail</mat-label>
+                            <input matInput type="email" id="email" formControlName="email">
+                        </mat-form-field>
+                        <div class="error text-danger" *ngIf="authForm.get('email')!.hasError('required') && authForm.get('email')!.touched">
+                            L’adresse e-mail est requise.
+                        </div>
+                        <div class="error text-danger" *ngIf="authForm.get('email')!.hasError('email') && authForm.get('email')!.touched">
+                            Veuillez entrer une adresse e-mail valide.
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="label d-block fw-medium mb-10">
+                            Mot de passe
+                        </label>
+                        <mat-form-field>
+                            <i-feather name="lock"></i-feather>
+                            <mat-label>Entrez votre mot de passe</mat-label>
+                            <input matInput [type]="hide ? 'password' : 'text'" id="password" formControlName="password">
+                            <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Masquer le mot de passe'" [attr.aria-pressed]="hide">
+                                <span class="material-symbols-outlined">
+                                    {{hide ? 'visibility_off' : 'visibility'}}
+                                </span>
+                            </button>
+                        </mat-form-field>
+                        <div class="error text-danger" *ngIf="authForm.get('password')!.hasError('required') && authForm.get('password')!.touched">
+                            Le mot de passe est requis.
+                        </div>
+                        <div class="error text-danger" *ngIf="authForm.get('password')!.hasError('minlength') && authForm.get('password')!.touched">
+                            Le mot de passe doit contenir au moins 8 caractères.
+                        </div>
+                    </div>
+                    <div class="info d-flex justify-content-between align-items-center">
+                        <mat-checkbox color="primary">
+                            Se souvenir de moi
+                        </mat-checkbox>
+                        <a routerLink="/authentication/forgot-password" class="d-inline-block text-primary">
+                            Mot de passe oublié ?
+                        </a>
+                    </div>
+                    <button mat-button type="submit" [disabled]="authForm.invalid">
+                        Se connecter
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

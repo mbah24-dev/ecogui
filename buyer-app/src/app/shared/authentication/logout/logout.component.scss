@@ -1,0 +1,175 @@
+.logout-area {
+    height: 100vh;
+    overflow-x: hidden;
+    padding: {
+        top: 30px;
+        bottom: 30px;
+        left: 12.5px;
+        right: 12.5px;
+    };
+    .trinta-form {
+        max-width: 1064px;
+        padding: 50px 30px;
+
+        h3 {
+            font-size: 18px;
+            margin-bottom: 55px;
+        }
+        .logo {
+            margin-bottom: 55px;
+
+            img {
+                &:last-child {
+                    display: none;
+                }
+            }
+        }
+        .mat-mdc-button {
+            height: auto;
+            min-width: auto;
+            margin-top: 15px;
+            border-radius: 6px;
+            padding: 18px 58px;
+            color: var(--whiteColor);
+            background-color: var(--primaryColor);
+            font: {
+                size: 16px;
+                weight: 500;
+                family: var(--headingFontFamily);
+            };
+        }
+        .shape1 {
+            top: 145px;
+            left: 180px;
+            z-index: -1;
+            position: absolute;
+        }
+        .shape2 {
+            top: 130px;
+            left: 280px;
+            z-index: -1;
+            position: absolute;
+        }
+        .shape3 {
+            top: 130px;
+            z-index: -1;
+            right: 280px;
+            position: absolute;
+        }
+        .shape4 {
+            top: 145px;
+            z-index: -1;
+            right: 180px;
+            position: absolute;
+        }
+    }
+}
+
+/* Max width 767px */
+@media only screen and (max-width : 767px) {
+
+    .logout-area {
+        .trinta-form {
+            max-width: 100%;
+            padding: 40px 20px;
+
+            h3 {
+                margin-bottom: 25px;
+            }
+            .logo {
+                margin-bottom: 25px;
+            }
+            .mat-mdc-button {
+                padding: 16px 40px;
+                margin-top: 10px;
+                font-size: 14px;
+            }
+            .shape1 {
+                display: none;
+            }
+            .shape2 {
+                display: none;
+            }
+            .shape3 {
+                display: none;
+            }
+            .shape4 {
+                display: none;
+            }
+        }
+    }
+
+}
+
+/* Min width 576px to Max width 767px */
+@media only screen and (min-width : 576px) and (max-width : 767px) {
+
+    .logout-area {
+        .trinta-form {
+            max-width: 540px;
+        }
+    }
+
+}
+
+/* Min width 768px to Max width 991px */
+@media only screen and (min-width : 768px) and (max-width : 991px) {
+
+    .logout-area {
+        .trinta-form {
+            max-width: 720px;
+
+            .shape1 {
+                left: 30px;
+            }
+            .shape2 {
+                left: 130px;
+            }
+            .shape3 {
+                right: 130px;
+            }
+            .shape4 {
+                right: 30px;
+            }
+        }
+    }
+
+}
+
+/* Min width 992px to Max width 1199px */
+@media only screen and (min-width : 992px) and (max-width : 1199px) {
+
+    .logout-area {
+        .trinta-form {
+            max-width: 960px;
+
+            .shape1 {
+                left: 140px;
+            }
+            .shape2 {
+                left: 240px;
+            }
+            .shape3 {
+                right: 240px;
+            }
+            .shape4 {
+                right: 140px;
+            }
+        }
+    }
+
+}
+
+.ecogui-text {
+    color: green !important;
+    font-weight: bold !important;
+    font-family: cursive !important;
+    font-size: 5rem !important;
+}
+
+
+/* Min width 1200px to Max width 1399px */
+@media only screen and (min-width: 1200px) and (max-width: 1399px) {}
+
+/* Min width 1600px */
+@media only screen and (min-width: 1600px) {}

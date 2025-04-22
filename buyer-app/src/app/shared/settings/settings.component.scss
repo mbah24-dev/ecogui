@@ -1,0 +1,140 @@
+
+.trinta-card {
+    &.profile-settings-card {
+        .mat-mdc-card-content {
+            .admin {
+                border-bottom: 1px solid #edeff5;
+                padding-bottom: 30px;
+                margin-bottom: 50px;
+
+                .image {
+                    width: 153px;
+                    height: 153px;
+
+                    .mdc-button {
+                        right: 2px;
+                        width: 45px;
+                        bottom: -1px;
+                        height: 45px;
+                        min-width: auto;
+                        padding: 5px 0 0;
+                        position: absolute;
+                        border-radius: 50%;
+                        color: var(--whiteColor);
+                        background-color: var(--primaryColor);
+
+                        i-feather {
+                            width: 18px;
+                            height: 18px;
+                        }
+                    }
+                }
+                h6 {
+                    font-size: 16px;
+                    margin: {
+                        top: 25px;
+                        bottom: 10px;
+                    };
+                }
+            }
+            ul {
+                li {
+                    a {
+                        color: var(--blackColor);
+                        padding: 12.5px 20px 12.5px 46px;
+
+                        i-feather {
+                            top: 50%;
+                            left: 20px;
+                            width: 16px;
+                            height: 16px;
+                            position: absolute;
+                            transform: translateY(-50%);
+                            transition: var(--transition);
+                        }
+                        &.active {
+                            color: var(--primaryColor);
+                            background: rgba(55, 97, 238, 0.05);
+
+                            i-feather {
+                                color: var(--primaryColor);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+/* Max width 767px */
+@media only screen and (max-width : 767px) {
+
+    .trinta-card {
+        &.profile-settings-card {
+            .mat-mdc-card-content {
+                .admin {
+                    padding-bottom: 20px;
+                    margin-bottom: 20px;
+
+                    .image {
+                        width: 145px;
+                        height: 145px;
+
+                        .mdc-button {
+                            right: 0;
+                            bottom: 0;
+                        }
+                    }
+                    h6 {
+                        font-size: 15px;
+                        margin: {
+                            top: 20px;
+                            bottom: 8px;
+                        };
+                    }
+                }
+                ul {
+                    li {
+                        a {
+                            padding: 11px 15px 11px 40px;
+
+                            i-feather {
+                                left: 15px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+}
+
+/* Min width 576px to Max width 767px */
+@media only screen and (min-width : 576px) and (max-width : 767px) {}
+
+/* Min width 768px to Max width 991px */
+@media only screen and (min-width : 768px) and (max-width : 991px) {
+
+    .trinta-card {
+        &.profile-settings-card {
+            .mat-mdc-card-content {
+                .admin {
+                    padding-bottom: 30px;
+                    margin-bottom: 30px;
+                }
+            }
+        }
+    }
+
+}
+
+/* Min width 992px to Max width 1199px */
+@media only screen and (min-width : 992px) and (max-width : 1199px) {}
+
+/* Min width 1200px to Max width 1399px */
+@media only screen and (min-width: 1200px) and (max-width: 1399px) {}
+
+/* Min width 1600px */
+@media only screen and (min-width: 1600px) {}

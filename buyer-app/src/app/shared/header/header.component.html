@@ -1,0 +1,135 @@
+<div
+    class="header-area bg-white box-shadow transition"
+    [ngClass]="{'active': isToggled}"
+>
+    <div class="d-md-flex align-items-center justify-content-between">
+        <div class="header-left-side d-flex align-items-center">
+            <div
+                class="burger-menu position-relative transition lh-1"
+                [ngClass]="{'active': isToggled}"
+                (click)="toggle()"
+            >
+                <i-feather name="align-left"></i-feather>
+            </div>
+            <form class="search-box position-relative">
+                <input type="text" class="input-search w-100 d-block border-none" placeholder="Search here..">
+                <button type="submit" class="bg-transparent p-0 border-none transition">
+                    <i-feather name="search"></i-feather>
+                </button>
+            </form>
+        </div>
+        <ul class="header-right-side d-flex align-items-center m-0 p-0 list-unstyled">
+
+            <!-- AUTH DEBUT -->
+            <li>
+                <button mat-icon-button [matMenuTriggerFor]="messagesMenu" class="auth-menu-btn">
+                  <i-feather name="lock" class="feather-icon"></i-feather>
+                </button>
+
+                <mat-menu #messagesMenu="matMenu" class="auth-menu-dropdown" xPosition="before">
+                  <div class="auth-menu-content px-4 py-3">
+                    <p class="menu-title fw-semibold mb-3 text-center">Bienvenue 👋</p>
+
+                    <button
+                      mat-flat-button
+                      color="primary"
+                      class="w-100 mb-2 auth-action-btn"
+                      routerLink="/authentication"
+                    >
+                      Se connecter
+                    </button>
+
+                    <button
+                      mat-stroked-button
+                      color="primary"
+                      class="w-100 auth-action-btn"
+                      routerLink="/authentication/sign-up"
+                    >
+                      Inscrivez-vous
+                    </button>
+                  </div>
+                </mat-menu>
+            </li>
+
+
+            <!-- AUTH FIN-->
+            <li >
+                <button
+                    mat-button
+                    (click)="toggleTheme()"
+                    class="dark-swtich-btn whishlist-tag"
+                    [class.active]="toggleService.isDark()"
+                >
+                    <i-feather name="moon"></i-feather>
+                </button>
+            </li>
+
+            <!-- whishlist -->
+            <app-whishlist [products]="(products$ | async) || []" class="whishlist-tag"/>
+
+            <!-- cart-preview -->
+            <app-cart-preview [products]="(products$ | async) || []" class="whishlist-tag" />
+
+            <li>
+                <button mat-button class="language-menu-btn">
+                    <img src="images/gn-flag.png" alt="flag"> GN
+                </button>
+            </li>
+            <li>
+                <button mat-button [matMenuTriggerFor]="profileMenu" class="profile-menu-btn">
+                    <img src="images/mbah.jpeg" class="rounded-circle" alt="admin-image">
+                </button>
+                <mat-menu class="profile-menu-dropdown" #profileMenu="matMenu" xPosition="before">
+                    <div class="menu-header d-flex align-items-center">
+                        <img src="images/mbah.jpeg" class="rounded-circle" alt="admin-image">
+                        <div class="title">
+                            <a routerLink="/my-profile" class="d-inline-block fw-medium">
+                                BAH Mamadou
+                            </a>
+                            <span class="designation d-block text-body">
+                                Client
+                            </span>
+                        </div>
+                    </div>
+                    <ul class="menu-body pl-0 mb-0 mt-0 list-unstyled">
+                        <li class="position-relative transition fw-medium">
+                            <i class="material-symbols-outlined">
+                                person
+                            </i>
+                            Mon profil
+                            <a routerLink="/profile/orders" class="link-btn d-block position-absolute left-0 right-0 top-0 bottom-0 z-1"></a>
+                        </li>
+                        <li class="position-relative transition fw-medium">
+                            <i class="material-symbols-outlined">
+                                settings
+                            </i>
+                            Paramètres
+                            <a routerLink="/settings" class="link-btn d-block position-absolute left-0 right-0 top-0 bottom-0 z-1"></a>
+                        </li>
+                        <li class="position-relative transition fw-medium">
+                            <i class="material-symbols-outlined">
+                                info
+                            </i>
+                            FAQ
+                            <a routerLink="/profile/faq" class="link-btn d-block position-absolute left-0 right-0 top-0 bottom-0 z-1"></a>
+                        </li>
+                        <li class="position-relative transition fw-medium">
+                            <i class="material-symbols-outlined">
+                                mail
+                            </i>
+                            Nous contactez
+                            <a routerLink="/profile/contact" class="link-btn d-block position-absolute left-0 right-0 top-0 bottom-0 z-1"></a>
+                        </li>
+                        <li class="position-relative transition fw-medium">
+                            <i class="material-symbols-outlined">
+                                logout
+                            </i>
+                            Déconnexion
+                            <a routerLink="/authentication/logout" class="link-btn d-block position-absolute left-0 right-0 top-0 bottom-0 z-1"></a>
+                        </li>
+                    </ul>
+                </mat-menu>
+            </li>
+        </ul>
+    </div>
+</div>

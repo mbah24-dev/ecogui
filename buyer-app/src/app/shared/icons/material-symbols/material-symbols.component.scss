@@ -1,0 +1,42 @@
+code {
+    padding: 20px;
+    display: block;
+    background: #f5f2f0;
+
+    .red {
+        color: #905;
+        margin-right: 5px;
+
+        &:last-child {
+            margin-right: 0;
+        }
+    }
+    .green {
+        color: #690;
+    }
+    .blue {
+        color: #07a;
+    }
+}
+.mat-mdc-button {
+    height: auto;
+    min-width: auto;
+    padding: 15px 35px;
+    color: var(--whiteColor);
+    background-color: var(--primaryColor);
+    font: {
+        weight: 500;
+        family: var(--headingFontFamily);
+    };
+}
+.trinta-card {
+    &.icon-card {
+        .mat-mdc-card-content {
+            padding-top: 40px;
+
+            .title {
+                margin-top: 40px;
+            }
+        }
+    }
+}

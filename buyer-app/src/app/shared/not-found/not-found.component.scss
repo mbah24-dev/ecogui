@@ -1,0 +1,148 @@
+.trinta-card {
+    &.error-card {
+        padding: {
+            top: 50px;
+            bottom: 70px;
+        };
+        .mat-mdc-card-content {
+            h3 {
+                font-size: 32px;
+                letter-spacing: 0.32px;
+                margin: {
+                    top: 20px;
+                    bottom: 17px;
+                };
+            }
+        }
+    }
+}
+::ng-deep {
+    .trinta-card {
+        &.error-card {
+            .mat-mdc-card-content {
+                .mat-mdc-button {
+                    height: auto;
+                    min-width: auto;
+                    margin-top: 15px;
+                    padding: 21px 62px;
+                    color: var(--whiteColor);
+                    background-color: var(--primaryColor);
+
+                    .mdc-button__label {
+                        display: block;
+                        padding-right: 35px;
+                        font: {
+                            size: 16px;
+                            weight: 500;
+                            family: var(--headingFontFamily);
+                        };
+                        i {
+                            transform: translateY(-50%);
+                            font-weight: normal;
+                            position: absolute;
+                            font-size: 25px;
+                            top: 50%;
+                            right: 0;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+/* Max width 767px */
+@media only screen and (max-width : 767px) {
+
+    .trinta-card {
+        &.error-card {
+            padding: {
+                top: 30px;
+                bottom: 30px;
+            };
+            .mat-mdc-card-content {
+                h3 {
+                    font-size: 24px;
+                    margin: {
+                        top: 15px;
+                        bottom: 15px;
+                    };
+                }
+            }
+        }
+    }
+    ::ng-deep {
+        .trinta-card {
+            &.error-card {
+                .mat-mdc-card-content {
+                    .mat-mdc-button {
+                        margin-top: 5px;
+                        padding: 17px 35px;
+
+                        .mdc-button__label {
+                            padding-right: 30px;
+                            font-size: 14px;
+
+                            i {
+                                font-size: 20px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+}
+
+/* Min width 576px to Max width 767px */
+@media only screen and (min-width : 576px) and (max-width : 767px) {}
+
+/* Min width 768px to Max width 991px */
+@media only screen and (min-width : 768px) and (max-width : 991px) {
+
+    .trinta-card {
+        &.error-card {
+            padding: {
+                top: 40px;
+                bottom: 40px;
+            };
+            .mat-mdc-card-content {
+                h3 {
+                    font-size: 28px;
+                }
+            }
+        }
+    }
+    ::ng-deep {
+        .trinta-card {
+            &.error-card {
+                .mat-mdc-card-content {
+                    .mat-mdc-button {
+                        margin-top: 12px;
+                        padding: 18px 45px;
+
+                        .mdc-button__label {
+                            padding-right: 30px;
+                            font-size: 15px;
+
+                            i {
+                                font-size: 20px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+}
+
+/* Min width 992px to Max width 1199px */
+@media only screen and (min-width : 992px) and (max-width : 1199px) {}
+
+/* Min width 1200px to Max width 1399px */
+@media only screen and (min-width: 1200px) and (max-width: 1399px) {}
+
+/* Min width 1600px */
+@media only screen and (min-width: 1600px) {}
