@@ -116,8 +116,7 @@ ng serve
   <h2>🔗 Liens Utiles</h2>
   <ul>
     <li><a href="#">🌐 Accéder à Ecogui</a></li>
-    <li><a href="#">📄 Documentation API</a></li>
-    <li><a href="#">🐙 Repository GitHub</a></li>
+    <li><a href="https://ecogui-api-routes.vercel.app/">📄 Documentation API</a></li>
   </ul>
 
   <h2>📬 Contact</h2>
