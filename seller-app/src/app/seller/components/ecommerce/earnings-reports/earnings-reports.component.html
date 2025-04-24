@@ -1,0 +1,63 @@
+<mat-card class="trinta-card earnings-reports-card mb-25 bg-white border-none d-block">
+    <mat-card-header>
+      <mat-card-title>
+        <h5 class="mt-0 mb-0">
+          Rapports de Revenus
+        </h5>
+      </mat-card-title>
+      <mat-card-subtitle>
+        <button
+          type="button"
+          mat-button
+          class="card-header-dot-btn lh-1 p-0 min-w-auto h-auto"
+          [matMenuTriggerFor]="cardHeaderMenu"
+        >
+          <i class="ri-more-2-fill"></i>
+        </button>
+        <mat-menu #cardHeaderMenu="matMenu" class="card-header-menu" xPosition="before">
+          <button mat-menu-item>Hier</button>
+          <button mat-menu-item>La Semaine Dernière</button>
+          <button mat-menu-item>Le Mois Dernier</button>
+          <button mat-menu-item>L'Année Dernière</button>
+        </mat-menu>
+      </mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div class="earnings-reports-table">
+        <div class="table-responsive">
+          <table mat-table [dataSource]="dataSource">
+
+            <!-- Date -->
+            <ng-container matColumnDef="date">
+              <th mat-header-cell *matHeaderCellDef class="pl-0">Date</th>
+              <td mat-cell *matCellDef="let element" class="text-dark pl-0">
+                {{ element.date }}
+              </td>
+            </ng-container>
+
+            <!-- Nombre d'articles -->
+            <ng-container matColumnDef="itemCount">
+              <th mat-header-cell *matHeaderCellDef>Articles</th>
+              <td mat-cell *matCellDef="let element">
+                {{ element.itemCount }}
+              </td>
+            </ng-container>
+
+            <!-- Revenus -->
+            <ng-container matColumnDef="earnings">
+              <th mat-header-cell *matHeaderCellDef class="text-end pr-0">Revenus</th>
+              <td mat-cell *matCellDef="let element" class="text-primary text-end pr-0">
+                {{ element.earnings }}
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+          </table>
+        </div>
+        <mat-paginator [pageSizeOptions]="[7, 12, 18]"></mat-paginator>
+      </div>
+    </mat-card-content>
+  </mat-card>

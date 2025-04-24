@@ -1,0 +1,40 @@
+<mat-card
+  class="trinta-card website-overview-card mb-25 bg-transparent border-none d-block position-relative z-1"
+>
+  <mat-card-header>
+    <mat-card-title>
+      <h5 class="mt-0 mb-0 text-white">
+        Tableau de bord
+      </h5>
+    </mat-card-title>
+
+  </mat-card-header>
+  <mat-card-content>
+    <div class="row">
+      <div class="col-sm-6 col-lg-4 col-xxxl-2">
+        <!-- Commandes du jour -->
+        <app-todays-order />
+      </div>
+      <div class="col-sm-6 col-lg-4 col-xxxl-2">
+        <!-- Revenus du jour -->
+        <app-todays-revenue />
+      </div>
+      <div class="col-sm-6 col-lg-4 col-xxxl-2">
+        <!-- Valeur moyenne -->
+        <app-average-value />
+      </div>
+      <div class="col-sm-6 col-lg-4 col-xxxl-2">
+        <!-- Dépenses totales -->
+        <app-all-spending />
+      </div>
+      <div class="col-sm-6 col-lg-4 col-xxxl-2">
+        <!-- Revenus attendus -->
+        <app-expected-earnings />
+      </div>
+      <div class="col-sm-6 col-lg-4 col-xxxl-2">
+        <!-- Rapport hebdomadaire -->
+        <app-week-report />
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

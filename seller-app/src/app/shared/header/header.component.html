@@ -1,0 +1,203 @@
+<div
+    class="header-area bg-white box-shadow transition"
+    [ngClass]="{'active': isToggled}"
+>
+    <div class="d-md-flex align-items-center justify-content-between">
+        <div class="header-left-side d-flex align-items-center">
+            <div
+                class="burger-menu position-relative transition lh-1"
+                [ngClass]="{'active': isToggled}"
+                (click)="toggle()"
+            >
+                <i-feather name="align-left"></i-feather>
+            </div>
+            <form class="search-box position-relative">
+                <input type="text" class="input-search w-100 d-block border-none" placeholder="Search here..">
+                <button type="submit" class="bg-transparent p-0 border-none transition">
+                    <i-feather name="search"></i-feather>
+                </button>
+            </form>
+        </div>
+        <ul class="header-right-side d-flex align-items-center m-0 p-0 list-unstyled">
+
+            <!-- AUTH DEBUT -->
+            <li>
+                <button mat-icon-button [matMenuTriggerFor]="messagesMenu" class="auth-menu-btn">
+                  <i-feather name="lock"></i-feather>
+                </button>
+
+                <mat-menu #messagesMenu="matMenu" class="auth-menu-dropdown" xPosition="before">
+                  <div class="auth-menu-content px-4 py-3">
+                    <p class="menu-title fw-semibold mb-3 text-center">Bienvenue 👋</p>
+
+                    <button
+                      mat-flat-button
+                      color="primary"
+                      class="w-100 mb-2 auth-action-btn"
+                      routerLink="/authentication"
+                    >
+                      Se connecter
+                    </button>
+
+                    <button
+                      mat-stroked-button
+                      color="primary"
+                      class="w-100 auth-action-btn"
+                      routerLink="/authentication/sign-up"
+                    >
+                      Inscrivez-vous
+                    </button>
+                  </div>
+                </mat-menu>
+            </li>
+            <li>
+                <button mat-button [matMenuTriggerFor]="notificationsMenu" class="notifications-menu-btn">
+                  <i-feather name="bell"></i-feather>
+                  <span class="trinta-badge fw-bold bg-primary text-center text-white rounded-circle d-flex align-items-center justify-content-center">
+                    3
+                  </span>
+                </button>
+                <mat-menu class="notifications-menu-dropdown" #notificationsMenu="matMenu" xPosition="before">
+                  <div class="title d-flex align-items-center justify-content-between">
+                    <span class="fw-medium fs-16">
+                      Notifications
+                      <span class="text-body fw-normal fs-15">
+                        (03)
+                      </span>
+                    </span>
+                    <a routerLink="/" class="link-btn fw-medium text-primary">
+                      Tout effacer
+                    </a>
+                  </div>
+                  <ul class="menu-body p-0 mt-0 list-unstyled">
+                    <li class="position-relative">
+                      <div class="icon rounded-circle d-flex align-items-center justify-content-center position-absolute text-center transition">
+                        <i class="material-symbols-outlined">
+                          attach_money
+                        </i>
+                      </div>
+                      <span class="sub-title d-block">
+                        Paiement reçu de <strong class="fw-semibold">Ecogui</strong> : 27 500 000 GNF
+                      </span>
+                      <span class="time d-block text-body">
+                        Il y a 30 minutes
+                      </span>
+                      <a routerLink="/" class="d-block left-0 top-0 bottom-0 right-0 z-1 position-absolute"></a>
+                      <span class="unread d-inline-block rounded-circle bg-primary position-absolute"></span>
+                    </li>
+
+                    <li class="position-relative">
+                      <div class="icon rounded-circle d-flex align-items-center justify-content-center position-absolute text-center transition">
+                        <i class="material-symbols-outlined">
+                          shopping_cart
+                        </i>
+                      </div>
+                      <span class="sub-title d-block">
+                        Nouvelle commande : <strong class="fw-semibold">Ordinateur Zenix-24 x2</strong>
+                      </span>
+                      <span class="time d-block text-body">
+                        Il y a 1 heure
+                      </span>
+                      <a routerLink="/" class="d-block left-0 top-0 bottom-0 right-0 z-1 position-absolute"></a>
+                      <span class="unread d-inline-block rounded-circle bg-primary position-absolute"></span>
+                    </li>
+
+                    <li class="position-relative">
+                      <div class="icon rounded-circle d-flex align-items-center justify-content-center position-absolute text-center transition">
+                        <i class="material-symbols-outlined">
+                          chat
+                        </i>
+                      </div>
+                      <span class="sub-title d-block">
+                        Nouveau message : <strong class="fw-semibold">Votre produit a été valider !</strong>
+                      </span>
+                      <span class="time d-block text-body">
+                        Il y a 3 heures
+                      </span>
+                      <a routerLink="/" class="d-block left-0 top-0 bottom-0 right-0 z-1 position-absolute"></a>
+                      <span class="unread d-inline-block rounded-circle bg-primary position-absolute"></span>
+                    </li>
+                  </ul>
+                  <div class="menu-footer text-center">
+                    <a routerLink="/" class="text-primary text-decoration-underline d-inline-block fw-medium">
+                      Voir toutes les notifications
+                    </a>
+                  </div>
+                </mat-menu>
+              </li>
+
+            <!-- AUTH FIN-->
+            <li >
+                <button
+                    mat-button
+                    (click)="toggleTheme()"
+                    class="dark-swtich-btn whishlist-tag"
+                    [class.active]="toggleService.isDark()"
+                >
+                    <i-feather name="moon"></i-feather>
+                </button>
+            </li>
+
+            <li>
+                <button mat-button class="language-menu-btn">
+                    <img src="images/gn-flag.png" alt="flag"> GN
+                </button>
+            </li>
+            <li>
+                <button mat-button [matMenuTriggerFor]="profileMenu" class="profile-menu-btn">
+                    <img src="images/mbah.jpeg" class="rounded-circle" alt="admin-image">
+                </button>
+                <mat-menu class="profile-menu-dropdown" #profileMenu="matMenu" xPosition="before">
+                    <div class="menu-header d-flex align-items-center">
+                        <img src="images/mbah.jpeg" class="rounded-circle" alt="admin-image">
+                        <div class="title">
+                            <a routerLink="/my-profile" class="d-inline-block fw-medium">
+                                BAH Mamadou
+                            </a>
+                            <span class="designation d-block text-body">
+                                Client
+                            </span>
+                        </div>
+                    </div>
+                    <ul class="menu-body pl-0 mb-0 mt-0 list-unstyled">
+                        <li class="position-relative transition fw-medium">
+                            <i class="material-symbols-outlined">
+                                person
+                            </i>
+                            Mon profil
+                            <a routerLink="/profile/orders" class="link-btn d-block position-absolute left-0 right-0 top-0 bottom-0 z-1"></a>
+                        </li>
+                        <li class="position-relative transition fw-medium">
+                            <i class="material-symbols-outlined">
+                                settings
+                            </i>
+                            Paramètres
+                            <a routerLink="/settings" class="link-btn d-block position-absolute left-0 right-0 top-0 bottom-0 z-1"></a>
+                        </li>
+                        <li class="position-relative transition fw-medium">
+                            <i class="material-symbols-outlined">
+                                info
+                            </i>
+                            FAQ
+                            <a routerLink="/profile/faq" class="link-btn d-block position-absolute left-0 right-0 top-0 bottom-0 z-1"></a>
+                        </li>
+                        <li class="position-relative transition fw-medium">
+                            <i class="material-symbols-outlined">
+                                mail
+                            </i>
+                            Nous contactez
+                            <a routerLink="/profile/contact" class="link-btn d-block position-absolute left-0 right-0 top-0 bottom-0 z-1"></a>
+                        </li>
+                        <li class="position-relative transition fw-medium">
+                            <i class="material-symbols-outlined">
+                                logout
+                            </i>
+                            Déconnexion
+                            <a routerLink="/authentication/logout" class="link-btn d-block position-absolute left-0 right-0 top-0 bottom-0 z-1"></a>
+                        </li>
+                    </ul>
+                </mat-menu>
+            </li>
+        </ul>
+    </div>
+</div>

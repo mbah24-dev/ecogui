@@ -1,0 +1,260 @@
+.trinta-card {
+    &.top-selling-products-card {
+        .mat-mdc-card-content {
+            .products-slides {
+                margin-top: 30px;
+
+                .image {
+                    border-radius: 10px;
+                    margin-right: 15px;
+                    width: 100px;
+
+                    img {
+                        border-radius: 10px;
+                    }
+                }
+                .content {
+                    letter-spacing: 1px;
+
+                    h5 {
+                        font-size: 15px;
+                        margin-bottom: 10px;
+                    }
+                    .price {
+                        margin-top: 10px;
+
+                        span {
+                            color: #00b69b;
+                        }
+                    }
+                }
+            }
+            .chart {
+                margin: {
+                    bottom: -13px;
+                    left: -15px;
+                    top: 16px;
+                };
+            }
+        }
+    }
+}
+::ng-deep {
+    .trinta-card {
+        &.top-selling-products-card {
+            .mat-mdc-card-content {
+                .products-slides {
+                    .owl-theme {
+                        .owl-nav {
+                            right: 0;
+                            top: 15px;
+                            margin-top: 0;
+                            position: absolute;
+
+                            [class*=owl-] {
+                                padding: 0;
+                                width: 30px;
+                                height: 36px;
+                                font-size: 16px;
+                                position: relative;
+                                border-radius: 4px;
+                                color: var(--blackColor);
+                                border: 1px solid #e2e8f0;
+                                transition: var(--transition);
+                                background-color: var(--whiteColor);
+                                box-shadow: 0px 1px 2px 0px rgba(15, 23, 42, 0.04);
+                                margin: {
+                                    top: 0;
+                                    left: 4px;
+                                    bottom: 0;
+                                    right: 4px;
+                                };
+                                i {
+                                    left: 0;
+                                    right: 0;
+                                    top: 50%;
+                                    position: absolute;
+                                    transform: translateY(-50%);
+                                }
+                                &:first-child {
+                                    margin-left: 0;
+                                }
+                                &:last-child {
+                                    margin-right: 0;
+                                }
+                                &:hover {
+                                    color: var(--whiteColor);
+                                    border-color: var(--primaryColor);
+                                    background-color: var(--primaryColor);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+/* Max width 767px */
+@media only screen and (max-width : 767px) {
+
+    .trinta-card {
+        &.top-selling-products-card {
+            .mat-mdc-card-content {
+                .products-slides {
+                    margin-top: 20px;
+    
+                    .content {
+                        letter-spacing: 0.15px;
+    
+                        h5 {
+                            font-size: 13px;
+                            margin-bottom: 8px;
+                        }
+                        .price {
+                            margin-top: 8px;
+                        }
+                    }
+                }
+                .chart {
+                    margin-top: 0;
+                }
+            }
+        }
+    }
+    ::ng-deep {
+        .trinta-card {
+            &.top-selling-products-card {
+                .mat-mdc-card-content {
+                    .products-slides {
+                        .owl-theme {
+                            .owl-nav {
+                                top: 0;
+                                margin-top: 20px;
+                                text-align: start;
+                                position: relative;
+
+                                [class*=owl-] {
+                                    text-align: center;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+}
+
+/* Min width 576px to Max width 767px */
+@media only screen and (min-width : 576px) and (max-width : 767px) {}
+
+/* Min width 768px to Max width 991px */
+@media only screen and (min-width : 768px) and (max-width : 991px) {
+
+    .trinta-card {
+        &.top-selling-products-card {
+            .mat-mdc-card-content {
+                .products-slides {
+                    margin-top: 0;
+    
+                    .content {
+                        h5 {
+                            font-size: 14px;
+                        }
+                    }
+                }
+                .chart {
+                    margin-top: 10px;
+                }
+            }
+        }
+    }
+
+}
+
+/* Min width 992px to Max width 1199px */
+@media only screen and (min-width : 992px) and (max-width : 1199px) {
+
+    .trinta-card {
+        &.top-selling-products-card {
+            .mat-mdc-card-content {
+                .products-slides {
+                    margin-top: 0;
+                }
+                .chart {
+                    margin-top: 5px;
+                }
+            }
+        }
+    }
+
+}
+
+/* Min width 1200px to Max width 1399px */
+@media only screen and (min-width: 1200px) and (max-width: 1399px) {
+
+    .trinta-card {
+        &.top-selling-products-card {
+            .mat-mdc-card-content {
+                .products-slides {
+                    margin-top: 0;
+                }
+            }
+        }
+    }
+
+}
+
+/* Min width 1600px */
+@media only screen and (min-width: 1600px) {
+
+    .trinta-card {
+        &.top-selling-products-card {
+            .mat-mdc-card-content {
+                .products-slides {
+                    margin-top: 0;
+
+                    .image {
+                        margin-right: 20px;
+                        width: 128px;
+                    }
+                }
+                .chart {
+                    margin: {
+                        top: 10px;
+                        bottom: -20px;
+                    };
+                }
+            }
+        }
+    }
+    ::ng-deep {
+        .trinta-card {
+            &.top-selling-products-card {
+                .mat-mdc-card-content {
+                    .products-slides {
+                        .owl-theme {
+                            .owl-nav {
+                                top: 28px;
+    
+                                [class*=owl-] {
+                                    width: 32px;
+                                    height: 38px;
+                                    font-size: 18px;
+                                    margin: {
+                                        left: 6px;
+                                        right: 6px;
+                                    };
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+}

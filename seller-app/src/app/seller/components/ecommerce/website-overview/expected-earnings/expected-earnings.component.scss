@@ -1,0 +1,76 @@
+.expected-earnings-box {
+    padding: 20px;
+    margin-top: 25px;
+    border-radius: 6px;
+
+    h5 {
+        font-size: 15px;
+        margin-bottom: 32px;
+    }
+    .info {
+        span {
+            letter-spacing: 1px;
+
+            &:nth-child(1) {
+                font-size: 13px;
+            }
+        }
+        .mat-mdc-progress-bar {
+            margin-top: 15px;
+            --mdc-linear-progress-active-indicator-height: 6px;
+            --mdc-linear-progress-track-height: 6px;
+            --mdc-linear-progress-track-shape: 4px;
+            --mdc-linear-progress-track-color: #eeeeee;
+            --mdc-linear-progress-active-indicator-color: #00b69b;
+            border-radius: 4px;
+        }
+    }
+}
+
+/* Max width 767px */
+@media only screen and (max-width : 767px) {
+
+    .expected-earnings-box {
+        padding: 15px;
+        margin-top: 20px;
+    
+        h5 {
+            font-size: 14px;
+            margin-bottom: 18px;
+        }
+        .info {
+            .mat-mdc-progress-bar {
+                margin-top: 10px;
+            }
+        }
+    }
+
+}
+
+/* Min width 576px to Max width 767px */
+@media only screen and (min-width : 576px) and (max-width : 767px) {
+
+    .expected-earnings-box {
+        h5 {
+            margin-bottom: 28px;
+        }
+        .info {
+            .mat-mdc-progress-bar {
+                margin-top: 15px;
+            }
+        }
+    }
+
+}
+
+/* Min width 768px to Max width 991px */
+@media only screen and (min-width : 768px) and (max-width : 991px) {}
+
+/* Min width 992px to Max width 1199px */
+@media only screen and (min-width : 992px) and (max-width : 1199px) {}
+
+/* Min width 1200px to Max width 1399px */
+@media only screen and (min-width: 1200px) and (max-width: 1399px) {}
+
+/* Min width 1600px */
+@media only screen and (min-width: 1600px) {}

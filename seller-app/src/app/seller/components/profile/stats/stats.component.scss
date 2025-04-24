@@ -1,0 +1,110 @@
+.trinta-card {
+    &.stat-card {
+        .mat-mdc-card-content {
+            .title {
+                span {
+                    font-size: 15px;
+                    margin-bottom: 10px;
+                }
+                h5 {
+                    font-size: 20px;
+                    letter-spacing: 1px;
+                }
+            }
+            .info {
+                margin-top: 22px;
+
+                span {
+                    letter-spacing: 1px;
+
+                    &.trending {
+                        font-size: 13px;
+                        color: #00b69b;
+                        margin-right: 15px;
+                        border-radius: 4px;
+                        padding: 3.5px 27px 3.5px 8px;
+                        background: rgba(0, 182, 155, 0.10);
+                        
+                        i {
+                            top: 50%;
+                            right: 4px;
+                            font-size: 18px;
+                            margin-top: -0.5px;
+                            position: absolute;
+                            transform: translateY(-50%);
+                        }
+                        &.down {
+                            color: var(--dangerColor);
+                            background: rgba(238, 54, 140, 0.10);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+/* Max width 767px */
+@media only screen and (max-width : 767px) {
+
+    .trinta-card {
+        &.stat-card {
+            .mat-mdc-card-content {
+                .title {
+                    span {
+                        font-size: 13px;
+                        margin-bottom: 8px;
+                    }
+                    h5 {
+                        font-size: 16px;
+                    }
+                }
+                .info {
+                    margin-top: 15px;
+    
+                    span {
+                        &.trending {
+                            font-size: 12px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+}
+
+/* Min width 576px to Max width 767px */
+@media only screen and (min-width : 576px) and (max-width : 767px) {}
+
+/* Min width 768px to Max width 991px */
+@media only screen and (min-width : 768px) and (max-width : 991px) {
+
+    .trinta-card {
+        &.stat-card {
+            .mat-mdc-card-content {
+                .title {
+                    span {
+                        font-size: 14px;
+                    }
+                    h5 {
+                        font-size: 18px;
+                    }
+                }
+                .info {
+                    margin-top: 15px;
+                }
+            }
+        }
+    }
+
+}
+
+/* Min width 992px to Max width 1199px */
+@media only screen and (min-width : 992px) and (max-width : 1199px) {}
+
+/* Min width 1200px to Max width 1399px */
+@media only screen and (min-width: 1200px) and (max-width: 1399px) {}
+
+/* Min width 1600px */
+@media only screen and (min-width: 1600px) {}

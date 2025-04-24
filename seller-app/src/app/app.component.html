@@ -1,0 +1,22 @@
+<div
+    [ngClass]="{'blank-page': router.url === '/authentication' || router.url === '/authentication/sign-up' || router.url === '/authentication/forgot-password' || router.url === '/authentication/reset-password' || router.url === '/authentication/lock-screen' || router.url === '/authentication/logout' || router.url === '/authentication/confirm-email'}"
+    [class.dark-theme]="toggleService.isDark()"
+>
+
+    
+
+    <!-- Sidebar -->
+    <app-sidebar />
+
+    <!-- Main Content -->
+    <div
+        class="main-content transition d-flex flex-column"
+        [ngClass]="{'active': isToggled}"
+    >
+        <app-header />
+        <router-outlet />
+        <div class="flex-grow-1"></div>
+        <app-footer />
+    </div>
+
+</div>

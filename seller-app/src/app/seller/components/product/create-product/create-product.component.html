@@ -1,0 +1,104 @@
+<mat-card class="trinta-card add-product-card mb-25 bg-white border-none d-block">
+    <mat-card-header>
+        <mat-card-title>
+            <h5 class="mt-0 mb-0">
+                Ajouter un produit
+            </h5>
+        </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+        <form>
+            <div class="row">
+                <div class="col-lg-12">
+                    <label class="label d-block fw-medium mb-10">
+                        Nom du produit
+                    </label>
+                    <mat-form-field>
+                        <i-feather name="edit-3"></i-feather>
+                        <mat-label>Entrer le nom du produit</mat-label>
+                        <input matInput>
+                    </mat-form-field>
+                </div>
+                <div class="col-lg-12">
+                    <label class="label d-block fw-medium mb-10">
+                        Description du produit
+                    </label>
+                    <div class="NgxEditor__Wrapper">
+                        <ng-container *ngIf="editor">
+                            <ngx-editor-menu [editor]="editor" [toolbar]="toolbar"></ngx-editor-menu>
+                            <ngx-editor [editor]="editor"></ngx-editor>
+                        </ng-container>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <label class="label d-block fw-medium mb-10">
+                        Prix du produit
+                    </label>
+                    <mat-form-field>
+                        <i-feather name="shopping-cart"></i-feather>
+                        <mat-label>Entrer le prix</mat-label>
+                        <input matInput type="number">
+                    </mat-form-field>
+                </div>
+                <div class="col-lg-4">
+                    <label class="label d-block fw-medium mb-10">
+                        Stock disponible
+                    </label>
+                    <mat-form-field>
+                        <i-feather name="database"></i-feather>
+                        <mat-label>Quantité en stock</mat-label>
+                        <input matInput type="number">
+                    </mat-form-field>
+                </div>
+                <div class="col-lg-4">
+                    <label class="label d-block fw-medium mb-10">
+                        Promotion / Remise
+                    </label>
+                    <mat-form-field>
+                        <i-feather name="percent"></i-feather>
+                        <mat-label>Prix promotionnel</mat-label>
+                        <input matInput type="number">
+                    </mat-form-field>
+                </div>
+                <div class="col-lg-6">
+                    <label class="label d-block fw-medium mb-10">
+                        Catégorie
+                    </label>
+                    <mat-form-field>
+                        <i-feather name="shopping-bag"></i-feather>
+                        <mat-label>Sélectionner une catégorie</mat-label>
+                        <mat-select [(value)]="selectedCategory" (selectionChange)="onCategoryChange($event)">
+                            <mat-option value="electronique">Electronique</mat-option>
+                            <mat-option value="chaussures">Chaussures</mat-option>
+                            <mat-option value="mode">Mode</mat-option>
+                            <mat-option value="accessoires">Accessoires</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-lg-6">
+                    <label class="label d-block fw-medium mb-10">
+                        Taille
+                    </label>
+                    <mat-form-field>
+                        <i-feather name="tag"></i-feather>
+                        <mat-label>Choisir des tailles</mat-label>
+                        <mat-select multiple [(value)]="selectedSize">
+                            <mat-option *ngFor="let size of sizes" [value]="size">{{ size }}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-lg-12">
+                    <label class="label d-block fw-medium mb-10">
+                        Images du produit
+                    </label>
+                    <file-upload class="file-uploader"></file-upload>
+                </div>
+            </div>
+            <div class="create-product-btn">
+                <button mat-button type="button">
+                    Créer le produit
+                </button>
+            </div>
+        </form>
+    </mat-card-content>
+</mat-card>

@@ -1,0 +1,44 @@
+<div class="row">
+    <div class="col-lg-4" [ngClass]="{'hide-profile-left-sidebar': router.url === '/profile/orders/details'
+            || router.url === '/profile/invoices/details' || router.url === '/profile/faq'
+            || router.url === '/profile/contact'}">
+      <mat-card class="trinta-card profile-settings-card mb-25 bg-white border-none d-block">
+        <mat-card-content>
+          <div class="admin text-center">
+            <div class="image ml-auto mr-auto position-relative">
+              <img src="images/mbah.jpeg" class="rounded-circle" alt="image-profil">
+              <button type="button" mat-button>
+                <i-feather name="camera"></i-feather>
+              </button>
+            </div>
+            <h6>BAH Mamadou</h6>
+            <span class="d-block text-body">&#64;bah_mamadou</span>
+          </div>
+
+          <ul class="list-unstyled p-0 m-0">
+            <li class="fw-medium">
+              <a routerLink="/profile/orders" class="d-block position-relative" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                <i-feather name="shopping-bag"></i-feather>
+                Ma carte
+              </a>
+            </li>
+            <li class="fw-medium">
+              <a routerLink="/profile/stats" class="d-block position-relative" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                <i-feather name="file-text"></i-feather>
+                Mes statistiques
+              </a>
+            </li>
+          </ul>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <!-- Si la sidebar est cachée, la colonne prendra toute la largeur (12 colonnes) -->
+    <div [ngClass]="{
+        'col-lg-8': !isSidebarHidden(),
+        'col-lg-12': isSidebarHidden()
+      }">
+        <router-outlet></router-outlet>
+    </div>
+
+  </div>

@@ -1,0 +1,62 @@
+.vendeur-guide-card {
+    margin-bottom: 20px !important;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    font-family: 'Roboto', sans-serif;
+
+    a {
+        color: #1565c0 !important;
+        text-decoration: underline !important;
+    }
+    h2 {
+      font-size: 24px;
+      color: #2e7d32;
+      margin-bottom: 1rem;
+    }
+
+    h3 {
+      font-size: 18px;
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+      color: #1565c0;
+    }
+
+    ul {
+      list-style: disc;
+      padding-left: 1.5rem;
+
+      font-size: 15px;
+
+      li {
+        margin-bottom: 0.5rem;
+      }
+    }
+
+    .section {
+      margin-bottom: 2rem;
+    }
+
+    .warning {
+
+      padding: 1rem;
+      border-left: 4px solid #f57c00;
+
+      .warning-text {
+        display: inline-block;
+        color: #c62828;
+        margin-left: 0.5rem;
+        font-weight: bold;
+      }
+    }
+
+    .tip {
+
+      padding: 1rem;
+      border-left: 4px solid #1976d2;
+    }
+
+    mat-icon {
+      vertical-align: middle;
+    }
+  }

@@ -1,0 +1,77 @@
+<mat-card class="trinta-card top-selling-products-card mb-25 bg-white border-none d-block">
+    <mat-card-header>
+        <mat-card-title>
+            <h5 class="mt-0 mb-0">
+                Produits les plus vendus
+            </h5>
+        </mat-card-title>
+        <mat-card-subtitle>
+            <button type="button" mat-button class="card-header-menu-btn" [matMenuTriggerFor]="cardHeaderMenu">
+                Ce mois
+            </button>
+            <mat-menu #cardHeaderMenu="matMenu" class="card-header-menu" xPosition="before">
+                <button mat-menu-item>
+                    Aujourd'hui
+                </button>
+                <button mat-menu-item>
+                    Cette semaine
+                </button>
+                <button mat-menu-item>
+                    Ce mois
+                </button>
+                <button mat-menu-item>
+                    Cette année
+                </button>
+            </mat-menu>
+        </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+        <div class="products-slides">
+            <owl-carousel-o [options]="productsSlides">
+                <ng-template carouselSlide>
+                    <div class="d-flex align-items-center">
+                        <a [routerLink]="['/ecogui/client/product-details', 2]" class="image d-block flex-shrink-0">
+                            <img src="images/montre.png" alt="image-produit">
+                        </a>
+                        <div class="content flex-grow-1">
+                            <h5>
+                                <a [routerLink]="['/ecogui/client/product-details', 2]">
+                                    Montre rolex
+                                </a>
+                            </h5>
+                            <span class="sale d-block text-black">
+                                2 ventes
+                            </span>
+                            <span class="price d-block text-black">
+                                <span>23 908 787 GNF</span> de revenus cette semaine
+                            </span>
+                        </div>
+                    </div>
+                </ng-template>
+                <ng-template carouselSlide>
+                    <div class="d-flex align-items-center">
+                        <a [routerLink]="['/ecogui/client/product-details', 2]" class="image d-block flex-shrink-0">
+                            <img src="images/iphone14.png" alt="image-produit">
+                        </a>
+                        <div class="content flex-grow-1">
+                            <h5>
+                                <a [routerLink]="['/ecogui/client/product-details', 2]">
+                                    Iphone 14 Pro Max
+                                </a>
+                            </h5>
+                            <span class="sale d-block text-black">
+                                3 ventes
+                            </span>
+                            <span class="price d-block text-black">
+                                <span>28 432 000 GNF</span> de revenus cette semaine
+                            </span>
+                        </div>
+                    </div>
+                </ng-template>
+            </owl-carousel-o>
+        </div>
+        <div class="chart">
+            <div id="ecommerce_top_selling_products_chart"></div>
+        </div>
+    </mat-card-content>
+</mat-card>

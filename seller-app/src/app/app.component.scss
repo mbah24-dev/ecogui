@@ -1,0 +1,82 @@
+// Main Content
+.main-content {
+    overflow: hidden;
+    min-height: 100vh;
+    padding: {
+        top: 105px;
+        left: 282px;
+        right: 25px;
+    };
+    &.active, &.hide-sidebar {
+        padding-left: 85px;
+    }
+}
+
+// Blank Page
+.blank-page {
+    app-sidebar, app-footer, app-header {
+        display: none !important;
+    }
+    .main-content {
+        padding: 0 !important;
+    }
+}
+
+/* Max width 767px */
+@media only screen and (max-width : 767px) {
+
+    // Main Content
+    .main-content {
+        padding: {
+            top: 150px;
+            left: 15px;
+            right: 15px;
+        };
+        &.active, &.hide-sidebar {
+            padding-left: 15px;
+        }
+    }
+    
+}
+
+/* Min width 576px to Max width 767px */
+@media only screen and (min-width : 576px) and (max-width : 767px) {}
+
+/* Min width 768px to Max width 991px */
+@media only screen and (min-width : 768px) and (max-width : 991px) {
+
+    // Main Content
+    .main-content {
+        padding: {
+            top: 101px;
+            left: 25px;
+            right: 25px;
+        };
+        &.active, &.hide-sidebar {
+            padding-left: 25px;
+        }
+    }
+
+}
+
+/* Min width 992px to Max width 1199px */
+@media only screen and (min-width : 992px) and (max-width : 1199px) {
+
+    // Main Content
+    .main-content {
+        padding: {
+            left: 25px;
+            right: 25px;
+        };
+        &.active, &.hide-sidebar {
+            padding-left: 25px;
+        }
+    }
+
+}
+
+/* Min width 1200px to Max width 1399px */
+@media only screen and (min-width: 1200px) and (max-width: 1399px) {}
+
+/* Min width 1600px */
+@media only screen and (min-width: 1600px) {}

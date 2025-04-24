@@ -1,0 +1,118 @@
+<mat-card class="trinta-card recent-orders-card mb-25 bg-white border-none d-block">
+    <mat-card-header>
+        <mat-card-title>
+            <h5 class="mt-0 mb-0">
+                Commandes récentes
+            </h5>
+        </mat-card-title>
+        <mat-card-subtitle>
+            <button type="button" mat-button class="card-header-menu-btn" [matMenuTriggerFor]="cardHeaderMenu">
+                Cette semaine
+            </button>
+            <mat-menu #cardHeaderMenu="matMenu" class="card-header-menu" xPosition="before">
+                <button mat-menu-item>
+                    Aujourd’hui
+                </button>
+                <button mat-menu-item>
+                    Cette semaine
+                </button>
+                <button mat-menu-item>
+                    Ce mois
+                </button>
+                <button mat-menu-item>
+                    Cette année
+                </button>
+            </mat-menu>
+        </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+        <div class="recent-orders-table">
+            <div class="table-responsive">
+                <table mat-table [dataSource]="dataSource">
+
+                    <!-- Colonne Numéro de suivi -->
+                    <ng-container matColumnDef="orderId">
+                        <th mat-header-cell *matHeaderCellDef class="text-primary pl-0">
+                            N° de commande
+                        </th>
+                        <td mat-cell *matCellDef="let element" class="text-primary fw-medium pl-0">
+                            {{element.orderId}}
+                        </td>
+                    </ng-container>
+
+                    <!-- Colonne Produit -->
+                    <ng-container matColumnDef="product">
+                        <th mat-header-cell *matHeaderCellDef>
+                            Produit
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                            <div class="product-info d-flex align-items-center">
+                                <a [routerLink]="['/ecogui/client/product-details', 2]" class="image d-block">
+                                    <img [src]="element.product.img" alt="image-produit">
+                                </a>
+                                <div class="info">
+                                    <a [routerLink]="['/ecogui/client/product-details', 2]" class="d-block fw-semibold">
+                                        {{element.product.title}}
+                                    </a>
+                                    <span class="d-block text-body">
+                                        {{element.product.date}}
+                                    </span>
+                                </div>
+                            </div>
+                        </td>
+                    </ng-container>
+
+                    <!-- Colonne Client -->
+                    <ng-container matColumnDef="customer">
+                        <th mat-header-cell *matHeaderCellDef>
+                            Client
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                            {{element.customer}}
+                        </td>
+                    </ng-container>
+
+                    <!-- Colonne Prix -->
+                    <ng-container matColumnDef="price">
+                        <th mat-header-cell *matHeaderCellDef>
+                            Prix
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                            {{element.price}} GNF
+                        </td>
+                    </ng-container>
+
+                    <!-- Colonne Quantité -->
+                    <ng-container matColumnDef="quantity">
+                        <th mat-header-cell *matHeaderCellDef>
+                            Quantité
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                            {{element.quantity}}
+                        </td>
+                    </ng-container>
+
+                    <!-- Colonne Statut -->
+                    <ng-container matColumnDef="status">
+                        <th mat-header-cell *matHeaderCellDef class="text-end pr-0">
+                            Statut
+                        </th>
+                        <td mat-cell *matCellDef="let element" class="text-end pr-0">
+                            <span class="trinta-badge fw-medium pending d-inline-block" *ngIf="element.status.pending">
+                                {{element.status.pending}} <!-- Ex : En attente -->
+                            </span>
+                            <span class="trinta-badge fw-medium delivered d-inline-block" *ngIf="element.status.delivered">
+                                {{element.status.delivered}} <!-- Ex : Livré -->
+                            </span>
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                </table>
+            </div>
+            <mat-paginator [pageSizeOptions]="[5, 10, 15]"></mat-paginator>
+        </div>
+    </mat-card-content>
+</mat-card>

@@ -1,0 +1,322 @@
+<mat-card class="trinta-card sales-overview-card mb-25 bg-white border-none d-block">
+    <mat-card-header>
+        <mat-card-title>
+            <h5 class="mt-0 mb-0">
+                Vue d'ensemble des ventes
+            </h5>
+        </mat-card-title>
+        <mat-card-subtitle>
+            <span class="trending d-block text-black position-relative">
+                <i class="material-symbols-outlined">trending_up</i> <span class="fw-semibold">30M</span> Revenu total
+            </span>
+        </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+        <mat-tab-group>
+            <mat-tab label="Mode">
+                <div class="row">
+                    <div class="col-xl-6 col-xxl-3 col-xxxl-6 col-lg-3 col-sm-6">
+                        <div class="item d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <a [routerLink]="['/ecogui/client/product-details', 2]" class="image position-relative text-center d-block">
+                                    <img src="images/iphone14.png" alt="image-produit">
+                                </a>
+                                <div class="info">
+                                    <a [routerLink]="['/ecogui/client/product-details', 2]" class="fw-semibold d-block">
+                                        T-Shirts
+                                    </a>
+                                    <span class="d-block text-gray">
+                                        250 000 GNF
+                                    </span>
+                                </div>
+                            </div>
+                            <span class="d-block text-primary fw-medium number">252</span>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-xxl-3 col-xxxl-6 col-lg-3 col-sm-6">
+                        <div class="item d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <a [routerLink]="['/ecogui/client/product-details', 2]" class="image position-relative text-center d-block">
+                                    <img src="images/iphone14.png" alt="image-produit">
+                                </a>
+                                <div class="info">
+                                    <a [routerLink]="['/ecogui/client/product-details', 2]" class="fw-semibold d-block">
+                                        Montres
+                                    </a>
+                                    <span class="d-block text-gray">
+                                        200 000 GNF
+                                    </span>
+                                </div>
+                            </div>
+                            <span class="d-block text-primary fw-medium number">147</span>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-xxl-3 col-xxxl-6 col-lg-3 col-sm-6">
+                        <div class="item d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <a [routerLink]="['/ecogui/client/product-details', 2]" class="image position-relative text-center d-block">
+                                    <img src="images/macbook.png" alt="image-produit">
+                                </a>
+                                <div class="info">
+                                    <a [routerLink]="['/ecogui/client/product-details', 2]" class="fw-semibold d-block">
+                                        Chaussures
+                                    </a>
+                                    <span class="d-block text-gray">
+                                        220 000 GNF
+                                    </span>
+                                </div>
+                            </div>
+                            <span class="d-block text-primary fw-medium number">68</span>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-xxl-3 col-xxxl-6 col-lg-3 col-sm-6">
+                        <div class="item d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <a [routerLink]="['/ecogui/client/product-details', 2]" class="image position-relative text-center d-block">
+                                    <img src="images/macbook2.png" alt="image-produit">
+                                </a>
+                                <div class="info">
+                                    <a [routerLink]="['/ecogui/client/product-details', 2]" class="fw-semibold d-block">
+                                        Sacs
+                                    </a>
+                                    <span class="d-block text-gray">
+                                        120 000 GNF
+                                    </span>
+                                </div>
+                            </div>
+                            <span class="d-block text-primary fw-medium number">2 155</span>
+                        </div>
+                    </div>
+                </div>
+            </mat-tab>
+            <mat-tab label="Électroniques">
+                <div class="row">
+                    <div class="col-xl-6 col-xxl-3 col-xxxl-6 col-lg-3 col-sm-6">
+                        <div class="item d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <a [routerLink]="['/ecogui/client/product-details', 2]" class="image position-relative text-center d-block">
+                                    <img src="images/iphone15.png" alt="image-produit">
+                                </a>
+                                <div class="info">
+                                    <a [routerLink]="['/ecogui/client/product-details', 2]" class="fw-semibold d-block">
+                                        Téléphones
+                                    </a>
+                                    <span class="d-block text-gray">
+                                        250 000 GNF
+                                    </span>
+                                </div>
+                            </div>
+                            <span class="d-block text-primary fw-medium number">123</span>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-xxl-3 col-xxxl-6 col-lg-3 col-sm-6">
+                        <div class="item d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <a [routerLink]="['/ecogui/client/product-details', 2]" class="image position-relative text-center d-block">
+                                    <img src="images/macbook.png" alt="image-produit">
+                                </a>
+                                <div class="info">
+                                    <a [routerLink]="['/ecogui/client/product-details', 2]" class="fw-semibold d-block">
+                                        Objets connectés
+                                    </a>
+                                    <span class="d-block text-gray">
+                                        190 000 GNF
+                                    </span>
+                                </div>
+                            </div>
+                            <span class="d-block text-primary fw-medium number">321</span>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-xxl-3 col-xxxl-6 col-lg-3 col-sm-6">
+                        <div class="item d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <a [routerLink]="['/ecogui/client/product-details', 2]" class="image position-relative text-center d-block">
+                                    <img src="images/iphone15.png" alt="image-produit">
+                                </a>
+                                <div class="info">
+                                    <a [routerLink]="['/ecogui/client/product-details', 2]" class="fw-semibold d-block">
+                                        Ordinateurs
+                                    </a>
+                                    <span class="d-block text-gray">
+                                        210 000 GNF
+                                    </span>
+                                </div>
+                            </div>
+                            <span class="d-block text-primary fw-medium number">100</span>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-xxl-3 col-xxxl-6 col-lg-3 col-sm-6">
+                        <div class="item d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <a [routerLink]="['/ecogui/client/product-details', 2]" class="image position-relative text-center d-block">
+                                    <img src="images/macbook2.png" alt="image-produit">
+                                </a>
+                                <div class="info">
+                                    <a [routerLink]="['/ecogui/client/product-details', 2]" class="fw-semibold d-block">
+                                        Scanners
+                                    </a>
+                                    <span class="d-block text-gray">
+                                        120 000 GNF
+                                    </span>
+                                </div>
+                            </div>
+                            <span class="d-block text-primary fw-medium number">421</span>
+                        </div>
+                    </div>
+                </div>
+            </mat-tab>
+            <mat-tab label="Mobilier">
+                <div class="row">
+                    <div class="col-xl-6 col-xxl-3 col-xxxl-6 col-lg-3 col-sm-6">
+                        <div class="item d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <a [routerLink]="['/ecogui/client/product-details', 2]" class="image position-relative text-center d-block">
+                                    <img src="images/macbook2.png" alt="image-produit">
+                                </a>
+                                <div class="info">
+                                    <a [routerLink]="['/ecogui/client/product-details', 2]" class="fw-semibold d-block">
+                                        Tables
+                                    </a>
+                                    <span class="d-block text-gray">
+                                        250 000 GNF
+                                    </span>
+                                </div>
+                            </div>
+                            <span class="d-block text-primary fw-medium number">12</span>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-xxl-3 col-xxxl-6 col-lg-3 col-sm-6">
+                        <div class="item d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <a [routerLink]="['/ecogui/client/product-details', 2]" class="image position-relative text-center d-block">
+                                    <img src="images/montre.png" alt="image-produit">
+                                </a>
+                                <div class="info">
+                                    <a [routerLink]="['/ecogui/client/product-details', 2]" class="fw-semibold d-block">
+                                        Lits
+                                    </a>
+                                    <span class="d-block text-gray">
+                                        190 000 GNF
+                                    </span>
+                                </div>
+                            </div>
+                            <span class="d-block text-primary fw-medium number">15</span>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-xxl-3 col-xxxl-6 col-lg-3 col-sm-6">
+                        <div class="item d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <a [routerLink]="['/ecogui/client/product-details', 2]" class="image position-relative text-center d-block">
+                                    <img src="images/montre.png" alt="image-produit">
+                                </a>
+                                <div class="info">
+                                    <a [routerLink]="['/ecogui/client/product-details', 2]" class="fw-semibold d-block">
+                                        Chaises
+                                    </a>
+                                    <span class="d-block text-gray">
+                                        210 000 GNF
+                                    </span>
+                                </div>
+                            </div>
+                            <span class="d-block text-primary fw-medium number">21</span>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-xxl-3 col-xxxl-6 col-lg-3 col-sm-6">
+                        <div class="item d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <a [routerLink]="['/ecogui/client/product-details', 2]" class="image position-relative text-center d-block">
+                                    <img src="images/montre.png" alt="image-produit">
+                                </a>
+                                <div class="info">
+                                    <a [routerLink]="['/ecogui/client/product-details', 2]" class="fw-semibold d-block">
+                                        Bureaux
+                                    </a>
+                                    <span class="d-block text-gray">
+                                        120 000 GNF
+                                    </span>
+                                </div>
+                            </div>
+                            <span class="d-block text-primary fw-medium number">55</span>
+                        </div>
+                    </div>
+                </div>
+            </mat-tab>
+            <mat-tab label="Accessoires">
+                <div class="row">
+                    <div class="col-xl-6 col-xxl-3 col-xxxl-6 col-lg-3 col-sm-6">
+                        <div class="item d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <a [routerLink]="['/ecogui/client/product-details', 2]" class="image position-relative text-center d-block">
+                                    <img src="images/iphone14.png" alt="image-produit">
+                                </a>
+                                <div class="info">
+                                    <a [routerLink]="['/ecogui/client/product-details', 2]" class="fw-semibold d-block">
+                                        Bottes
+                                    </a>
+                                    <span class="d-block text-gray">
+                                        250 000 GNF
+                                    </span>
+                                </div>
+                            </div>
+                            <span class="d-block text-primary fw-medium number">72</span>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-xxl-3 col-xxxl-6 col-lg-3 col-sm-6">
+                        <div class="item d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <a [routerLink]="['/ecogui/client/product-details', 2]" class="image position-relative text-center d-block">
+                                    <img src="images/macbook2.png" alt="image-produit">
+                                </a>
+                                <div class="info">
+                                    <a [routerLink]="['/ecogui/client/product-details', 2]" class="fw-semibold d-block">
+                                        Ceintures
+                                    </a>
+                                    <span class="d-block text-gray">
+                                        190 000 GNF
+                                    </span>
+                                </div>
+                            </div>
+                            <span class="d-block text-primary fw-medium number">99</span>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-xxl-3 col-xxxl-6 col-lg-3 col-sm-6">
+                        <div class="item d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <a [routerLink]="['/ecogui/client/product-details', 2]" class="image position-relative text-center d-block">
+                                    <img src="images/macbook.png" alt="image-produit">
+                                </a>
+                                <div class="info">
+                                    <a [routerLink]="['/ecogui/client/product-details', 2]" class="fw-semibold d-block">
+                                        Gants
+                                    </a>
+                                    <span class="d-block text-gray">
+                                        210 000 GNF
+                                    </span>
+                                </div>
+                            </div>
+                            <span class="d-block text-primary fw-medium number">14</span>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-xxl-3 col-xxxl-6 col-lg-3 col-sm-6">
+                        <div class="item d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <a [routerLink]="['/ecogui/client/product-details', 2]" class="image position-relative text-center d-block">
+                                    <img src="images/montre.png" alt="image-produit">
+                                </a>
+                                <div class="info">
+                                    <a [routerLink]="['/ecogui/client/product-details', 2]" class="fw-semibold d-block">
+                                        Bracelets
+                                    </a>
+                                    <span class="d-block text-gray">
+                                        120 000 GNF
+                                    </span>
+                                </div>
+                            </div>
+                            <span class="d-block text-primary fw-medium number">21</span>
+                        </div>
+                    </div>
+                </div>
+            </mat-tab>
+        </mat-tab-group>
+    </mat-card-content>
+</mat-card>

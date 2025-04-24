@@ -1,0 +1,51 @@
+<div class="row">
+    <div class="col-lg-4">
+        <mat-card class="trinta-card profile-settings-card mb-25 bg-white border-none d-block">
+            <mat-card-content>
+                <div class="admin text-center">
+                    <div class="image ml-auto mr-auto position-relative">
+                        <img src="images/mbah.jpeg" class="rounded-circle" alt="image-profil">
+                        <button type="button" mat-button>
+                            <i-feather name="camera"></i-feather>
+                        </button>
+                    </div>
+                    <h6>
+                        BAH Mamadou
+                    </h6>
+                    <span class="d-block text-body">
+                        &#64;bah_mamadou
+                    </span>
+                </div>
+                <ul class="list-unstyled p-0 m-0">
+                    <li class="fw-medium">
+                        <a routerLink="/settings" class="d-block position-relative" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                            <i-feather name="settings"></i-feather>
+                            Paramètres du compte
+                        </a>
+                    </li>
+                    <li class="fw-medium">
+                        <a routerLink="/settings/change-password" class="d-block position-relative" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                            <i-feather name="key"></i-feather>
+                            Changer le mot de passe
+                        </a>
+                    </li>
+                    <li class="fw-medium">
+                        <a routerLink="/settings/privacy-policy" class="d-block position-relative" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                            <i-feather name="user"></i-feather>
+                            Politique de confidentialité
+                        </a>
+                    </li>
+                    <li class="fw-medium">
+                        <a routerLink="/settings/terms-conditions" class="d-block position-relative" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                            <i-feather name="info"></i-feather>
+                            Conditions générales
+                        </a>
+                    </li>
+                </ul>
+            </mat-card-content>
+        </mat-card>
+    </div>
+    <div class="col-lg-8">
+        <router-outlet></router-outlet>
+    </div>
+</div>
