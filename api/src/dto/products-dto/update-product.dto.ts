@@ -52,6 +52,28 @@ export class UpdateProductDto {
   @IsUUID()
   categoryId: string;
 
+  @ApiPropertyOptional({
+    description: 'Les tailles disponibles du produit (optionnel)',
+    type: [String],
+    example: ['Taille unique'],
+    default: ['Taille unique'],
+  })
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  size?: string[];
+
+  @ApiPropertyOptional({
+    description: 'Les couleurs disponibles du produit (optionnel)',
+    type: [String],
+    example: ['Standard'],
+    default: ['Standard'],
+  })
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  color?: string[];
+
   // Uncomment if images are to be handled later
   // @ApiPropertyOptional({
   //   description: 'Les images du produit',

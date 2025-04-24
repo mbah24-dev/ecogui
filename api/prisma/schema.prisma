@@ -37,6 +37,8 @@ model Product {
   description String
   price       Float
   stock       Int
+  size        String[] @default(["Taille unique"])
+  color       String[] @default(["Standard"])
   categoryId  String
   sellerId    String
   createdAt   DateTime       @default(now())
