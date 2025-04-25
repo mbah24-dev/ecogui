@@ -6,7 +6,7 @@
 /*   By: mbah <mbah@student.42lyon.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 03:44:40 by mbah              #+#    #+#             */
-/*   Updated: 2025/03/29 02:50:42 by mbah             ###   ########.fr       */
+/*   Updated: 2025/04/25 01:38:55 by mbah             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,9 @@ export class SendEmailService {
 			where: { email },
 			data: { resetToken: token}
 		});
-		const resetLink = `http://localhost:4200/reset-password?token=${token}`;
+		const resetLink = `http://localhost:4200/authentication/reset-password?token=${token}`;
 
-		await this.send_email_to_reset_password(email, resetLink, user_found.name, 'Réinitialisation de votre mot de passe');
+		await this.send_email_to_reset_password(email, resetLink, user_found.name, '[Ecogui] Instructions pour réinitialiser votre mot de passe');
 
 		return ({ message: 'Un email de réinitialisation a été envoyé.' });
 	}
@@ -54,8 +54,8 @@ export class SendEmailService {
 		const transporter = nodemailer.createTransport({
 			service: 'gmail',
 			auth: {
-			  user: process.env.EMAIL_USER, // ton email
-			  pass: process.env.EMAIL_PASS, // ton mot de passe
+			  user: process.env.EMAIL_USER, 
+			  pass: process.env.EMAIL_PASS, 
 			},
 		  });
 	  

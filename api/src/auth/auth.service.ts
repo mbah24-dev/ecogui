@@ -44,24 +44,20 @@ export class AuthService {
 			throw new HttpException('Access Denied', HttpStatus.UNAUTHORIZED);
 		}
 	
-		// TODO a decommenter apres le test
-		/*const isValidPassword = await this.bcryptUtils.isValidPassword(password, foundUser.password);
+		// TODO a commenter pour le test
+		const isValidPassword = await this.bcryptUtils.isValidPassword(password, foundUser.password);
 		if (!isValidPassword) {
 			throw new UnauthorizedException('Mot de passe incorrect.');
-		}*/
-		if (password !== foundUser.password) throw new UnauthorizedException('Mot de passe incorrect.');
+		}
+		// TODO a decommenter pour le test
+		//if (password !== foundUser.password) throw new UnauthorizedException('Mot de passe incorrect.');
 		const token = this.bcryptUtils.generateToken({
 			userId: foundUser.id,
 			email: foundUser.email,
 			role: foundUser.role,
 		});
 	
-		req.session.user = {
-			id: foundUser.id,
-			email: foundUser.email,
-			role: foundUser.role,
-			name: foundUser.name
-		};
+		req.session.user = foundUser;
 
 		await this.prismaService.user.update({
 			where: { id: foundUser.id},
@@ -81,7 +77,7 @@ export class AuthService {
 			where: { email: signupBody.email }
 		})
 		if (alreadyHaveAccount) {
-			throw new HttpException('Vous avez deja un compte, Penser a changer votre email', HttpStatus.UNAUTHORIZED);
+			throw new HttpException('Vous avez deja un compte, Penser a vous connecter', HttpStatus.CONFLICT);
 		}
 		const addUserObject = await this.userService.create_user(signupBody);
 		const token = (this.bcryptUtils.generateToken({
@@ -95,12 +91,7 @@ export class AuthService {
 		if (!foundUser) {
 			throw new UnauthorizedException('Email incorrect.');
 		}
-		req.session.user = {
-			id: foundUser.id,
-			email: foundUser.email,
-			role: foundUser.role,
-			name: foundUser.name
-		};
+		req.session.user = foundUser;
 		await this.prismaService.user.update({
 			where: { id: foundUser.id},
 			data: { isOnline: true }
