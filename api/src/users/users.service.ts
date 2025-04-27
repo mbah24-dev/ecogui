@@ -6,15 +6,21 @@
 /*   By: mbah <mbah@student.42lyon.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 23:26:22 by mbah              #+#    #+#             */
-/*   Updated: 2025/04/11 03:24:50 by mbah             ###   ########.fr       */
+/*   Updated: 2025/04/25 23:49:35 by mbah             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+import { ne } from '@faker-js/faker/.';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { OrderItemStatus, ProductStatus, Role } from '@prisma/client';
 import { BcryptUtilsService } from 'src/bcrypt-utils/bcrypt-utils.service';
 import { CreateUserDto } from 'src/dto/users/create-user.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import * as sharp from 'sharp';
+import * as fs from 'fs';
+import * as path from 'path';
+import * as uuid from 'uuid';
+import { get_upload_path } from "src/utility/get_path";
 
 @Injectable()
 export class UsersService {
@@ -23,6 +29,40 @@ export class UsersService {
 		private readonly _bcrypt: BcryptUtilsService
 	) {}
 
+	async upload_user_profile_pic(file: Express.Multer.File) {
+		try {
+			const extension = file.mimetype.split('/')[1];
+			const imageName = `${uuid.v4()}.${extension}`;
+			const uploadDir = get_upload_path('images', 'user_profiles');
+			const imagePath = path.join(uploadDir, imageName);
+		
+			if (!fs.existsSync(path.dirname(imagePath))) {
+			fs.mkdirSync(path.dirname(imagePath), { recursive: true });
+			}
+		
+			await sharp(file.buffer)
+			.resize(300, 300)
+			.toFile(imagePath);
+		
+			return (imageName);
+		} catch (error) {
+			throw new HttpException('Erreur lors de l\'upload de la photo de profil', HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	async set_user_profilePic(userId: string, file: Express.Multer.File): Promise<any> {
+		const imageName = await this.upload_user_profile_pic(file);
+	  
+		const updatedUser = await this._prisma.user.update({
+		  where: { id: userId },
+		  data: {
+			profilePic: imageName
+		  }
+		});
+	  
+		return (updatedUser);
+	}
+	  
 	async get_user_by_ID(user_Id: string) {
 		const user = await this._prisma.user.findUnique({
 			where: { id: user_Id }

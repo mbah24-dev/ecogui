@@ -6,12 +6,13 @@
 /*   By: mbah <mbah@student.42lyon.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 17:45:33 by mbah              #+#    #+#             */
-/*   Updated: 2025/04/12 17:45:34 by mbah             ###   ########.fr       */
+/*   Updated: 2025/04/26 01:31:55 by mbah             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 import { Body, Controller, Delete, ForbiddenException, Get, HttpException, HttpStatus,
-	Param, Post, Put, Req, Request, Res, UseGuards } from '@nestjs/common';
+	Param, Post, Put, Req, Request, Res, UploadedFile, UseGuards, 
+	UseInterceptors} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
 import { RequestWithUser } from 'src/jwt/jwt.strategy';
@@ -23,13 +24,47 @@ import { SetUserRoleDto } from 'src/dto/users/set-user-role.dto';
 import { Request as RequestExpressSession, Response } from 'express';
 import { IsSeller } from 'src/decorator/is-seller.decorator';
 import { AdminOrSellerGuard } from 'src/guards/admin-or-seller.guard';
-import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBody } from '@nestjs/swagger'; // Importation des décorateurs Swagger
+import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBody, ApiConsumes } from '@nestjs/swagger'; // Importation des décorateurs Swagger
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @ApiTags('Users') // Etiquette pour regrouper les routes liées aux utilisateurs
 @Controller('users')
 export class UsersController {
 	constructor(private readonly _users_service: UsersService) {}
 
+	@Post('profile-pic')
+	@UseInterceptors(FileInterceptor('image')) // "image" = nom du champ côté Angular
+	@ApiOperation({ summary: 'Met à jour la photo de profil de l’utilisateur' })
+	@ApiConsumes('multipart/form-data')
+	@ApiBody({
+	schema: {
+		type: 'object',
+		properties: {
+		image: {
+			type: 'string',
+			format: 'binary'
+		}
+		}
+	}
+	})
+	async updateProfilePic(
+	@UploadedFile() file: Express.Multer.File,
+	@Req() req: RequestExpressSession,
+	@Res() res: Response
+	) {
+		if (!req.session.user) {
+			return res.status(401).json({ message: 'Utilisateur non connecté' });
+		}
+
+		try {
+			const updatedUser = await this._users_service.set_user_profilePic(req.session.user.id, file);
+			req.session.user = updatedUser;
+			return res.json({ message: 'Image mise à jour avec succès', user: updatedUser });
+		} catch (error) {
+			return res.status(400).json({ message: error.message || 'Erreur lors de la mise à jour de l’image' });
+		}
+	}
+		
 	@Get()
 	@UseGuards(JwtAuthGuard, AdminGuard)
 	@IsAdmin()
@@ -61,7 +96,6 @@ export class UsersController {
 	}
 
 	@Get('me/info')
-	@UseGuards(JwtAuthGuard)
 	@ApiOperation({ summary: 'Récupérer les informations de l\'utilisateur connecté.' })
 	@ApiResponse({ status: 200, description: 'Informations de l\'utilisateur récupérées avec succès.' })
 	@ApiResponse({ status: 401, description: 'Utilisateur non connecté.' })
@@ -72,8 +106,8 @@ export class UsersController {
 		return res.json({ user: req.session.user });
 	}
 
+
 	@Get('me/role')
-	@UseGuards(JwtAuthGuard)
 	@ApiOperation({ summary: 'Récupérer le rôle de l\'utilisateur connecté.' })
 	@ApiResponse({ status: 200, description: 'Rôle de l\'utilisateur récupéré avec succès.' })
 	@ApiResponse({ status: 401, description: 'Utilisateur non connecté.' })
@@ -86,7 +120,7 @@ export class UsersController {
 	}
 
 	@Delete(':user_id')
-	@UseGuards(JwtAuthGuard, AdminGuard)
+	@UseGuards(AdminGuard)
 	@IsAdmin()
 	@ApiOperation({ summary: 'Supprimer un utilisateur par son ID (admin).' })
 	@ApiParam({ name: 'user_id', description: 'ID de l\'utilisateur à supprimer.' })
@@ -102,7 +136,6 @@ export class UsersController {
 	}
 
 	@Delete('me/account')
-	@UseGuards(JwtAuthGuard)
 	@ApiOperation({ summary: 'Supprimer le compte de l\'utilisateur connecté.' })
 	@ApiResponse({ status: 200, description: 'Compte utilisateur supprimé avec succès.' })
 	@ApiResponse({ status: 401, description: 'Utilisateur non connecté.' })
@@ -118,7 +151,6 @@ export class UsersController {
 	}
 
 	@Put('me/account')
-	@UseGuards(JwtAuthGuard)
 	@ApiOperation({ summary: 'Mettre à jour le compte de l\'utilisateur connecté.' })
 	@ApiBody({ type: CreateUserDto })
 	@ApiResponse({ status: 200, description: 'Compte utilisateur mis à jour avec succès.' })
@@ -138,7 +170,7 @@ export class UsersController {
 	}
 
 	@Put(':user_id')
-	@UseGuards(JwtAuthGuard, AdminGuard)
+	@UseGuards(AdminGuard)
 	@IsAdmin()
 	@ApiOperation({ summary: 'Mettre à jour un utilisateur par son ID (admin).' })
 	@ApiParam({ name: 'user_id', description: 'ID de l\'utilisateur à mettre à jour.' })
@@ -158,7 +190,7 @@ export class UsersController {
 	}
 
 	@Put('set-role/:user_id')
-	@UseGuards(JwtAuthGuard, AdminGuard)
+	@UseGuards(AdminGuard)
 	@IsAdmin()
 	@ApiOperation({ summary: 'Définir le rôle d\'un utilisateur par son ID.' })
 	@ApiParam({ name: 'user_id', description: 'ID de l\'utilisateur pour modifier son rôle.' })
@@ -178,7 +210,7 @@ export class UsersController {
 	}
 
 	@Get('connected/products')
-	@UseGuards(JwtAuthGuard, AdminOrSellerGuard)
+	@UseGuards(AdminOrSellerGuard)
 	@IsSeller()
 	@IsAdmin()
 	@ApiOperation({ summary: 'Récupérer les produits du vendeur ou administrateur connecté.' })
@@ -193,7 +225,7 @@ export class UsersController {
 	}
 
 	@Get('connected/products/sold')
-	@UseGuards(JwtAuthGuard, AdminOrSellerGuard)
+	@UseGuards(AdminOrSellerGuard)
 	@IsSeller()
 	@ApiOperation({ summary: 'Récupérer les produits vendus par le vendeur ou administrateur connecté.' })
 	@ApiResponse({ status: 200, description: 'Produits vendus récupérés avec succès.' })

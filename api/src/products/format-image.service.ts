@@ -6,7 +6,7 @@
 /*   By: mbah <mbah@student.42lyon.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 02:35:53 by mbah              #+#    #+#             */
-/*   Updated: 2025/04/12 01:32:35 by mbah             ###   ########.fr       */
+/*   Updated: 2025/04/25 22:32:44 by mbah             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,11 +47,9 @@ import { get_upload_path } from 'src/utility/get_path';
 			},
 		  });
 		} catch (error) {
-		  console.error('Erreur lors de l\'upload de l\'image', error);
 		  throw new HttpException('Erreur lors de l\'upload de l\'image', HttpStatus.BAD_REQUEST);
 		}
 	  });
-  
 	  await Promise.all(imagePromises);
 	}
   }

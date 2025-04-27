@@ -6,7 +6,7 @@
 /*   By: mbah <mbah@student.42lyon.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 17:36:08 by mbah              #+#    #+#             */
-/*   Updated: 2025/04/12 17:36:09 by mbah             ###   ########.fr       */
+/*   Updated: 2025/04/26 14:59:03 by mbah             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ export class AuthController {
 		private readonly sendEmail: SendEmailService
 	) {}
 	
-	@UseGuards(JwtAuthGuard)
 	@Get()
 	@ApiOperation({ summary: 'Authentifie l\'utilisateur connecté.' })
 	@ApiResponse({ status: 200, description: 'Utilisateur authentifié avec succès.' })
@@ -95,7 +94,6 @@ export class AuthController {
 		return (await this.authService.signin(userInfo, role, req, res));
 	}
 	
-	@UseGuards(JwtAuthGuard)
 	@Post('logout')
 	@ApiOperation({ summary: 'Déconnexion de l\'utilisateur.' })
 	@ApiResponse({ status: 200, description: 'Utilisateur déconnecté avec succès.' })
@@ -103,7 +101,6 @@ export class AuthController {
 		return this.authService.signout(req, res);
 	}
 
-	@UseGuards(JwtAuthGuard)
 	@Get('session')
 	@ApiOperation({ summary: 'Récupère la session de l\'utilisateur.' })
 	@ApiResponse({ status: 200, description: 'Session de l\'utilisateur récupérée avec succès.' })
@@ -133,7 +130,7 @@ export class AuthController {
 		return (await this.authService.resetPassword(token, body));
 	}
 
-	@UseGuards(JwtAuthGuard, AdminGuard)
+	@UseGuards(AdminGuard)
 	@IsAdmin()
 	@Post('me/admin/signup')
 	@ApiOperation({ summary: 'Inscription d\'un nouvel administrateur (accessible uniquement aux admins).' })
