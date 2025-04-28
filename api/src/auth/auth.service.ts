@@ -148,7 +148,7 @@ export class AuthService {
 			});
 			return ({ message: 'Mot de passe réinitialisé avec succès !' });
 		} catch (error) {
-			throw new HttpException('Token invalide ou expiré', HttpStatus.BAD_REQUEST);
+			throw new HttpException('Ce lien n\'est plus valide.\nMerci de recommencer la procédure de réinitialisation.', HttpStatus.BAD_REQUEST);
 		}
 	}
 }

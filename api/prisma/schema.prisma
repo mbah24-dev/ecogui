@@ -37,14 +37,14 @@ model Product {
   description String
   price       Float
   stock       Int
-  size        String[] @default(["Taille unique"])
-  color       String[] @default(["Standard"])
   categoryId  String
   sellerId    String
   createdAt   DateTime       @default(now())
   updatedAt   DateTime       @updatedAt
   status      ProductStatus  @default(AVAILABLE)
   buyCount    Int            @default(0)
+  color       String[]       @default(["Standard"])
+  size        String[]       @default(["Taille unique"])
   cartItems   CartItem[]
   orderItems  OrderItem?
   category    Category       @relation(fields: [categoryId], references: [id])
