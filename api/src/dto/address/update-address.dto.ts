@@ -6,9 +6,9 @@ export class UpdateAddressDto {
   
   @ApiProperty({
     description: 'La commune de l\'adresse (facultatif)',
-    enum: ConakryCommune, // Déclarez l\'enum pour Swagger
-    example: ConakryCommune.Dixinn, // Exemple de valeur à afficher dans la documentation Swagger
-    required: false, // Cette propriété est optionnelle
+    enum: ConakryCommune,
+    example: ConakryCommune.Dixinn,
+    required: false,
   })
   @IsOptional()
   @IsEnum(ConakryCommune)
@@ -16,9 +16,9 @@ export class UpdateAddressDto {
 
   @ApiProperty({
     description: 'La ville de l\'adresse (facultatif)',
-    enum: City, // Déclarez l\'enum pour Swagger
-    example: City.Conakry, // Exemple de valeur à afficher dans la documentation Swagger
-    required: false, // Cette propriété est optionnelle
+    enum: City,
+    example: City.Conakry,
+    required: false,
   })
   @IsOptional()
   @IsEnum(City)
@@ -26,9 +26,9 @@ export class UpdateAddressDto {
 
   @ApiProperty({
     description: 'Le pays de l\'adresse (facultatif)',
-    type: String, // Indiquez le type pour Swagger
-    example: 'Guinée', // Exemple de valeur à afficher dans la documentation Swagger
-    required: false, // Cette propriété est optionnelle
+    type: String,
+    example: 'Guinée',
+    required: false,
   })
   @IsOptional()
   @IsString()
@@ -37,9 +37,9 @@ export class UpdateAddressDto {
 
   @ApiProperty({
     description: 'Une description de l\'adresse (facultatif)',
-    type: String, // Indiquez le type pour Swagger
-    example: 'Adresse mise à jour dans le quartier X à Conakry', // Exemple de valeur à afficher dans la documentation Swagger
-    required: false, // Cette propriété est optionnelle
+    type: String,
+    example: 'Adresse mise à jour dans le quartier X à Conakry', 
+    required: false, 
   })
   @IsOptional()
   @IsString()

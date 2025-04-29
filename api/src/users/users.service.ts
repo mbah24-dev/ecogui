@@ -6,7 +6,7 @@
 /*   By: mbah <mbah@student.42lyon.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 23:26:22 by mbah              #+#    #+#             */
-/*   Updated: 2025/04/25 23:49:35 by mbah             ###   ########.fr       */
+/*   Updated: 2025/04/29 16:07:07 by mbah             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as uuid from 'uuid';
 import { get_upload_path } from "src/utility/get_path";
+import { UpdateUserDto } from 'src/dto/users/update-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -103,24 +104,21 @@ export class UsersService {
 		return ({ user_Id: new_user.id });
 	}
 
-	async update_user(user_Id: string, new_user: CreateUserDto) {
-		let hashedPassword: any;
-		
+	async update_user(user_Id: string, new_user: UpdateUserDto) {
 		const	user_to_update = await this._prisma.user.findUnique({
 			where: { id: user_Id }
 		});
 		if (!user_to_update)
 			throw new HttpException('Cet utilisateur n\'existe pas', HttpStatus.NOT_FOUND);
 		if (new_user.password)
-			hashedPassword = await this._bcrypt.hashPassword(new_user.password);
+		{
+			new_user.password = await this._bcrypt.hashPassword(new_user.password);
+		}
 		return (
 			await this._prisma.user.update({
 				where: { id: user_Id },
 				data: { 
-					email: new_user.email,
-					password: hashedPassword,
-					name: new_user.name,
-					role: new_user.role
+					...new_user
 				 }
 			})
 		);

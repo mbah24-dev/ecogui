@@ -20,7 +20,7 @@ model User {
   balance      Float       @default(0.0)
   profilePic   String?
   isOnline     Boolean     @default(false)
-  countryCode  String?
+  countryCode  String      @default("+224")
   phoneNumber  String?     @unique
   score        Int         @default(50)
   addresses    Address[]

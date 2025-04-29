@@ -6,7 +6,7 @@
 /*   By: mbah <mbah@student.42lyon.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 17:45:33 by mbah              #+#    #+#             */
-/*   Updated: 2025/04/26 01:31:55 by mbah             ###   ########.fr       */
+/*   Updated: 2025/04/29 15:53:57 by mbah             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ import { IsSeller } from 'src/decorator/is-seller.decorator';
 import { AdminOrSellerGuard } from 'src/guards/admin-or-seller.guard';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBody, ApiConsumes } from '@nestjs/swagger'; // Importation des décorateurs Swagger
 import { FileInterceptor } from '@nestjs/platform-express';
+import { UpdateUserDto } from 'src/dto/users/update-user.dto';
 
 @ApiTags('Users') // Etiquette pour regrouper les routes liées aux utilisateurs
 @Controller('users')
@@ -152,11 +153,11 @@ export class UsersController {
 
 	@Put('me/account')
 	@ApiOperation({ summary: 'Mettre à jour le compte de l\'utilisateur connecté.' })
-	@ApiBody({ type: CreateUserDto })
+	@ApiBody({ type: UpdateUserDto })
 	@ApiResponse({ status: 200, description: 'Compte utilisateur mis à jour avec succès.' })
 	@ApiResponse({ status: 401, description: 'Utilisateur non connecté.' })
 	async update_user(
-		@Body() userInfoBody: CreateUserDto,
+		@Body() userInfoBody: UpdateUserDto,
 		@Req() req: RequestExpressSession,
 		@Res() res: Response) {
 		if (!req.session.user) {
