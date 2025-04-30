@@ -6,7 +6,7 @@
 /*   By: mbah <mbah@student.42lyon.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 23:26:22 by mbah              #+#    #+#             */
-/*   Updated: 2025/04/30 20:11:45 by mbah             ###   ########.fr       */
+/*   Updated: 2025/04/30 23:21:34 by mbah             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,19 +114,23 @@ export class UsersService {
 		  throw new HttpException('Cet utilisateur n\'existe pas', HttpStatus.NOT_FOUND);
 	  
 		if (new_user.password && new_user.old_password) {
-			if (!(await this._bcrypt.isValidPassword(new_user.old_password, user_to_update.password)))
-				throw new HttpException('L\'ancien mot de passe est incorrecte !', HttpStatus.NOT_FOUND);
+			const isValid = await this._bcrypt.isValidPassword(new_user.old_password, user_to_update.password);
+			if (!isValid) {
+			  throw new HttpException("L'ancien mot de passe est incorrect !", HttpStatus.BAD_REQUEST);
+			}
 			new_user.password = await this._bcrypt.hashPassword(new_user.password);
 		}
-	  
-		// Ne garde que les champs non vides et non undefined
+		  
+		// Supprime explicitement le champ old_password
+		const { old_password, ...userData } = new_user;
+		  
 		const cleanedData = Object.fromEntries(
-		  Object.entries(new_user).filter(([_, value]) => value !== undefined && value !== '')
+			Object.entries(userData).filter(([_, value]) => value !== undefined && value !== '')
 		);
-	  
+		  
 		return await this._prisma.user.update({
-		  where: { id: user_Id },
-		  data: cleanedData,
+			where: { id: user_Id },
+			data: cleanedData,
 		});
 	}
 	  
