@@ -6,7 +6,7 @@
 /*   By: mbah <mbah@student.42lyon.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 23:26:22 by mbah              #+#    #+#             */
-/*   Updated: 2025/04/29 16:07:07 by mbah             ###   ########.fr       */
+/*   Updated: 2025/04/30 20:11:45 by mbah             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ import * as path from 'path';
 import * as uuid from 'uuid';
 import { get_upload_path } from "src/utility/get_path";
 import { UpdateUserDto } from 'src/dto/users/update-user.dto';
+import { _ } from '@faker-js/faker/dist/airline-CBNP41sR';
 
 @Injectable()
 export class UsersService {
@@ -105,24 +106,30 @@ export class UsersService {
 	}
 
 	async update_user(user_Id: string, new_user: UpdateUserDto) {
-		const	user_to_update = await this._prisma.user.findUnique({
-			where: { id: user_Id }
+		const user_to_update = await this._prisma.user.findUnique({
+		  where: { id: user_Id },
 		});
+	  
 		if (!user_to_update)
-			throw new HttpException('Cet utilisateur n\'existe pas', HttpStatus.NOT_FOUND);
-		if (new_user.password)
-		{
+		  throw new HttpException('Cet utilisateur n\'existe pas', HttpStatus.NOT_FOUND);
+	  
+		if (new_user.password && new_user.old_password) {
+			if (!(await this._bcrypt.isValidPassword(new_user.old_password, user_to_update.password)))
+				throw new HttpException('L\'ancien mot de passe est incorrecte !', HttpStatus.NOT_FOUND);
 			new_user.password = await this._bcrypt.hashPassword(new_user.password);
 		}
-		return (
-			await this._prisma.user.update({
-				where: { id: user_Id },
-				data: { 
-					...new_user
-				 }
-			})
+	  
+		// Ne garde que les champs non vides et non undefined
+		const cleanedData = Object.fromEntries(
+		  Object.entries(new_user).filter(([_, value]) => value !== undefined && value !== '')
 		);
+	  
+		return await this._prisma.user.update({
+		  where: { id: user_Id },
+		  data: cleanedData,
+		});
 	}
+	  
 
 	async delete_user(user_Id: string) {
 		try {

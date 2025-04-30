@@ -34,6 +34,16 @@ export class UpdateUserDto {
   password?: string;
 
   @ApiProperty({
+    description: "L'ancien mot de passe de l'utilisateur (minimum 6 caractères)",
+    type: String,
+    example: 'password123',
+    required: false,
+  })
+  @MinLength(6)
+  @IsOptional()
+  old_password?: string;
+
+  @ApiProperty({
     description: 'Le nom complet de l’utilisateur (au moins prénom et nom)',
     type: String,
     example: 'John Doe',

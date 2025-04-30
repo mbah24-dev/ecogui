@@ -1,3 +1,4 @@
+import { sanitizeUser } from 'src/utility/sanitize_user';
 import { Req, Body } from '@nestjs/common';
 /* ************************************************************************** */
 /*                                                                            */
@@ -57,7 +58,7 @@ export class AuthService {
 			role: foundUser.role,
 		});
 	
-		req.session.user = foundUser;
+		req.session.user = sanitizeUser(foundUser);
 
 		await this.prismaService.user.update({
 			where: { id: foundUser.id},
@@ -91,7 +92,7 @@ export class AuthService {
 		if (!foundUser) {
 			throw new UnauthorizedException('Email incorrect.');
 		}
-		req.session.user = foundUser;
+		req.session.user = sanitizeUser(foundUser);
 		await this.prismaService.user.update({
 			where: { id: foundUser.id},
 			data: { isOnline: true }

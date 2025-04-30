@@ -6,7 +6,7 @@
 /*   By: mbah <mbah@student.42lyon.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 17:45:33 by mbah              #+#    #+#             */
-/*   Updated: 2025/04/29 15:53:57 by mbah             ###   ########.fr       */
+/*   Updated: 2025/04/30 18:04:47 by mbah             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ import { AdminOrSellerGuard } from 'src/guards/admin-or-seller.guard';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBody, ApiConsumes } from '@nestjs/swagger'; // Importation des décorateurs Swagger
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UpdateUserDto } from 'src/dto/users/update-user.dto';
+import { sanitizeUser } from 'src/utility/sanitize_user';
 
 @ApiTags('Users') // Etiquette pour regrouper les routes liées aux utilisateurs
 @Controller('users')
@@ -59,7 +60,7 @@ export class UsersController {
 
 		try {
 			const updatedUser = await this._users_service.set_user_profilePic(req.session.user.id, file);
-			req.session.user = updatedUser;
+			req.session.user = sanitizeUser(updatedUser);
 			return res.json({ message: 'Image mise à jour avec succès', user: updatedUser });
 		} catch (error) {
 			return res.status(400).json({ message: error.message || 'Erreur lors de la mise à jour de l’image' });
@@ -67,7 +68,7 @@ export class UsersController {
 	}
 		
 	@Get()
-	@UseGuards(JwtAuthGuard, AdminGuard)
+	@UseGuards(AdminGuard)
 	@IsAdmin()
 	@ApiOperation({ summary: 'Récupérer tous les utilisateurs.' })
 	@ApiResponse({ status: 200, description: 'Liste des utilisateurs récupérée avec succès.' })
@@ -81,7 +82,7 @@ export class UsersController {
 	}
 
 	@Get(':user_id')
-	@UseGuards(JwtAuthGuard, AdminGuard)
+	@UseGuards(AdminGuard)
 	@IsAdmin()
 	@ApiOperation({ summary: 'Récupérer un utilisateur par son ID (admin).' })
 	@ApiParam({ name: 'user_id', description: 'ID de l\'utilisateur à récupérer.' })
@@ -106,7 +107,6 @@ export class UsersController {
 		}
 		return res.json({ user: req.session.user });
 	}
-
 
 	@Get('me/role')
 	@ApiOperation({ summary: 'Récupérer le rôle de l\'utilisateur connecté.' })
@@ -133,6 +133,7 @@ export class UsersController {
 			return res.status(401).json({ message: 'Utilisateur non connecté' });
 		}
 		const user = await this._users_service.delete_user(user_id);
+		req.session.user = sanitizeUser(user);
 		return res.json({ user });
 	}
 
@@ -148,6 +149,7 @@ export class UsersController {
 			throw new ForbiddenException('Les utilisateurs restreints ne peuvent pas supprimer leur compte');
 		}
 		const user = await this._users_service.delete_user(req.session.user.id);
+		req.session.user = sanitizeUser(user);
 		return res.json({ user });
 	}
 
@@ -167,7 +169,8 @@ export class UsersController {
 			throw new ForbiddenException('Les utilisateurs restreints ne peuvent pas modifier leur compte');
 		}
 		const user = await this._users_service.update_user(req.session.user.id, userInfoBody);
-		return res.json({ user });
+		req.session.user = sanitizeUser(user);
+		return res.json({ user: req.session.user });
 	}
 
 	@Put(':user_id')
@@ -180,13 +183,14 @@ export class UsersController {
 	@ApiResponse({ status: 401, description: 'Utilisateur non connecté.' })
 	async update_user_by_admin(
 		@Param('user_id') user_id: string,
-		@Body() userInfoBody: CreateUserDto,
+		@Body() userInfoBody: UpdateUserDto,
 		@Req() req: RequestExpressSession, @Res() res: Response
 	) {
 		if (!req.session.user) {
 			return res.status(401).json({ message: 'Utilisateur non connecté' });
 		}
 		const user = await this._users_service.update_user(user_id, userInfoBody);
+		req.session.user = sanitizeUser(user);
 		return res.json({ user });
 	}
 
@@ -207,6 +211,7 @@ export class UsersController {
 			return res.status(401).json({ message: 'Utilisateur non connecté' });
 		}
 		const user = await this._users_service.set_user_role(user_id, data.role);
+		req.session.user = sanitizeUser(user);
 		return res.json({ user });
 	}
 
