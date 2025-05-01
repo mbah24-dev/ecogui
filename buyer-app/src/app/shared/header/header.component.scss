@@ -493,6 +493,23 @@
     }
 }
 
+.language-menu-btn {
+    padding: 0 !important;
+    min-width: auto;
+    margin: 0;
+    line-height: 1;
+  }
+
+  .language-menu-btn img {
+    width: 30px;
+    height: 21px;
+    object-fit: cover;
+    border-radius: 2px;
+    display: block;
+  }
+
+
+
 /* Max width 767px */
 @media only screen and (max-width : 767px) {
 

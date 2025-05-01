@@ -35,8 +35,8 @@
                         <div class="error text-danger" *ngIf="authForm.get('email')!.hasError('required') && authForm.get('email')!.touched">
                             L’adresse e-mail est requise.
                         </div>
-                        <div class="error text-danger" *ngIf="authForm.get('email')!.hasError('email') && authForm.get('email')!.touched">
-                            Veuillez entrer une adresse e-mail valide.
+                        <div class="error text-danger" *ngIf="authForm.get('email')!.hasError('pattern') && authForm.get('email')!.touched">
+                            Veuillez entrer une adresse email valide (ex: {{ exempleEmail }}) .
                         </div>
                     </div>
                     <div class="form-group">
@@ -59,6 +59,9 @@
                         <div class="error text-danger" *ngIf="authForm.get('password')!.hasError('minlength') && authForm.get('password')!.touched">
                             Le mot de passe doit contenir au moins 8 caractères.
                         </div>
+                        <div class="error text-danger" *ngIf="errorMessage">
+                            {{ errorMessage }}
+                        </div>
                     </div>
                     <div class="info d-flex justify-content-between align-items-center">
                         <mat-checkbox color="primary">
@@ -68,7 +71,10 @@
                             Mot de passe oublié ?
                         </a>
                     </div>
-                    <button mat-button type="submit" [disabled]="authForm.invalid">
+                    <div class="spinner-wrapper" *ngIf="isLoading">
+                        <mat-spinner diameter="30" strokeWidth="4"></mat-spinner>
+                    </div>
+                    <button mat-button type="submit" [disabled]="authForm.invalid || isLoading">
                         Se connecter
                     </button>
                 </form>

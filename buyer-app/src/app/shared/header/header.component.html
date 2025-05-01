@@ -21,38 +21,37 @@
         <ul class="header-right-side d-flex align-items-center m-0 p-0 list-unstyled">
 
             <!-- AUTH DEBUT -->
-            <li>
+            <li *ngIf="!isAuthenticated">
                 <button mat-icon-button [matMenuTriggerFor]="messagesMenu" class="auth-menu-btn">
-                  <i-feather name="lock" class=""></i-feather>
+                <i-feather name="lock" class=""></i-feather>
                 </button>
 
                 <mat-menu #messagesMenu="matMenu" class="auth-menu-dropdown" xPosition="before">
-                  <div class="auth-menu-content px-4 py-3">
+                <div class="auth-menu-content px-4 py-3">
                     <p class="menu-title fw-semibold mb-3 text-center">Bienvenue 👋</p>
 
                     <button
-                      mat-flat-button
-                      color="primary"
-                      class="w-100 mb-2 auth-action-btn"
-                      routerLink="/authentication"
+                    mat-flat-button
+                    color="primary"
+                    class="w-100 mb-2 auth-action-btn"
+                    routerLink="/authentication"
                     >
-                      Se connecter
+                    Se connecter
                     </button>
 
                     <button
-                      mat-stroked-button
-                      color="primary"
-                      class="w-100 auth-action-btn"
-                      routerLink="/authentication/sign-up"
+                    mat-stroked-button
+                    color="primary"
+                    class="w-100 auth-action-btn"
+                    routerLink="/authentication/sign-up"
                     >
-                      Inscrivez-vous
+                    Inscrivez-vous
                     </button>
-                  </div>
+                </div>
                 </mat-menu>
             </li>
+            <!-- AUTH FIN -->
 
-
-            <!-- AUTH FIN-->
             <li >
                 <button
                     mat-button
@@ -70,21 +69,19 @@
             <!-- cart-preview -->
             <app-cart-preview [products]="(products$ | async) || []" class="whishlist-tag" />
 
-            <li>
-                <button mat-button class="language-menu-btn">
-                    <img src="images/gn-flag.png" alt="flag"> GN
-                </button>
-            </li>
-            <li>
+            <button mat-button class="language-menu-btn">
+                <img src="images/gn-flag.png" alt="flag">
+            </button>
+            <li *ngIf="isAuthenticated">
                 <button mat-button [matMenuTriggerFor]="profileMenu" class="profile-menu-btn">
-                    <img src="images/mbah.jpeg" class="rounded-circle" alt="admin-image">
+                    <img [src]="profileImage" class="rounded-circle" alt="admin-image">
                 </button>
                 <mat-menu class="profile-menu-dropdown" #profileMenu="matMenu" xPosition="before">
                     <div class="menu-header d-flex align-items-center">
-                        <img src="images/mbah.jpeg" class="rounded-circle" alt="admin-image">
+                        <img [src]="profileImage" class="rounded-circle" alt="admin-image">
                         <div class="title">
-                            <a routerLink="/my-profile" class="d-inline-block fw-medium">
-                                BAH Mamadou
+                            <a routerLink="/my-profile" class="d-inline-block fw-medium" >
+                                {{ userData?.name }}
                             </a>
                             <span class="designation d-block text-body">
                                 Client
@@ -125,7 +122,7 @@
                                 logout
                             </i>
                             Déconnexion
-                            <a routerLink="/authentication/logout" class="link-btn d-block position-absolute left-0 right-0 top-0 bottom-0 z-1"></a>
+                            <a routerLink="/" (click)="logout()" class="link-btn d-block position-absolute left-0 right-0 top-0 bottom-0 z-1"></a>
                         </li>
                     </ul>
                 </mat-menu>
