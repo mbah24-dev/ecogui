@@ -5,7 +5,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { AddressService } from 'src/address/address.service';
 
 @Module({
-  providers: [InvoiceService, PrismaService, AddressService],
+  providers: [InvoiceService, AddressService],
   controllers: [InvoiceController]
 })
 export class InvoiceModule {}

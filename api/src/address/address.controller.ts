@@ -12,7 +12,6 @@ import { ApiTags, ApiOperation, ApiResponse, ApiParam } from '@nestjs/swagger'; 
 export class AddressController {
 	constructor(private readonly addressService: AddressService) {}
 
-	@UseGuards(JwtAuthGuard)
 	@Get("me")
 	@ApiOperation({ summary: 'Récupère l\'adresse de l\'utilisateur connecté.' })
 	@ApiResponse({ status: 200, description: 'Adresse de l\'utilisateur récupérée avec succès.' })
@@ -25,7 +24,7 @@ export class AddressController {
 		return (res.json(address));
 	}
 
-	@UseGuards(JwtAuthGuard, AdminGuard)
+	@UseGuards(AdminGuard)
 	@Get("all")
 	@ApiOperation({ summary: 'Récupère toutes les adresses (accessible uniquement aux administrateurs).' })
 	@ApiResponse({ status: 200, description: 'Toutes les adresses récupérées avec succès.' })
@@ -39,7 +38,6 @@ export class AddressController {
 		return (res.json(all_address));
 	}
 
-	@UseGuards(JwtAuthGuard)
 	@Post("create")
 	@ApiOperation({ summary: 'Crée une nouvelle adresse pour l\'utilisateur connecté.' })
 	@ApiResponse({ status: 201, description: 'Nouvelle adresse créée avec succès.' })
@@ -55,7 +53,6 @@ export class AddressController {
 		return (res.json(new_address));
 	}
 
-	@UseGuards(JwtAuthGuard)
 	@Put("update/address=:addressId")
 	@ApiOperation({ summary: 'Met à jour l\'adresse de l\'utilisateur spécifié.' })
 	@ApiParam({ name: 'addressId', description: 'ID de l\'adresse à mettre à jour' })
@@ -73,7 +70,6 @@ export class AddressController {
 		return (res.json(new_address));
 	}
 
-	@UseGuards(JwtAuthGuard)
 	@Delete("delete/address=:addressId")
 	@ApiOperation({ summary: 'Supprime l\'adresse de l\'utilisateur spécifié.' })
 	@ApiParam({ name: 'addressId', description: 'ID de l\'adresse à supprimer' })

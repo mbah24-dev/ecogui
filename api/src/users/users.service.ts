@@ -6,7 +6,7 @@
 /*   By: mbah <mbah@student.42lyon.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 23:26:22 by mbah              #+#    #+#             */
-/*   Updated: 2025/04/30 23:21:34 by mbah             ###   ########.fr       */
+/*   Updated: 2025/05/01 10:42:32 by mbah             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,16 @@ import * as uuid from 'uuid';
 import { get_upload_path } from "src/utility/get_path";
 import { UpdateUserDto } from 'src/dto/users/update-user.dto';
 import { _ } from '@faker-js/faker/dist/airline-CBNP41sR';
+import { AddressService } from 'src/address/address.service';
+import { CreateAddressDto } from 'src/dto/address/create-address.dto';
+import { City } from 'src/types/address.types';
 
 @Injectable()
 export class UsersService {
 	constructor(
 		private readonly _prisma: PrismaService,
-		private readonly _bcrypt: BcryptUtilsService
+		private readonly _bcrypt: BcryptUtilsService,
+		private readonly _addressService: AddressService
 	) {}
 
 	async upload_user_profile_pic(file: Express.Multer.File) {
@@ -102,6 +106,8 @@ export class UsersService {
 				role: role || Role.BUYER
 			}
 		});
+		const user_address: CreateAddressDto = {commune: '', city: City.Conakry, country: 'Guinee', description: ''};
+		this._addressService.add_address(new_user.id, user_address);
 		return ({ user_Id: new_user.id });
 	}
 

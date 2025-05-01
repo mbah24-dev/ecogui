@@ -6,11 +6,10 @@ export class CreateAddressDto {
 
   @ApiProperty({
     description: 'La commune de l\'adresse',
-    enum: ConakryCommune, // Déclarez l\'enum pour Swagger
+	type: String,
     example: ConakryCommune.Dixinn, // Exemple de valeur à afficher dans la documentation Swagger
   })
-  @IsEnum(ConakryCommune)
-  commune: ConakryCommune;
+  commune?: string;
 
   @ApiProperty({
     description: 'La ville de l\'adresse',

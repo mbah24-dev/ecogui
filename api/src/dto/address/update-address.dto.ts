@@ -6,13 +6,13 @@ export class UpdateAddressDto {
   
   @ApiProperty({
     description: 'La commune de l\'adresse (facultatif)',
-    enum: ConakryCommune,
+    type: String,
     example: ConakryCommune.Dixinn,
     required: false,
   })
   @IsOptional()
-  @IsEnum(ConakryCommune)
-  commune: ConakryCommune;
+  @IsString()
+  commune?: string;
 
   @ApiProperty({
     description: 'La ville de l\'adresse (facultatif)',
@@ -22,7 +22,7 @@ export class UpdateAddressDto {
   })
   @IsOptional()
   @IsEnum(City)
-  city: City;
+  city?: City;
 
   @ApiProperty({
     description: 'Le pays de l\'adresse (facultatif)',
@@ -33,7 +33,7 @@ export class UpdateAddressDto {
   @IsOptional()
   @IsString()
   @IsNotEmpty()
-  country: string;
+  country?: string;
 
   @ApiProperty({
     description: 'Une description de l\'adresse (facultatif)',
@@ -44,5 +44,5 @@ export class UpdateAddressDto {
   @IsOptional()
   @IsString()
   @IsNotEmpty()
-  description: string;
+  description?: string;
 }

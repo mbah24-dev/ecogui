@@ -6,7 +6,7 @@
 /*   By: mbah <mbah@student.42lyon.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 03:44:35 by mbah              #+#    #+#             */
-/*   Updated: 2025/03/30 18:32:47 by mbah             ###   ########.fr       */
+/*   Updated: 2025/05/01 13:38:14 by mbah             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { SendEmailController } from './send-email.controller';
 
 @Module({
-  providers: [SendEmailService, PrismaService],
+  providers: [SendEmailService],
   controllers: [SendEmailController]
 })
 export class SendEmailModule {}

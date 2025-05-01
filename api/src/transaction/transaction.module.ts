@@ -11,7 +11,6 @@ import { AddressService } from 'src/address/address.service';
 @Module({
 	providers: [
 		TransactionService,
-		PrismaService,
 		TransactionUtils,
 		SendEmailService,
 		OrdersValidationService,
