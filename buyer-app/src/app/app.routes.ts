@@ -25,12 +25,16 @@ import { OrderDetailsComponent } from './buyer/components/profile/order/order-de
 import { OrderComponent } from './buyer/components/profile/order/order.component';
 import { FaqComponent } from './shared/faq/faq.component';
 import { ContactComponent } from './shared/contact/contact.component';
+import { AuthGuard } from './buyer/guards/auth/auth.guard';
+import { NoAuthGuard } from './buyer/guards/auth/no-auth.guard';
+import { ConfirmResetPasswordComponent } from './shared/authentication/confirm-reset-password/confirm-reset-password.component';
 
 export const routes: Routes = [
     {path: '', component: ProductsGridComponent},
     {
         path: 'settings',
         component: SettingsComponent,
+        canActivate: [AuthGuard],
         children: [
             {path: '', component: AccountSettingsComponent},
             {path: 'change-password', component: ChangePasswordComponent},
@@ -45,6 +49,7 @@ export const routes: Routes = [
             {
                 path: 'orders',
                 component: OrderComponent,
+                canActivate: [AuthGuard],
                 children: [
                     {path: '', component: ClientOrderComponent},
                     {path: 'details', component: OrderDetailsComponent},
@@ -53,32 +58,36 @@ export const routes: Routes = [
             {
                 path: 'invoices',
                 component: InvoiceComponent,
+                canActivate: [AuthGuard],
                 children: [
                     {path: '', component: InvoiceListComponent},
                     {path: 'details', component: InvoiceDetailsComponent}
                 ]
             },
             {path: 'faq', component: FaqComponent},
-            {path: 'contact', component: ContactComponent},
+            {path: 'contact', component: ContactComponent, canActivate: [AuthGuard]},
         ]
     },
     {
         path: 'authentication',
         component: AuthenticationComponent,
+        canActivate: [NoAuthGuard],
         children: [
             {path: '', component: SignInComponent},
             {path: 'sign-up', component: SignUpComponent},
             {path: 'forgot-password', component: ForgotPasswordComponent},
             {path: 'reset-password', component: ResetPasswordComponent},
             {path: 'confirm-email', component: ConfirmEmailComponent},
+            {path: 'confirm-reset-password', component: ConfirmResetPasswordComponent},
             {path: 'logout', component: LogoutComponent}
         ]
     },
-    {path: 'ecogui/client/cart', component: ProductCartComponent},
+    {path: 'ecogui/client/cart', component: ProductCartComponent, canActivate: [AuthGuard]},
     {path: 'ecogui/client/product-details/:id', component: ProductDetailsComponent},
-    {path: 'ecogui/client/checkout', component: ProductCheckoutComponent},
+    {path: 'ecogui/client/checkout', component: ProductCheckoutComponent, canActivate: [AuthGuard]},
     /* Les autres chemins ici */
 
-    {path: '**', component: NotFoundComponent},
+    //{path: '**', component: NotFoundComponent},
+    {path: '**', component: ProductsGridComponent},
     /** ne rien ecrire ci bas */
 ];

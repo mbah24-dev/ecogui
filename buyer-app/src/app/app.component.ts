@@ -6,7 +6,7 @@
 /*   By: mbah <mbah@student.42lyon.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:33:31 by mbah              #+#    #+#             */
-/*   Updated: 2025/04/22 23:49:53 by mbah             ###   ########.fr       */
+/*   Updated: 2025/04/24 23:34:21 by mbah             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,11 @@ import { SidebarComponent } from './shared/sidebar/sidebar.component';
 import { CommonModule, Location, LocationStrategy, PathLocationStrategy } from '@angular/common';
 import { RouterOutlet, Router, NavigationCancel, NavigationEnd } from '@angular/router';
 import { AlertNotificationComponent } from "./shared/alert-notification/alert-notification.component";
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
     selector: 'app-root',
-    imports: [RouterOutlet, CommonModule, SidebarComponent, HeaderComponent, FooterComponent],
+    imports: [RouterOutlet, CommonModule, SidebarComponent, HeaderComponent, FooterComponent, MatSnackBarModule],
     templateUrl: './app.component.html',
     styleUrl: './app.component.scss',
     providers: [
@@ -32,7 +33,8 @@ import { AlertNotificationComponent } from "./shared/alert-notification/alert-no
             provide: LocationStrategy,
             useClass: PathLocationStrategy
         }
-    ]
+    ],
+
 })
 export class AppComponent {
 
