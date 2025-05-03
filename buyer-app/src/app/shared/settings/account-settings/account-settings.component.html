@@ -138,15 +138,20 @@
                 </mat-error>
             </div>
         </div>
-        <div *ngIf="addressErrorMessage">
-            {{ addressErrorMessage }}
+        <div *ngIf="addressFormErrorMessage">
+            {{ addressFormErrorMessage }}
         </div>
         <div class="procced-shipping-btn mt-4">
             <div class="spinner-wrapper" *ngIf="addressIsLoading">
                 <mat-spinner diameter="30" strokeWidth="4"></mat-spinner>
             </div>
-            <button mat-flat-button color="primary" *ngIf="!addressIsLoading"  type="submit" [disabled]="!isFormValid(addressForm) || isAllFieldsEmpty(addressForm)">
-                Mettre a jour l'adresse
+            <button
+            mat-flat-button
+            color="primary"
+            *ngIf="!addressIsLoading"
+            type="submit"
+            [disabled]="!isFormValid(addressForm) || isAllFieldsEmpty(addressForm)">
+                Mettre à jour l'adresse
             </button>
         </div>
       </form>
