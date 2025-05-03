@@ -66,7 +66,7 @@ export class SignUpComponent {
             const registrationData: LoginDto = this.authForm.value;
             this.signupService.signup(registrationData).subscribe({
                 next: (response: LoginResponseDto) => {
-                    console.log("Réponse de l'API NestJS: ", response);
+                    // console.log("Réponse de l'API NestJS: ", response);
                     this.authService.login();
                     this.router.navigate(['/']);
                 },
