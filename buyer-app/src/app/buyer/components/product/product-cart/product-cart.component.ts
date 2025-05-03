@@ -16,11 +16,12 @@ import localeFr from '@angular/common/locales/fr';
 import { CartItem, Product, ProductService } from '../../../services/product.service';
 import { isPlatformBrowser } from '@angular/common';
 import { Inject, PLATFORM_ID } from '@angular/core';
+import { GnfFormatPipe } from "../../../pipes/gnf-format.pipe";
 
 
 @Component({
   selector: 'app-cart',
-  imports: [NgFor, MatTooltipModule,  CommonModule, MatCardModule, MatMenuModule, MatButtonModule, RouterLink, MatTableModule, MatPaginatorModule, FeathericonsModule, MatFormFieldModule, MatInputModule, FormsModule, MatSelectModule],
+  imports: [NgFor, MatTooltipModule, CommonModule, MatCardModule, MatMenuModule, MatButtonModule, RouterLink, MatTableModule, MatPaginatorModule, FeathericonsModule, MatFormFieldModule, MatInputModule, FormsModule, MatSelectModule, GnfFormatPipe],
   templateUrl: './product-cart.component.html',
   styleUrls: ['./product-cart.component.scss']
 })

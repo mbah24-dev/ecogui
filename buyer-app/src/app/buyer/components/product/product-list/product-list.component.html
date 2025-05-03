@@ -76,7 +76,7 @@
             <!-- Prix -->
             <div class="price lh-1 d-flex justify-content-center align-items-center">
               <span class="d-block fw-semibold text-black heading-font-family">
-                {{ product.price | number:'1.0-2':'fr' }} GNF
+                {{ product.price | gnfFormat: 'GNF' }}
               </span>
             </div>
           </div>

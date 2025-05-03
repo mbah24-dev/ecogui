@@ -9,13 +9,14 @@ import { RouterLink } from '@angular/router';
 import { CommonModule, registerLocaleData } from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
 import { AlertNotificationComponent } from "../../../../shared/alert-notification/alert-notification.component";
+import { GnfFormatPipe } from "../../../pipes/gnf-format.pipe";
 
 
 @Component({
   selector: 'app-product-list',
   templateUrl: './product-list.component.html',
   styleUrl: './product-list.component.scss',
-  imports: [MatCardModule, MatMenuModule, MatButtonModule, RouterLink, MatSelectModule, FormsModule, ReactiveFormsModule, CommonModule, AlertNotificationComponent]
+  imports: [MatCardModule, MatMenuModule, MatButtonModule, RouterLink, MatSelectModule, FormsModule, ReactiveFormsModule, CommonModule, AlertNotificationComponent, GnfFormatPipe]
 })
 export class ProductListComponent implements OnInit {
     products: Product[] = [];

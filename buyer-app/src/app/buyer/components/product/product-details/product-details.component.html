@@ -24,7 +24,11 @@
                         <owl-carousel-o [options]="{dots: false, margin: 10, autoWidth: true}">
                             <ng-container *ngFor="let image of productImages; let i = index">
                                 <ng-template carouselSlide [id]="image.url+i" [width]="100">
-                                    <a (click)="owlCar.to(image.url); changeimage(image.url+i)" class="border-radius">
+                                    <a
+                                    (click)="owlCar.to(image.url); changeimage(image.url)"
+                                    class="border-radius"
+                                    [class.selected]="selectedImage === image.url"
+                                    >
                                         <img [src]="image.url" [alt]="image.url" class="border-radius">
                                     </a>
                                 </ng-template>
@@ -88,7 +92,7 @@
                               Prix :
                             </span>
                             <span class="d-block text-black ms-1">
-                              {{ product.price | number:'1.0-2':'fr' }} GNF
+                              {{ product.price  | gnfFormat: 'GNF'}}
                             </span>
                         </li>
                         <li class="d-flex align-items-center fs-14">

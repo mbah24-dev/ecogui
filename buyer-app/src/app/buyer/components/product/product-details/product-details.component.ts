@@ -12,10 +12,11 @@ import { Product, ProductService } from '../../../services/product.service';
 import localeFr from '@angular/common/locales/fr';
 import { ColorService } from '../../../services/color.service';
 import { AlertNotificationComponent } from "../../../../shared/alert-notification/alert-notification.component";
+import { GnfFormatPipe } from "../../../pipes/gnf-format.pipe";
 
 @Component({
     selector: 'app-e-product-details',
-    imports: [CommonModule, MatCardModule, MatButtonModule, FeathericonsModule, CarouselModule, NgFor, MatProgressBarModule, MatMenuModule, ReviewsComponent, AlertNotificationComponent],
+    imports: [CommonModule, MatCardModule, MatButtonModule, FeathericonsModule, CarouselModule, NgFor, MatProgressBarModule, MatMenuModule, ReviewsComponent, AlertNotificationComponent, GnfFormatPipe],
     templateUrl: './product-details.component.html',
     styleUrl: './product-details.component.scss'
 })

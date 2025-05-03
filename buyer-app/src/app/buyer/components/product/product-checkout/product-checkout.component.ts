@@ -11,10 +11,11 @@ import { Subscription } from 'rxjs';
 import { isPlatformBrowser } from '@angular/common';
 import { Inject, PLATFORM_ID } from '@angular/core';
 import { AlertNotificationComponent } from "../../../../shared/alert-notification/alert-notification.component";
+import { GnfFormatPipe } from "../../../pipes/gnf-format.pipe";
 
 @Component({
     selector: 'app-shopping-cart',
-    imports: [CommonModule, MatCardModule, MatButtonModule, RouterLink, MatTableModule, InvoiceInformationComponent],
+    imports: [CommonModule, MatCardModule, MatButtonModule, RouterLink, MatTableModule, InvoiceInformationComponent, GnfFormatPipe],
     templateUrl: './product-checkout.component.html',
     styleUrl: './product-checkout.component.scss'
 })
