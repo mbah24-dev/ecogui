@@ -59,7 +59,7 @@ export class CreateProductDto {
   @IsOptional()
   @IsArray()
   @IsString({ each: true })
-  size?: string[];
+  sizes: string[];
 
   @ApiPropertyOptional({
     description: 'Les couleurs disponibles du produit (optionnel)',
@@ -70,7 +70,7 @@ export class CreateProductDto {
   @IsOptional()
   @IsArray()
   @IsString({ each: true })
-  color?: string[];
+  colors: string[];
 
   // Uncomment if images are to be handled later
   // @ApiProperty({

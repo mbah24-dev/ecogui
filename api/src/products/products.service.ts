@@ -6,7 +6,7 @@
 /*   By: mbah <mbah@student.42lyon.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 03:43:16 by mbah              #+#    #+#             */
-/*   Updated: 2025/04/12 00:46:20 by mbah             ###   ########.fr       */
+/*   Updated: 2025/05/05 22:15:11 by mbah             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ export class ProductsService {
 	) {}
 
     async create_product(data: CreateProductDto, sellerId: string, files: Express.Multer.File[]) {
-		const { name, description, price, stock, categoryId }: CreateProductDto = data;
+		const { name, description, price, stock, categoryId, colors, sizes }: CreateProductDto = data;
 	
 		const category = await this.prismaService.category.findUnique({
 			where: { id: categoryId }
@@ -61,6 +61,8 @@ export class ProductsService {
 					stock, 
 					categoryId, 
 					sellerId,
+					sizes,
+					colors,
 					status: ProductStatus.PENDING
 				}
 			});

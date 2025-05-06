@@ -63,7 +63,7 @@ export class AuthService {
 		await this.prismaService.user.update({
 			where: { id: foundUser.id},
 			data: { isOnline: true }
-		})
+		});
 	
 		return res.json({
 			message: 'Connexion réussie',
@@ -72,38 +72,69 @@ export class AuthService {
 		});
 	}
 	
-
 	async signup(signupBody: CreateUserDto, req: RequestExpressSession, res: Response) {
-		const alreadyHaveAccount = await this.prismaService.user.findUnique({
-			where: { email: signupBody.email }
-		})
-		if (alreadyHaveAccount) {
-			throw new HttpException('Vous avez deja un compte, Penser a vous connecter', HttpStatus.CONFLICT);
-		}
-		const addUserObject = await this.userService.create_user(signupBody);
-		const token = (this.bcryptUtils.generateToken({
-			userId: addUserObject.user_Id,
-			email: signupBody.email,
-			role: signupBody.role
-		}));
-		const foundUser = await this.prismaService.user.findUnique({
-			where: { id: addUserObject.user_Id },
-		});
-		if (!foundUser) {
-			throw new UnauthorizedException('Email incorrect.');
-		}
-		req.session.user = sanitizeUser(foundUser);
-		await this.prismaService.user.update({
-			where: { id: foundUser.id},
-			data: { isOnline: true }
-		})
-		return res.json({
-			message: 'Inscription réussie',
-			accessToken: token,
-			user: req.session.user,
+		const { email, role } = signupBody;
+		let newRole: Role;
+	
+		return await this.prismaService.$transaction(async (transaction) => {
+			const existingUser = await transaction.user.findUnique({ where: { email } });
+	
+			let userId: string;
+	
+			if (existingUser) {
+				if (
+					existingUser.role === role ||
+					existingUser.role === Role.BUYER_AND_SELLER
+				) {
+					console.log("cas 1 refus : " + role + " page & " + "user role: " + existingUser.role);
+					throw new HttpException(
+						'Vous avez déjà un compte, pensez à vous connecter',
+						HttpStatus.CONFLICT
+					);
+				} else {
+					// Mise à jour du rôle en B&S
+					console.log("cas 2 update : " + role + " page & " + "user role: " + existingUser.role);
+					await transaction.user.update({
+						where: { id: existingUser.id },
+						data: { role: Role.BUYER_AND_SELLER },
+					});
+					userId = existingUser.id;
+					newRole = Role.BUYER_AND_SELLER;
+				}
+			} else {
+				console.log("cas 3 create : " + role + " page");
+				const newUser = await this.userService.create_user(signupBody, transaction);
+				userId = newUser.user_Id;
+				newRole = role;
+			}
+	
+			const foundUser = await transaction.user.findUnique({ where: { id: userId } });
+			if (!foundUser) {
+				throw new UnauthorizedException("Erreur lors de l'inscription");
+			}
+	
+			const token = this.bcryptUtils.generateToken({
+				userId,
+				email,
+				role: newRole,
+			});
+	
+			await transaction.user.update({
+				where: { id: userId },
+				data: { isOnline: true },
+			});
+	
+			// NOTE: req.session ne peut pas être modifié en dehors du contexte HTTP.
+			req.session.user = sanitizeUser(foundUser);
+	
+			res.json({
+				message: "Inscription réussie",
+				accessToken: token,
+				user: req.session.user,
+			});
 		});
 	}
-
+	
 	async signout(@Req() req: RequestExpressSession, res: Response) {
 		if (req.session.user) {
 			await this.prismaService.user.update({

@@ -43,8 +43,8 @@ model Product {
   updatedAt   DateTime       @updatedAt
   status      ProductStatus  @default(AVAILABLE)
   buyCount    Int            @default(0)
-  color       String[]       @default(["Standard"])
-  size        String[]       @default(["Taille unique"])
+  colors       String[]       
+  sizes        String[]      
   cartItems   CartItem[]
   orderItems  OrderItem?
   category    Category       @relation(fields: [categoryId], references: [id])

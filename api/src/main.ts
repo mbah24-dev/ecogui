@@ -6,7 +6,7 @@
 /*   By: mbah <mbah@student.42lyon.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 22:20:39 by mbah              #+#    #+#             */
-/*   Updated: 2025/04/12 17:53:48 by mbah             ###   ########.fr       */
+/*   Updated: 2025/05/05 01:29:56 by mbah             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors({
-    origin: 'http://localhost:4200', // Permet uniquement l'origine de mon frontend Angular
+    origin: ['http://localhost:4200', 'http://localhost:4201'], // Permet uniquement l'origine de mon frontend Angular
     methods: 'GET,POST,PUT,DELETE',
     credentials: true, // Permet l'envoi de cookies/credentials avec la requête
   });

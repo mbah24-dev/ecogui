@@ -1,4 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Prisma, PrismaClient } from '@prisma/client';
 import { CreateAddressDto } from 'src/dto/address/create-address.dto';
 import { UpdateAddressDto } from 'src/dto/address/update-address.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -7,12 +8,16 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class AddressService {
 	constructor(private readonly prismaService: PrismaService) {}
 
-	async add_address(userId: string, addressData: CreateAddressDto) {
-		const address = await this.prismaService.address.create({
-			data: { ...addressData, userId }
+	async add_address(
+		userId: string,
+		addressData: CreateAddressDto,
+		prisma: PrismaClient | Prisma.TransactionClient = this.prismaService,
+	) {
+		const address = await prisma.address.create({
+		  data: { ...addressData, userId },
 		});
-
-		return (address);
+	  
+		return address;
 	}
 
 	async get_current_user_address(userId: string) {

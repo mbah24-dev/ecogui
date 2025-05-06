@@ -6,13 +6,13 @@
 /*   By: mbah <mbah@student.42lyon.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 23:26:22 by mbah              #+#    #+#             */
-/*   Updated: 2025/05/01 10:42:32 by mbah             ###   ########.fr       */
+/*   Updated: 2025/05/05 00:57:00 by mbah             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 import { ne } from '@faker-js/faker/.';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { OrderItemStatus, ProductStatus, Role } from '@prisma/client';
+import { OrderItemStatus, Prisma, PrismaClient, ProductStatus, Role } from '@prisma/client';
 import { BcryptUtilsService } from 'src/bcrypt-utils/bcrypt-utils.service';
 import { CreateUserDto } from 'src/dto/users/create-user.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -22,7 +22,6 @@ import * as path from 'path';
 import * as uuid from 'uuid';
 import { get_upload_path } from "src/utility/get_path";
 import { UpdateUserDto } from 'src/dto/users/update-user.dto';
-import { _ } from '@faker-js/faker/dist/airline-CBNP41sR';
 import { AddressService } from 'src/address/address.service';
 import { CreateAddressDto } from 'src/dto/address/create-address.dto';
 import { City } from 'src/types/address.types';
@@ -90,25 +89,36 @@ export class UsersService {
 		return (user.role);
 	}
 
-	async create_user(user_info: CreateUserDto) {
-		const {email, password, name, role}: CreateUserDto = user_info;
-		const user_found = await this._prisma.user.findUnique({
-			where: { email }
-		});
-		if (user_found)
+	async create_user(
+		user_info: CreateUserDto,
+		prisma: PrismaClient | Prisma.TransactionClient = this._prisma,
+	) {
+		const { email, password, name, role } = user_info;
+	
+		const existing = await prisma.user.findUnique({ where: { email } });
+		if (existing)
 			throw new HttpException('Cet email est déjà associé à un compte.', HttpStatus.FOUND);
+	
 		const hashedPassword = await this._bcrypt.hashPassword(password);
-		const new_user = await this._prisma.user.create({
+	
+		const newUser = await prisma.user.create({
 			data: {
 				email,
 				password: hashedPassword,
 				name,
-				role: role || Role.BUYER
-			}
+				role: role || Role.BUYER,
+			},
 		});
-		const user_address: CreateAddressDto = {commune: '', city: City.Conakry, country: 'Guinee', description: ''};
-		this._addressService.add_address(new_user.id, user_address);
-		return ({ user_Id: new_user.id });
+	
+		const defaultAddress: CreateAddressDto = {
+			commune: '',
+			city: City.Conakry,
+			country: 'Guinée',
+			description: '',
+		};
+		await this._addressService.add_address(newUser.id, defaultAddress, prisma);
+	
+		return { user_Id: newUser.id };
 	}
 
 	async update_user(user_Id: string, new_user: UpdateUserDto) {
@@ -161,7 +171,7 @@ export class UsersService {
 			return (await this._prisma.user.update({
 				where: { id: user_Id },
 				data: { role: role}
-			}))
+			}));
 		} catch (error) {
 			throw new HttpException(error.message || 'un probleme es survenue lors de la modification', HttpStatus.BAD_REQUEST);
 		}
