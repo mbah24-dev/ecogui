@@ -34,7 +34,6 @@ export class AuthService {
 	
 	async signin(signinBody: LoginDto, role: Role, req: RequestExpressSession, res: Response) {
 		const { email, password } = signinBody;
-		
 		const foundUser = await this.prismaService.user.findUnique({
 			where: { email },
 		});
@@ -57,7 +56,7 @@ export class AuthService {
 			email: foundUser.email,
 			role: foundUser.role,
 		});
-	
+
 		req.session.user = sanitizeUser(foundUser);
 
 		await this.prismaService.user.update({
