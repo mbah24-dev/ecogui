@@ -52,14 +52,14 @@
             </li>
             <!-- AUTH FIN -->
 
-            <li >
+            <li>
                 <button
-                    mat-button
-                    (click)="toggleTheme()"
-                    class="dark-swtich-btn whishlist-tag"
-                    [class.active]="toggleService.isDark()"
+                  mat-button
+                  (click)="toggleTheme()"
+                  class="dark-swtich-btn whishlist-tag"
+                  [class.active]="toggleService.isDark()"
                 >
-                    <i-feather name="moon"></i-feather>
+                  <i-feather [name]="toggleService.isDark() ? 'sun' : 'moon'"></i-feather>
                 </button>
             </li>
 

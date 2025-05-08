@@ -128,7 +128,6 @@ export class ProductService {
     }
   }
 
-
   clearCart() {
     this.triggerAlert('Votre panier a été vider !');
     this._cart = {};

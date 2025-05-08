@@ -17,14 +17,20 @@
         <div class="row">
           <div class="col-lg-6">
             <label class="label d-block fw-medium mb-10">Nom complet</label>
-            <mat-form-field floatLabel="always">
+            <mat-form-field floatLabel="always" >
               <i-feather name="user"></i-feather>
               <mat-label>Veuillez saisir votre nom</mat-label>
-              <input matInput formControlName="name" />
+              <input
+              matInput
+              formControlName="name"
+               />
             </mat-form-field>
             <div class="error text-danger" *ngIf="profileForm.get('name')?.touched && profileForm.get('name')?.invalid">
               Veuillez saisir un nom complet valide
             </div>
+            <mat-hint *ngIf="profileForm.get('name')?.value === '' && initialProfileData?.name" class="error text-danger">
+                Champ vide : la valeur actuelle ne sera pas modifiée.
+            </mat-hint>
           </div>
 
           <div class="col-lg-6">
@@ -42,6 +48,9 @@
                 Format d'email incorrect.
               </div>
             </div>
+            <mat-hint *ngIf="profileForm.get('email')?.value === '' && initialProfileData?.email" class="error text-danger">
+                Champ vide : la valeur actuelle ne sera pas modifiée.
+            </mat-hint>
           </div>
 
           <div class="col-lg-6">
@@ -54,6 +63,9 @@
             <div class="error text-danger" *ngIf="profileForm.get('phoneNumber')?.touched && profileForm.get('phoneNumber')?.invalid">
               Numéro invalide.
             </div>
+            <mat-hint *ngIf="profileForm.get('phoneNumber')?.value === '' && initialProfileData?.phoneNumber" class="error text-danger">
+                Champ vide : la valeur actuelle ne sera pas modifiée.
+            </mat-hint>
           </div>
         </div>
         <div *ngIf="profileFormErrorMessage">

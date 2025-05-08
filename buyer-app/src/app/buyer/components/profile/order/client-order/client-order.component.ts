@@ -7,10 +7,11 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { NgIf, registerLocaleData, CommonModule } from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
+import { GnfFormatPipe } from "../../../../pipes/gnf-format.pipe";
 
 @Component({
     selector: 'app-e-orders-list',
-    imports: [CommonModule, MatCardModule, MatMenuModule, MatButtonModule, RouterLink, MatTableModule, MatPaginatorModule, NgIf],
+    imports: [CommonModule, MatCardModule, MatMenuModule, MatButtonModule, RouterLink, MatTableModule, MatPaginatorModule, NgIf, GnfFormatPipe],
     templateUrl: './client-order.component.html',
     styleUrl: './client-order.component.scss'
 })

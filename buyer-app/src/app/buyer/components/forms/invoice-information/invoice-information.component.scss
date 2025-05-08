@@ -24,6 +24,10 @@
     }
 }
 
+textarea {
+    resize: none;
+}
+
 .form-group {
     margin-bottom: 1.5rem;
   }
@@ -35,7 +39,7 @@
   .hide-this{
     display: none !important;
   }
-  
+
   .error {
     color: #e53935;
     font-size: 0.875rem;

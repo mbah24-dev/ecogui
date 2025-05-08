@@ -6,7 +6,7 @@
 /*   By: mbah <mbah@student.42lyon.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:20:04 by mbah              #+#    #+#             */
-/*   Updated: 2025/04/30 14:42:36 by mbah             ###   ########.fr       */
+/*   Updated: 2025/05/04 22:14:00 by mbah             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ import { AuthService } from '../../buyer/services/auth/auth.service';
 import { UserService } from '../../buyer/services/user/user.service';
 import { User } from '../../buyer/models/user/user.model';
 import { Enviroment } from '../../buyer/utils/eviroment';
-
 
 @Component({
     selector: 'app-header',
@@ -58,7 +57,6 @@ export class HeaderComponent implements OnInit {
         this.toggleService.isToggled$.subscribe(isToggled => {
             this.isToggled = isToggled;
         });
-        this.formattedDate = this.datePipe.transform(this.currentDate, 'dd MMMM yyyy');
         this.products$ = this.productService.getLiveProducts();
 
         this.authService.isAuthenticated$.subscribe(isLoggedIn => {
@@ -110,9 +108,5 @@ export class HeaderComponent implements OnInit {
     toggleTheme() {
         this.toggleService.toggleTheme();
     }
-
-    // Current Date
-    currentDate: Date = new Date();
-    formattedDate: any;
 
 }

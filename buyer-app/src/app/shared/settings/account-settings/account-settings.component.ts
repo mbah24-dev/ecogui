@@ -106,9 +106,9 @@ export class AccountSettingsComponent implements OnInit {
 
     private patchProfileForm(user: User): void {
         this.initialProfileData = {
-        name: user.name,
-        email: user.email,
-        phoneNumber: user.phoneNumber
+            name: user.name,
+            email: user.email,
+            phoneNumber: user.phoneNumber
         };
 
         this.profileForm.patchValue(this.initialProfileData);

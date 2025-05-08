@@ -6,13 +6,24 @@
         <mat-card-content>
           <div class="admin text-center">
             <div class="image ml-auto mr-auto position-relative">
-              <img src="images/mbah.jpeg" class="rounded-circle" alt="image-profil">
-              <button type="button" mat-button>
-                <i-feather name="camera"></i-feather>
-              </button>
+                <img [src]="profileImage" class="rounded-circle" alt="image-profil">
+
+                <button mat-button type="button" (click)="triggerFileInput()">
+                  <i-feather name="camera"></i-feather>
+                </button>
+
+                <!-- INPUT FICHIER CACHÉ -->
+                <input
+                  type="file"
+                  accept="image/*"
+                  #fileInput
+                  (change)="onImageSelected($event)"
+                  style="display: none"
+                />
             </div>
-            <h6>BAH Mamadou</h6>
-            <span class="d-block text-body">&#64;bah_mamadou</span>
+
+            <h6> {{ userData?.name}} </h6>
+            <span class="d-block text-body">&#64;{{ userData?.name?.replace(' ', '_')?.toLowerCase() }} </span>
           </div>
 
           <ul class="list-unstyled p-0 m-0">

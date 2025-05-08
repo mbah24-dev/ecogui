@@ -14,37 +14,43 @@
                   <mat-form-field appearance="fill" class="w-100">
                     <i-feather name="user"></i-feather>
                     <mat-label>Entrez votre nom complet</mat-label>
-                    <input matInput type="text" formControlName="fullName" placeholder="ex: Mohamed Camara" />
+                    <input matInput type="text" formControlName="name" placeholder="ex: Mohamed Camara" />
                   </mat-form-field>
-                  <div class="error" *ngIf="billingForm.get('fullName')?.touched && billingForm.get('fullName')?.invalid">
+                  <div class="error" *ngIf="billingForm.get('name')?.touched && billingForm.get('name')?.invalid">
                     Le nom est requis.
-                  </div>
-                </div>
-
-                <!-- Commune -->
-                <div class="form-group">
-                  <label class="label d-block fw-medium">Commune</label>
-                  <mat-form-field appearance="fill" class="w-100">
-                    <i-feather name="map-pin"></i-feather>
-                    <mat-label>Commune</mat-label>
-                    <input matInput type="text" formControlName="commune" placeholder="ex: Ratoma" />
-                  </mat-form-field>
-                  <div class="error" *ngIf="billingForm.get('commune')?.touched && billingForm.get('commune')?.invalid">
-                    La commune est requise.
                   </div>
                 </div>
 
                 <!-- Ville -->
                 <div class="form-group">
-                  <label class="label d-block fw-medium">Ville</label>
-                  <mat-form-field appearance="fill" class="w-100">
-                    <i-feather name="map"></i-feather>
+                    <label class="label d-block fw-medium">Ville</label>
+                    <mat-form-field appearance="fill" class="w-100">
+                    <i-feather name="map-pin"></i-feather>
                     <mat-label>Ville</mat-label>
-                    <input matInput type="text" formControlName="city" placeholder="ex: Conakry" />
-                  </mat-form-field>
-                  <div class="error" *ngIf="billingForm.get('city')?.touched && billingForm.get('city')?.invalid">
+                    <mat-select formControlName="city">
+                        <mat-option *ngFor="let city of cityList" [value]="city">{{ city }}</mat-option>
+                    </mat-select>
+                    </mat-form-field>
+                    <div class="error" *ngIf="billingForm.get('city')?.touched && billingForm.get('city')?.invalid">
                     La ville est requise.
-                  </div>
+                    </div>
+                </div>
+
+                <!-- Commune -->
+                <div class="form-group">
+                    <label class="label d-block fw-medium">Commune</label>
+                    <mat-form-field appearance="fill" class="w-100"
+                        matTooltip="La commune est disponible uniquement si la ville est Conakry"
+                        [matTooltipDisabled]="isBillingCityConakry()" matTooltipShowDelay="200">
+                    <i-feather name="map"></i-feather>
+                    <mat-label>Commune</mat-label>
+                    <mat-select formControlName="commune">
+                        <mat-option *ngFor="let commune of communeList" [value]="commune">{{ commune }}</mat-option>
+                    </mat-select>
+                    </mat-form-field>
+                    <div class="error" *ngIf="billingForm.get('commune')?.touched && billingForm.get('commune')?.invalid">
+                    La commune est requise.
+                    </div>
                 </div>
 
                 <!-- Adresse (non requise) -->
