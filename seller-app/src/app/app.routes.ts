@@ -1,11 +1,4 @@
 import { Routes } from '@angular/router';
-import { SignInComponent } from './shared/authentication/sign-in/sign-in.component';
-import { SignUpComponent } from './shared/authentication/sign-up/sign-up.component';
-import { AuthenticationComponent } from './shared/authentication/authentication.component';
-import { ConfirmEmailComponent } from './shared/authentication/confirm-email/confirm-email.component';
-import { ForgotPasswordComponent } from './shared/authentication/forgot-password/forgot-password.component';
-import { LogoutComponent } from './shared/authentication/logout/logout.component';
-import { ResetPasswordComponent } from './shared/authentication/reset-password/reset-password.component';
 import { NotFoundComponent } from './shared/not-found/not-found.component';
 import { AccountSettingsComponent } from './shared/settings/account-settings/account-settings.component';
 import { ChangePasswordComponent } from './shared/settings/change-password/change-password.component';
@@ -30,71 +23,108 @@ import { OrderDetailsComponent } from './seller/components/order/order-details/o
 import { StatsComponent } from './seller/components/profile/stats/stats.component';
 import { PayementListComponent } from './seller/components/payement/payement-list.component';
 import { HowToSellComponent } from './seller/components/how-to-sell/how-to-sell.component';
+import { AuthGuard } from './seller/guards/auth/auth.guard';
+import { NoAuthGuard } from './seller/guards/auth/no-auth.guard';
+import { AuthenticationComponent } from './shared/authentication/authentication.component';
+import { ConfirmEmailComponent } from './shared/authentication/confirm-email/confirm-email.component';
+import { ForgotPasswordComponent } from './shared/authentication/forgot-password/forgot-password.component';
+import { LogoutComponent } from './shared/authentication/logout/logout.component';
+import { ResetPasswordComponent } from './shared/authentication/reset-password/reset-password.component';
+import { SignInComponent } from './shared/authentication/sign-in/sign-in.component';
+import { SignUpComponent } from './shared/authentication/sign-up/sign-up.component';
+import { SellerHomeComponent } from './seller/components/seller-home/seller-home.component';
+import { AuthRedirectGuard } from './seller/guards/auth/redirect.guard';
 
 export const routes: Routes = [
+    // Redirection intelligente pour la racine
+  {
+    path: '',
+    canActivate: [AuthRedirectGuard],
+    children: []
+  },
 
-    {path: '', component: EcommerceComponent},
-    {
+  { path: 'contact', component: ContactComponent },
+
+  // Zone publique
+  {
+    path: '',
+    canActivate: [NoAuthGuard],
+    children: [
+      { path: 'home', component: SellerHomeComponent },
+      {
+        path: 'auth',
+        component: AuthenticationComponent,
+        children: [
+          { path: 'sign-in', component: SignInComponent },
+          { path: 'sign-up', component: SignUpComponent },
+          { path: 'forgot-password', component: ForgotPasswordComponent },
+          { path: 'reset-password', component: ResetPasswordComponent },
+          { path: 'confirm-email', component: ConfirmEmailComponent }
+        ]
+      },
+      { path: 'howtosell', component: HowToSellComponent },
+      { path: 'faq', component: FaqComponent },
+      { path: 'privacy-policy', component: PrivacyPolicyComponent },
+      { path: 'terms-conditions', component: TermsConditionsComponent }
+    ]
+  },
+
+  // Zone privée
+  {
+    path: '',
+    canActivate: [AuthGuard],
+    children: [
+      { path: 'dashboard', component: EcommerceComponent },
+
+      {
         path: 'settings',
         component: SettingsComponent,
         children: [
-            {path: '', component: AccountSettingsComponent},
-            {path: 'change-password', component: ChangePasswordComponent},
-            {path: 'privacy-policy', component: PrivacyPolicyComponent},
-            {path: 'terms-conditions', component: TermsConditionsComponent}
+          { path: '', component: AccountSettingsComponent },
+          { path: 'change-password', component: ChangePasswordComponent },
         ]
-    },
-    {
+      },
+
+      {
         path: 'profile',
         component: ProfileComponent,
         children: [
-            {
-                path: 'orders',
-                children: [
-                    {path: '', component: SellerOverviewComponent},
-                    {path: 'details', component: OrderDetailsComponent},
-                ]
-            },
-            {path: 'faq', component: FaqComponent},
-            {path: 'contact', component: ContactComponent},
-            {path: 'stats', component: StatsComponent},
+          {
+            path: 'orders',
+            children: [
+              { path: '', component: SellerOverviewComponent },
+              { path: 'details', component: OrderDetailsComponent },
+            ]
+          },
+          { path: 'stats', component: StatsComponent },
         ]
-    },
-    {
-        path: 'authentication',
-        component: AuthenticationComponent,
-        children: [
-            {path: '', component: SignInComponent},
-            {path: 'sign-up', component: SignUpComponent},
-            {path: 'forgot-password', component: ForgotPasswordComponent},
-            {path: 'reset-password', component: ResetPasswordComponent},
-            {path: 'confirm-email', component: ConfirmEmailComponent},
-            {path: 'logout', component: LogoutComponent}
-        ]
-    },
-    {
+      },
+
+      {
         path: 'seller',
         children: [
-            {path: 'products', component: ProductsListComponent },
-            {path: 'add-product', component: CreateProductComponent},
-            {path: 'new-orders', component: NewOrderComponent},
-            {path: 'orders/delivered', component: OrderDeliveredComponent},
-            {path: 'orders/tasks', component: ToDoComponent},
-            {
-                path: 'invoices',
-                component: InvoiceComponent,
-                children: [
-                    {path: '', component: InvoiceListComponent},
-                    {path: 'details', component: InvoiceDetailsComponent}
-                ]
-            },
-            {path: 'paiements', component: PayementListComponent},
-            {path: 'howtosell', component: HowToSellComponent}
+          { path: 'products', component: ProductsListComponent },
+          { path: 'add-product', component: CreateProductComponent },
+          { path: 'new-orders', component: NewOrderComponent },
+          { path: 'orders/delivered', component: OrderDeliveredComponent },
+          { path: 'orders/tasks', component: ToDoComponent },
+          {
+            path: 'invoices',
+            component: InvoiceComponent,
+            children: [
+              { path: '', component: InvoiceListComponent },
+              { path: 'details', component: InvoiceDetailsComponent }
+            ]
+          },
+          { path: 'payments', component: PayementListComponent }
         ]
-    },
-    {path: 'ecogui/client/product-details/:id', component: ProductDetailsComponent},
-    /* Les autres chemins ici */
+      },
 
-    {path: '**', component: NotFoundComponent},
-    /** ne rien ecrire ci bas */
+      { path: 'product-details/:id', component: ProductDetailsComponent },
+      { path: 'logout', component: LogoutComponent }
+    ]
+  },
+
+  // Route de fallback
+  { path: '**', component: NotFoundComponent }    /** ne rien ecrire ci bas */
 ];

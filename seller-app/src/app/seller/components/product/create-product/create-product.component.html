@@ -1,104 +1,202 @@
+<app-alert-notification
+  *ngIf="showAlert"
+  [message]="alertMsg"
+  [type]="alertType"
+  (closeAlert)="showAlert = false"
+/>
 <mat-card class="trinta-card add-product-card mb-25 bg-white border-none d-block">
     <mat-card-header>
-        <mat-card-title>
-            <h5 class="mt-0 mb-0">
-                Ajouter un produit
-            </h5>
-        </mat-card-title>
+      <mat-card-title>
+        <h5 class="mt-0 mb-0">Ajouter un produit</h5>
+      </mat-card-title>
     </mat-card-header>
     <mat-card-content>
-        <form>
-            <div class="row">
-                <div class="col-lg-12">
-                    <label class="label d-block fw-medium mb-10">
-                        Nom du produit
-                    </label>
-                    <mat-form-field>
-                        <i-feather name="edit-3"></i-feather>
-                        <mat-label>Entrer le nom du produit</mat-label>
-                        <input matInput>
-                    </mat-form-field>
-                </div>
-                <div class="col-lg-12">
-                    <label class="label d-block fw-medium mb-10">
-                        Description du produit
-                    </label>
-                    <div class="NgxEditor__Wrapper">
-                        <ng-container *ngIf="editor">
-                            <ngx-editor-menu [editor]="editor" [toolbar]="toolbar"></ngx-editor-menu>
-                            <ngx-editor [editor]="editor"></ngx-editor>
-                        </ng-container>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <label class="label d-block fw-medium mb-10">
-                        Prix du produit
-                    </label>
-                    <mat-form-field>
-                        <i-feather name="shopping-cart"></i-feather>
-                        <mat-label>Entrer le prix</mat-label>
-                        <input matInput type="number">
-                    </mat-form-field>
-                </div>
-                <div class="col-lg-4">
-                    <label class="label d-block fw-medium mb-10">
-                        Stock disponible
-                    </label>
-                    <mat-form-field>
-                        <i-feather name="database"></i-feather>
-                        <mat-label>Quantité en stock</mat-label>
-                        <input matInput type="number">
-                    </mat-form-field>
-                </div>
-                <div class="col-lg-4">
-                    <label class="label d-block fw-medium mb-10">
-                        Promotion / Remise
-                    </label>
-                    <mat-form-field>
-                        <i-feather name="percent"></i-feather>
-                        <mat-label>Prix promotionnel</mat-label>
-                        <input matInput type="number">
-                    </mat-form-field>
-                </div>
-                <div class="col-lg-6">
-                    <label class="label d-block fw-medium mb-10">
-                        Catégorie
-                    </label>
-                    <mat-form-field>
-                        <i-feather name="shopping-bag"></i-feather>
-                        <mat-label>Sélectionner une catégorie</mat-label>
-                        <mat-select [(value)]="selectedCategory" (selectionChange)="onCategoryChange($event)">
-                            <mat-option value="electronique">Electronique</mat-option>
-                            <mat-option value="chaussures">Chaussures</mat-option>
-                            <mat-option value="mode">Mode</mat-option>
-                            <mat-option value="accessoires">Accessoires</mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </div>
-                <div class="col-lg-6">
-                    <label class="label d-block fw-medium mb-10">
-                        Taille
-                    </label>
-                    <mat-form-field>
-                        <i-feather name="tag"></i-feather>
-                        <mat-label>Choisir des tailles</mat-label>
-                        <mat-select multiple [(value)]="selectedSize">
-                            <mat-option *ngFor="let size of sizes" [value]="size">{{ size }}</mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </div>
-                <div class="col-lg-12">
-                    <label class="label d-block fw-medium mb-10">
-                        Images du produit
-                    </label>
-                    <file-upload class="file-uploader"></file-upload>
-                </div>
+      <form [formGroup]="createProductForm" (ngSubmit)="onSubmit()" *ngIf="createProductForm">
+        <div class="row">
+          <!-- Nom du produit -->
+          <div class="col-lg-12">
+            <label class="label d-block fw-medium mb-10">Nom du produit</label>
+            <mat-form-field class="w-100">
+              <i-feather name="edit-3"></i-feather>
+              <mat-label>Entrer le nom du produit</mat-label>
+              <input matInput formControlName="name">
+            </mat-form-field>
+            <div class="error text-danger" *ngIf="createProductForm.get('name')?.hasError('required') && createProductForm.get('name')?.touched">
+              Le nom du produit est requis.
             </div>
-            <div class="create-product-btn">
-                <button mat-button type="button">
-                    Créer le produit
+            <div class="error text-danger" *ngIf="createProductForm.get('name')?.hasError('pattern') && createProductForm.get('name')?.touched">
+              Veuillez entrer un nom de produit valide (ex: Iphone 15).
+            </div>
+            <div class="error text-danger" *ngIf="createProductForm.get('name')?.hasError('maxlength') && createProductForm.get('name')?.touched">
+              Le nom ne doit pas dépasser 100 caractères.
+            </div>
+          </div>
+
+          <!-- Description -->
+          <div class="col-lg-12">
+            <label class="label d-block fw-medium mb-10">Description du produit</label>
+            <div class="NgxEditor__Wrapper">
+              <ng-container *ngIf="editor">
+                <ngx-editor-menu [editor]="editor" [toolbar]="toolbar"></ngx-editor-menu>
+                <ngx-editor [editor]="editor" formControlName="description"></ngx-editor>
+              </ng-container>
+            </div>
+            <div class="error text-danger" *ngIf="createProductForm.get('description')?.hasError('required') && createProductForm.get('description')?.touched">
+              La description est requise.
+            </div>
+            <div class="error text-danger" *ngIf="createProductForm.get('description')?.hasError('minlength') && createProductForm.get('description')?.touched">
+              La description doit contenir au moins 10 caractères.
+            </div>
+            <div class="error text-danger" *ngIf="createProductForm.get('description')?.hasError('maxlength') && createProductForm.get('description')?.touched">
+              La description ne doit pas dépasser 2000 caractères.
+            </div>
+          </div>
+
+          <!-- Prix -->
+          <div class="col-lg-6">
+            <label class="label d-block fw-medium mb-10">Prix du produit</label>
+            <mat-form-field class="w-100">
+              <i-feather name="shopping-cart"></i-feather>
+              <mat-label>Entrer le prix</mat-label>
+              <input matInput type="number" formControlName="price">
+            </mat-form-field>
+            <div class="error text-danger" *ngIf="createProductForm.get('price')?.hasError('required') && createProductForm.get('price')?.touched">
+              Le prix est requis.
+            </div>
+            <div class="error text-danger" *ngIf="createProductForm.get('price')?.hasError('min') && createProductForm.get('price')?.touched">
+              Le prix doit être supérieur ou égal à 500.
+            </div>
+            <div class="error text-danger" *ngIf="createProductForm.get('price')?.hasError('max') && createProductForm.get('price')?.touched">
+              Le prix ne doit pas dépasser 999 999 000.
+            </div>
+          </div>
+
+          <!-- Stock -->
+          <div class="col-lg-4">
+            <label class="label d-block fw-medium mb-10">Stock disponible</label>
+            <mat-form-field class="w-100">
+              <i-feather name="database"></i-feather>
+              <mat-label>Quantité en stock</mat-label>
+              <input matInput type="number" formControlName="stock">
+            </mat-form-field>
+            <div class="error text-danger" *ngIf="createProductForm.get('stock')?.hasError('required') && createProductForm.get('stock')?.touched">
+              Le stock est requis.
+            </div>
+            <div class="error text-danger" *ngIf="createProductForm.get('stock')?.hasError('min') && createProductForm.get('stock')?.touched">
+              Le stock doit être d'au moins 1.
+            </div>
+            <div class="error text-danger" *ngIf="createProductForm.get('stock')?.hasError('max') && createProductForm.get('stock')?.touched">
+              Le stock est trop élevé.
+            </div>
+          </div>
+
+          <!-- Catégorie -->
+          <div class="col-lg-6">
+            <label class="label d-block fw-medium mb-10">Catégorie</label>
+            <mat-form-field class="w-100">
+              <i-feather name="shopping-bag" class="me-2"></i-feather>
+              <mat-label>Sélectionner une catégorie</mat-label>
+              <mat-select [(value)]="selectedCategory"
+                          formControlName="category"
+                          (selectionChange)="onCategoryChange($event)"
+                          [compareWith]="compareCategories">
+                <mat-option *ngFor="let category of categories" [value]="category">
+                  {{category.name}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <div class="error text-danger" *ngIf="createProductForm.get('category')?.hasError('required') && createProductForm.get('category')?.touched">
+              La catégorie est requise.
+            </div>
+          </div>
+
+          <!-- Taille -->
+          <div class="col-lg-6" *ngIf="sizes.length > 0">
+            <label class="label d-block fw-medium mb-10">Taille</label>
+            <mat-form-field class="w-100">
+              <i-feather name="tag" class="me-2"></i-feather>
+              <mat-label>Choisir une taille</mat-label>
+              <mat-select multiple formControlName="sizes" (selectionChange)="onSizeSelectionChange($event.value)">
+                <mat-option *ngFor="let size of sizes" [value]="size">
+                  {{size}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <div class="error text-danger" *ngIf="createProductForm.get('sizes')?.hasError('required') && createProductForm.get('sizes')?.touched">
+              Au moins une taille doit être sélectionnée.
+            </div>
+          </div>
+
+          <!-- Couleurs -->
+          <div class="col-lg-12 mt-3">
+            <label class="label d-block fw-medium mb-10">Couleurs</label>
+            <mat-form-field class="w-100">
+              <i-feather name="droplet"></i-feather>
+              <mat-label>Sélectionnez une ou plusieurs couleurs</mat-label>
+              <mat-select multiple name="productColors" formControlName="colors" (selectionChange)="onColorSelectionChange($event.value)">
+                <mat-option *ngFor="let color of colors" [value]="color.name">
+                  <div class="d-flex align-items-center">
+                    <div class="color-preview me-2" [style.background]="color.code || '#f5f5f5'"></div>
+                    {{ color.name }}
+                  </div>
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <div class="error text-danger" *ngIf="createProductForm.get('colors')?.hasError('required') && createProductForm.get('colors')?.touched">
+              Veuillez sélectionner au moins une couleur.
+            </div>
+          </div>
+
+          <div class="upload-container">
+            <label class="upload-label">Images du produit (minimum 2)</label>
+
+            <div class="dropzone" [class.drag-over]="dragOver"
+                 (drop)="onDrop($event)"
+                 (dragover)="onDragOver($event)"
+                 (dragleave)="onDragLeave($event)">
+              <div class="dropzone-content">
+                <i class="upload-icon bi bi-cloud-arrow-up-fill"></i>
+                <p class="upload-text">Glissez-déposez les images ici ou</p>
+                <button type="button" class="upload-button" (click)="fileInput.click()">Choisir des images</button>
+                <input #fileInput type="file" multiple accept="image/*" class="file-input" (change)="onFileSelected($event)">
+              </div>
+            </div>
+
+            <div class="preview-grid" *ngIf="selectedFiles.length > 0">
+              <div *ngFor="let file of selectedFiles; let i = index" class="preview-item">
+                <img [src]="file.preview" alt="Image preview" class="preview-image">
+                <button type="button" class="delete-button" (click)="removeImage(i)" title="Supprimer">
+                  <i class="bi ri-delete-bin-line"></i>
                 </button>
+                <div class="file-name">{{ file.name }}</div>
+              </div>
             </div>
-        </form>
+
+            <div class="error-message"
+                *ngIf="createProductForm.get('images')?.hasError('minImages') ||
+                        ((createProductForm.get('images')?.hasError('required')) &&
+                        createProductForm.get('images')?.touched)">
+                Vous devez ajouter au moins 2 images.
+            </div>
+            <div class="error-message">
+                @if (errorMessage) {
+                    {{ errorMessage }}
+                }
+            </div>
+          </div>
+        </div>
+
+        <!-- Bouton -->
+        <div class="create-product-btn mt-4">
+            <button mat-raised-button color="primary" type="submit"
+                    [disabled]="createProductForm.invalid || isSubmitting || selectedFiles.length < 2">
+                <span *ngIf="!isSubmitting">Créer le produit</span>
+                <span *ngIf="isSubmitting" class="d-flex align-items-center">
+                    <mat-spinner diameter="20" strokeWidth="3" class="me-2"></mat-spinner>
+                    Création en cours...
+                </span>
+            </button>
+        </div>
+      </form>
     </mat-card-content>
 </mat-card>

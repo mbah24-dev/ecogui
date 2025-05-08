@@ -14,7 +14,7 @@ export class TodaysOrderComponent {
     ) {}
 
     ngOnInit(): void {
-        this.todaysOrderService.loadChart();
+        
     }
 
 }

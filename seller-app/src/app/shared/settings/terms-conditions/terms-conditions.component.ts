@@ -9,5 +9,5 @@ import { MatCardModule } from '@angular/material/card';
   styleUrl: './terms-conditions.component.scss'
 })
 export class TermsConditionsComponent {
-    ecogui_email = 'support@ecogui.com';
+    ecogui_seller_email = 'support@ecogui.com';
 }

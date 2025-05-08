@@ -1,17 +1,41 @@
-<mat-card
-    class="trinta-card error-card mb-25 bg-white border-none d-block text-center"
->
-    <mat-card-content>
-        <img src="images/error.png" alt="error-image">
-        <h3>
-            <span class="text-primary">OOPS!</span> Page Not Found
-        </h3>
-        <p class="text-black fs-15">
-            Mais pas d'inquiétude ! Notre équipe est à vos côtés pendant que vous patientez en toute sécurité.
+<div class="error-page-container bg-white">
+    <mat-card class="error-card bg-white">
+      <mat-card-content>
+        <div class="error-illustration">
+          <img src="images/error.png" alt="Page non trouvée" loading="lazy">
+        </div>
+
+        <h1 class="error-title">
+          <span class="highlight">Oups !</span> Page introuvable
+        </h1>
+
+        <p class="error-message">
+          La page que vous cherchez semble avoir été déplacée ou n'existe pas.
+          Notre équipe a été notifiée et travaille à résoudre le problème.
         </p>
-        <a routerLink="/" mat-button>
-            Back To Home
-            <i class="ri-send-plane-fill"></i>
-        </a>
-    </mat-card-content>
-</mat-card>
+
+        <div class="action-buttons">
+          <button mat-raised-button color="primary" routerLink="/" class="home-button">
+            <mat-icon>home</mat-icon>
+            Retour à l'accueil
+          </button>
+
+          <button mat-stroked-button color="primary" (click)="goBack()" class="back-button">
+            <mat-icon>arrow_back</mat-icon>
+            Retour en arrière
+          </button>
+        </div>
+
+        <div class="support-contact">
+          <p>Besoin d'aide ? Contactez notre support :</p>
+          <a href="mailto:support@ecogui.com" class="contact-link">
+            <mat-icon>email</mat-icon> {{ ecogui_support_email}}
+          </a>
+          <a href="tel:+224123456789" class="contact-link">
+            <mat-icon>phone</mat-icon> +224 123 456 789
+          </a>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+

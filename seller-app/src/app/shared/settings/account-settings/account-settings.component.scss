@@ -46,6 +46,22 @@
 
 }
 
+.spinner-wrapper {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.warning-border {
+    border: 1px solid red !important;
+}
+
+textarea {
+    resize: none;
+}
+
+
+
 /* Min width 576px to Max width 767px */
 @media only screen and (min-width : 576px) and (max-width : 767px) {}
 

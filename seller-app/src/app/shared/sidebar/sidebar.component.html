@@ -1,138 +1,133 @@
-<div
-  class="sidebar-area bg-white transition"
-  [ngClass]="{'active': isToggled}"
->
-  <div class="logo bg-white">
-    <a routerLink="/" class="d-flex align-items-center">
-      <img src="images/logo-icon.svg" alt="logo-icon">
-      <span class="fw-extrabold">
-        Ecogui
-      </span>
-    </a>
-  </div>
-
-  <div
-    class="burger-menu transition cursor-pointer"
-    [ngClass]="{'active': isToggled}"
-    (click)="toggle()"
-  >
-    <span class="top-bar transition bg-dark d-block"></span>
-    <span class="middle-bar transition bg-dark d-block"></span>
-    <span class="bottom-bar transition bg-dark d-block"></span>
-  </div>
-
-  <ng-scrollbar visibility="hover">
-    <div class="sidebar-inner">
-      <div class="sidebar-menu">
-        <mat-accordion>
-          <!-- Section : Tableau de bord -->
-          <span class="sub-title text-body title">
-            Tableau de bord
-          </span>
-
-          <mat-expansion-panel disabled>
-            <mat-expansion-panel-header>
-              <mat-panel-title class="d-flex align-items-center">
-                <i-feather name="home" class="me-2"></i-feather>
-                <a routerLink="/" class="text-decoration-none text-dark w-100 title" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link" >Accueil</a>
-              </mat-panel-title>
-            </mat-expansion-panel-header>
-          </mat-expansion-panel>
-
-          <!-- Section : Gestion Produits -->
-          <span class="sub-title text-body title mt-4">
-            Mes produits
-          </span>
-
-          <mat-expansion-panel disabled>
-            <mat-expansion-panel-header>
-              <mat-panel-title class="d-flex align-items-center">
-                <i-feather name="grid" class="me-2"></i-feather>
-                <a routerLink="/seller/products" class="text-decoration-none text-dark w-100 title" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link" >Tous les produits</a>
-              </mat-panel-title>
-            </mat-expansion-panel-header>
-          </mat-expansion-panel>
-
-          <mat-expansion-panel disabled>
-            <mat-expansion-panel-header>
-              <mat-panel-title class="d-flex align-items-center">
-                <i-feather name="plus-circle" class="me-2"></i-feather>
-                <a routerLink="/seller/add-product" class="text-decoration-none text-dark w-100 title" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link" >Ajouter un produit</a>
-              </mat-panel-title>
-            </mat-expansion-panel-header>
-          </mat-expansion-panel>
-
-          <!-- Section : Commandes -->
-          <span class="sub-title text-body title mt-4">
-            Commandes
-          </span>
-
-          <mat-expansion-panel disabled>
-            <mat-expansion-panel-header>
-              <mat-panel-title class="d-flex align-items-center">
-                <i-feather name="shopping-cart" class="me-2"></i-feather>
-                <a routerLink="/seller/new-orders" class="text-decoration-none text-dark w-100 title" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link">Commandes reçues</a>
-              </mat-panel-title>
-            </mat-expansion-panel-header>
-          </mat-expansion-panel>
-
-          <mat-expansion-panel disabled>
-            <mat-expansion-panel-header>
-              <mat-panel-title class="d-flex align-items-center">
-                <i-feather name="check-circle" class="me-2"></i-feather>
-                <a routerLink="/seller/orders/delivered" class="text-decoration-none text-dark w-100 title" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link" >Commandes livrées</a>
-              </mat-panel-title>
-            </mat-expansion-panel-header>
-          </mat-expansion-panel>
-
-          <mat-expansion-panel disabled>
-            <mat-expansion-panel-header>
-              <mat-panel-title class="d-flex align-items-center">
-                <i-feather name="check-circle" class="me-2"></i-feather>
-                <a routerLink="/seller/orders/tasks" class="text-decoration-none text-dark w-100 title" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link" >tâches à faire</a>
-              </mat-panel-title>
-            </mat-expansion-panel-header>
-          </mat-expansion-panel>
-
-          <!-- Section : Finances -->
-          <span class="sub-title text-body title mt-4">
-            Finances
-          </span>
-
-          <mat-expansion-panel disabled>
-            <mat-expansion-panel-header>
-              <mat-panel-title class="d-flex align-items-center">
-                <i-feather name="file-text" class="me-2"></i-feather>
-                <a routerLink="/seller/invoices" class="text-decoration-none text-dark w-100 title" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link" >Mes factures</a>
-              </mat-panel-title>
-            </mat-expansion-panel-header>
-          </mat-expansion-panel>
-
-          <mat-expansion-panel disabled>
-            <mat-expansion-panel-header>
-              <mat-panel-title class="d-flex align-items-center">
-                <i-feather name="credit-card" class="me-2"></i-feather>
-                <a routerLink="/seller/paiements" class="text-decoration-none text-dark w-100 title" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link" >Paiements</a>
-              </mat-panel-title>
-            </mat-expansion-panel-header>
-          </mat-expansion-panel>
-
-          <!-- Section : Profil & Support -->
-          <span class="sub-title text-body title mt-4">
-            Comment vendre bien
-          </span>
-
-          <mat-expansion-panel disabled>
-            <mat-expansion-panel-header>
-              <mat-panel-title class="d-flex align-items-center">
-                <i-feather name="user" class="me-2"></i-feather>
-                <a routerLink="/seller/howtosell" class="text-decoration-none text-dark w-100 title" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link" >Centre d’aide</a>
-              </mat-panel-title>
-            </mat-expansion-panel-header>
-          </mat-expansion-panel>
-
-        </mat-accordion>
-      </div>
+<!-- sidebar.component.html -->
+<div class="sidebar-area bg-white transition" [class.active]="isToggled" (mouseenter)="hovered=true" (mouseleave)="hovered=false">
+    <div class="logo bg-white">
+      <a routerLink="/" class="d-flex align-items-center">
+        <img src="images/logo-icon.svg" alt="logo-icon">
+        <span class="fw-extrabold" [class.hidden-text]="isToggled && !hovered">
+          Ecogui
+        </span>
+      </a>
     </div>
-  </ng-scrollbar>
-</div>
+
+    <div class="burger-menu transition cursor-pointer" [class.active]="isToggled" (click)="toggle()">
+      <span class="top-bar transition bg-dark d-block"></span>
+      <span class="middle-bar transition bg-dark d-block"></span>
+      <span class="bottom-bar transition bg-dark d-block"></span>
+    </div>
+
+    <ng-scrollbar visibility="hover">
+      <div class="sidebar-inner">
+        <div class="sidebar-menu">
+          <mat-accordion>
+            <!-- Section : Tableau de bord -->
+            <span class="sub-title text-body title" [class.hidden-text]="isToggled && !hovered">
+              Tableau de bord
+            </span>
+
+            <mat-expansion-panel disabled>
+              <mat-expansion-panel-header>
+                <mat-panel-title class="d-flex align-items-center">
+                  <i-feather name="home" class="menu-icon"></i-feather>
+                  <a routerLink="/" class="text-decoration-none text-dark w-100 title"
+                     routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
+                     class="sidemenu-link" [class.hidden-text]="isToggled && !hovered">Accueil</a>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+            </mat-expansion-panel>
+
+            <!-- Section : Gestion Produits -->
+            <span class="sub-title text-body title mt-4" [class.hidden-text]="isToggled && !hovered">
+              Mes produits
+            </span>
+
+            <mat-expansion-panel disabled>
+              <mat-expansion-panel-header>
+                <mat-panel-title class="d-flex align-items-center">
+                  <i-feather name="grid" class="menu-icon"></i-feather>
+                  <a routerLink="/seller/products" class="text-decoration-none text-dark w-100 title"
+                     routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
+                     class="sidemenu-link" [class.hidden-text]="isToggled && !hovered">Tous les produits</a>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+            </mat-expansion-panel>
+
+            <mat-expansion-panel disabled>
+              <mat-expansion-panel-header>
+                <mat-panel-title class="d-flex align-items-center">
+                  <i-feather name="plus-circle" class="menu-icon"></i-feather>
+                  <a routerLink="/seller/add-product" class="text-decoration-none text-dark w-100 title"
+                     routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
+                     class="sidemenu-link" [class.hidden-text]="isToggled && !hovered">Ajouter un produit</a>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+            </mat-expansion-panel>
+
+            <!-- Section : Commandes -->
+            <span class="sub-title text-body title mt-4" [class.hidden-text]="isToggled && !hovered">
+              Commandes
+            </span>
+
+            <mat-expansion-panel disabled>
+              <mat-expansion-panel-header>
+                <mat-panel-title class="d-flex align-items-center">
+                  <i-feather name="shopping-cart" class="menu-icon"></i-feather>
+                  <a routerLink="/seller/new-orders" class="text-decoration-none text-dark w-100 title"
+                     routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
+                     class="sidemenu-link" [class.hidden-text]="isToggled && !hovered">Commandes reçues</a>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+            </mat-expansion-panel>
+
+            <mat-expansion-panel disabled>
+              <mat-expansion-panel-header>
+                <mat-panel-title class="d-flex align-items-center">
+                  <i-feather name="check-circle" class="menu-icon"></i-feather>
+                  <a routerLink="/seller/orders/delivered" class="text-decoration-none text-dark w-100 title"
+                     routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
+                     class="sidemenu-link" [class.hidden-text]="isToggled && !hovered">Commandes livrées</a>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+            </mat-expansion-panel>
+
+            <mat-expansion-panel disabled>
+              <mat-expansion-panel-header>
+                <mat-panel-title class="d-flex align-items-center">
+                  <i-feather name="check-circle" class="menu-icon"></i-feather>
+                  <a routerLink="/seller/orders/tasks" class="text-decoration-none text-dark w-100 title"
+                     routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
+                     class="sidemenu-link" [class.hidden-text]="isToggled && !hovered">Tâches à faire</a>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+            </mat-expansion-panel>
+
+            <!-- Section : Finances -->
+            <span class="sub-title text-body title mt-4" [class.hidden-text]="isToggled && !hovered">
+              Finances
+            </span>
+
+            <mat-expansion-panel disabled>
+              <mat-expansion-panel-header>
+                <mat-panel-title class="d-flex align-items-center">
+                  <i-feather name="file-text" class="menu-icon"></i-feather>
+                  <a routerLink="/seller/invoices" class="text-decoration-none text-dark w-100 title"
+                     routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
+                     class="sidemenu-link" [class.hidden-text]="isToggled && !hovered">Mes factures</a>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+            </mat-expansion-panel>
+
+            <mat-expansion-panel disabled>
+              <mat-expansion-panel-header>
+                <mat-panel-title class="d-flex align-items-center">
+                  <i-feather name="credit-card" class="menu-icon"></i-feather>
+                  <a routerLink="/seller/payments" class="text-decoration-none text-dark w-100 title"
+                     routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
+                     class="sidemenu-link" [class.hidden-text]="isToggled && !hovered">Paiements</a>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </div>
+      </div>
+    </ng-scrollbar>
+  </div>

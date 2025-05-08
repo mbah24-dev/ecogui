@@ -8,10 +8,10 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatMenuModule } from '@angular/material/menu';
 import { FeathericonsModule } from '../../../../shared/icons/feathericons/feathericons.module';
 import { ReviewsComponent } from './reviews/reviews.component';
-import { Product, ProductService } from '../../../services/product.service';
 import localeFr from '@angular/common/locales/fr';
-import { ColorService } from '../../../services/color.service';
 import { AlertNotificationComponent } from "../../../../shared/alert-notification/alert-notification.component";
+import { ColorService } from '../../../services/color.service';
+import { Product, ProductService } from '../../../services/product.service';
 
 @Component({
     selector: 'app-e-product-details',

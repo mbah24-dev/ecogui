@@ -8,7 +8,7 @@ import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { NgIf } from '@angular/common';
 import { FeathericonsModule } from '../../../../../shared/icons/feathericons/feathericons.module';
 import { Product } from '../../../../services/product.service';
-import { PeriodicElement, ELEMENT_DATA } from '../../../../services/reviews.service';
+import { ELEMENT_DATA, PeriodicElement } from '../../../../services/reviews.service';
 
 @Component({
     selector: 'app-reviews',

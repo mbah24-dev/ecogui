@@ -493,6 +493,44 @@
     }
 }
 
+.language-menu-btn {
+    padding: 0 !important;
+    min-width: auto;
+    margin: 0;
+    line-height: 1;
+  }
+
+  .language-menu-btn img {
+    width: 30px;
+    height: 21px;
+    object-fit: cover;
+    border-radius: 2px;
+    display: block;
+  }
+
+  .logo {
+    background-color: #ffffff;
+    padding: 0.5rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    img {
+      max-height: 40px;
+      width: auto;
+      object-fit: contain;
+      transition: all 0.3s ease-in-out;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+    }
+
+    @media (max-width: 768px) {
+      img {
+        max-height: 32px;
+      }
+    }
+  }
+
+
 /* Max width 767px */
 @media only screen and (max-width : 767px) {
 
@@ -790,9 +828,68 @@
   }
 
 
+
 .whishlist-tag{
     margin-right: 10px;
 }
+
+::ng-deep {
+    .header-area {
+        padding: 17px 20px;
+        position: fixed;
+        left: 282px;
+        z-index: 5;
+        right: 0;
+        top: 0;
+
+        // Si la sidebar est cachée
+        &.hide-sidebar {
+            left: 0 !important;
+            width: 100%;
+        }
+
+        .header-left-side {
+            .burger-menu {
+                top: 1px;
+                cursor: pointer;
+
+                &:hover {
+                    color: var(--primaryColor);
+                }
+            }
+            .search-box {
+                width: 320px;
+                margin-left: 20px;
+
+                .input-search {
+                    height: 46px;
+                    padding: 0 20px;
+                    border-radius: 6px;
+                    background: #f5f7fa;
+                    color: var(--darkColor);
+                    font: {
+                        weight: normal;
+                        size: var(--fontSize);
+                        family: var(--fontFamily);
+                    };
+                    &::placeholder {
+                        color: var(--bodyColor);
+                        transition: var(--transition);
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .header-area {
+      left: 0 !important;
+      width: 100% !important;
+    }
+}
+
+
 /* Min width 576px to Max width 767px */
 @media only screen and (min-width : 576px) and (max-width : 767px) {}
 

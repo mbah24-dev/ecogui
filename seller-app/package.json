@@ -33,6 +33,7 @@
     "express": "^4.21.0",
     "moment": "^2.30.1",
     "ng-apexcharts": "^1.15.0",
+    "ng2-file-upload": "^8.0.0",
     "ngx-color-picker": "^17.0.0",
     "ngx-editor": "^18.0.0",
     "ngx-mat-timepicker": "^19.0.0",

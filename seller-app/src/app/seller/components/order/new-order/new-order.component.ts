@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Product, ProductService } from '../../../services/product.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -19,5 +18,5 @@ import { OrderItemsComponent } from "../order-items/order-items.component";
   imports: [MatCardModule, MatMenuModule, MatButtonModule, MatSelectModule, FormsModule, ReactiveFormsModule, CommonModule, OrderItemsComponent]
 })
 export class NewOrderComponent {
-   
+
 }

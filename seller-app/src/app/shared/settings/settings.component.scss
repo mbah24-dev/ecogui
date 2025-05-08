@@ -67,6 +67,11 @@
     }
 }
 
+.hide-profile-left-sidebar {
+    padding: 0 !important;
+    display: none !important;
+}
+
 /* Max width 767px */
 @media only screen and (max-width : 767px) {
 

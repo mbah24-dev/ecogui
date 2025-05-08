@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Product, ProductService } from '../../../services/product.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -9,6 +8,7 @@ import { RouterLink } from '@angular/router';
 import { CommonModule, registerLocaleData } from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
 import { AlertNotificationComponent } from "../../../../shared/alert-notification/alert-notification.component";
+import { Product, ProductService } from '../../../services/product.service';
 
 
 @Component({

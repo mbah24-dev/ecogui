@@ -6,10 +6,9 @@
 /*   By: mbah <mbah@student.42lyon.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 12:37:57 by mbah              #+#    #+#             */
-/*   Updated: 2025/04/16 12:38:33 by mbah             ###   ########.fr       */
+/*   Updated: 2025/05/05 15:42:52 by mbah             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 export interface PeriodicElement {
     reviewer: any;

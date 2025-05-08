@@ -1,61 +1,111 @@
-<footer class="footer-area text-center bg-white ecogui-footer">
-    <div class="footer-container">
-      <!-- Branding / Présentation -->
-      <div class="footer-branding">
-        <img src="images/ecogui-logo.png" alt="Ecogui Logo" class="footer-logo" />
-        <p class="footer-desc">
-          Ecogui est une marketplace éthique qui promeut les produits locaux, durables et responsables. Nous croyons en une économie guinéenne forte, connectée et équitable.
+<footer class="ecogui-footer bg-white">
+    <div class="footer-main">
+      <!-- Colonne Logo et Description -->
+      <div class="footer-column logo-column">
+        <img src="images/ecogui-sm-logo.png" alt="Ecogui" class="footer-logo">
+        <p class="footer-description">
+          La première marketplace 100% guinéenne, connectant les vendeurs locaux à des milliers de clients à travers le pays.
         </p>
+
+        <div class="social-links">
+          <a href="#" aria-label="Facebook">
+            <i-feather name="Facebook" class="facebook"></i-feather>
+          </a>
+          <a href="#" aria-label="Instagram">
+            <i-feather name="Instagram" class="instagram"></i-feather>
+          </a>
+          <a href="#" aria-label="Twitter">
+            <i-feather name="Twitter" class="twitter"></i-feather>
+          </a>
+          <a href="#" aria-label="LinkedIn">
+            <i-feather name="Youtube" class="youtube"></i-feather>
+          </a>
+        </div>
       </div>
 
-      <!-- Contact -->
-      <div class="footer-links">
-        <h4>📞 Contact & Support</h4>
-        <ul>
-          <li>Tél : +224 622 00 00 00</li>
-          <li>Email : {{ email}}  </li>
-          <li>WhatsApp : +224 657 00 00 00</li>
-          <li>FAQ & assistance 24h/24</li>
+      <!-- Colonne Liens rapides -->
+      <div class="footer-column">
+        <h3 class="footer-title">Pour les acheteurs</h3>
+        <ul class="footer-links">
+          <li><a href="#">Comment acheter</a></li>
+          <li><a href="#">Modes de paiement</a></li>
+          <li><a href="#">Suivi de commande</a></li>
+          <li><a href="#">Guide d'achat</a></li>
+          <li><a href="#">Questions fréquentes</a></li>
+          <li><a href="#">Retours et remboursements</a></li>
         </ul>
       </div>
 
-      <!-- Livraison -->
-      <div class="footer-links">
-        <h4>🚚 Livraison & Couverture</h4>
-        <ul>
-          <li>Partout en Guinée 🇬🇳</li>
-          <li>Délai : 24h à 72h</li>
-          <li>Suivi de commande en temps réel</li>
-          <li>Retrait en point relais</li>
+      <!-- Colonne Pour les vendeurs -->
+      <div class="footer-column">
+        <h3 class="footer-title">Pour les vendeurs</h3>
+        <ul class="footer-links">
+          <li><a href="#">Devenir vendeur</a></li>
+          <li><a href="#">Conditions pour vendre</a></li>
+          <li><a href="#">Centre de vendeurs</a></li>
+          <li><a href="#">Frais et commissions</a></li>
+          <li><a href="#">Formations</a></li>
+          <li><a href="#">Ressources marketing</a></li>
         </ul>
       </div>
 
-      <!-- Paiement & Fiabilité -->
-      <div class="footer-links">
-        <h4>💳 Paiement sécurisé</h4>
-        <ul>
-          <li>Carte bancaire / Mobile Money</li>
-          <li>Paiement à la livraison (certaines zones)</li>
-          <li>100% Sécurisé & crypté</li>
-          <li>Satisfait ou remboursé sous 7 jours</li>
+      <!-- Colonne A propos -->
+      <div class="footer-column">
+        <h3 class="footer-title">À propos</h3>
+        <ul class="footer-links">
+          <li><a href="#">Notre histoire</a></li>
+          <li><a href="#">Carrières</a></li>
+          <li><a href="#">Impact local</a></li>
+          <li><a href="#">Presse</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Événements</a></li>
         </ul>
       </div>
 
-      <!-- Infos entreprise -->
-      <div class="footer-links">
-        <h4>🏢 Informations légales</h4>
-        <ul>
-          <li>Ecogui SARL</li>
-          <li>RCI : GN-123456789</li>
-          <li>Siège : Kipé, Conakry</li>
-          <li>NIF : 000000000</li>
-        </ul>
+      <!-- Colonne Contact -->
+      <div class="footer-column contact-column">
+        <h3 class="footer-title">Contactez-nous</h3>
+        <div class="contact-info">
+          <div class="contact-item">
+            <mat-icon>location_on</mat-icon>
+            <span>Kipé, Conakry, Guinée</span>
+          </div>
+          <div class="contact-item">
+            <mat-icon>phone</mat-icon>
+            <span>+224 623 45 67 89</span>
+          </div>
+          <div class="contact-item">
+            <mat-icon>email</mat-icon>
+            <span>{{ email }}</span>
+          </div>
+          <div class="contact-item">
+            <mat-icon>schedule</mat-icon>
+            <span>Lun-Ven: 8h-18h | Sam: 9h-13h</span>
+          </div>
+        </div>
       </div>
     </div>
 
     <div class="footer-bottom">
-      <p>
-        © {{ currentYear }} <strong>Ecogui</strong>. Créé avec passion en Guinée 🌍 — pour une consommation plus durable et plus locale.
-      </p>
+      <div class="footer-bottom-content">
+        <div class="copyright">
+          &copy; {{ currentYear }} Ecogui SARL. Tous droits réservés.
+        </div>
+
+        <div class="legal-links">
+          <a routerLink="/terms-conditions">Conditions générales</a>
+          <a routerLink="/privacy-policy">Politique de confidentialité</a>
+          <a routerLink="/cookies">Cookies</a>
+          <a routerLink="/faq">FAQ</a>
+        </div>
+
+        <div class="language-selector">
+          <mat-form-field appearance="outline">
+            <mat-select [(value)]="selectedLanguage">
+              <mat-option value="fr">Français</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
     </div>
   </footer>

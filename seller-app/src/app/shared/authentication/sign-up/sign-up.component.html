@@ -13,7 +13,7 @@
                 <div class="signup-with-socials">
                     <button type="button" mat-button>
                         <img src="images/icons/google2.svg" alt="google">
-                        S'inscrire avec Google
+                        S'inscrire avec Googleoo
                     </button>
                     <div class="or text-center position-relative z-1 text-body">
                         <span class="d-inline-block bg-white">
@@ -37,6 +37,9 @@
                         <div class="error text-danger" *ngIf="authForm.get('name')!.hasError('name') && authForm.get('name')!.touched">
                             Veuillez entrer un nom valide.
                         </div>
+                        <div class="error text-danger" *ngIf="authForm.get('name')!.hasError('pattern') && authForm.get('name')!.touched">
+                            Veuillez entrer un nom complet valide (prénom et nom).
+                        </div>
                     </div>
                     <div class="form-group">
                         <label class="label d-block fw-medium">
@@ -50,8 +53,8 @@
                         <div class="error text-danger" *ngIf="authForm.get('email')!.hasError('required') && authForm.get('email')!.touched">
                             L'adresse email est requise.
                         </div>
-                        <div class="error text-danger" *ngIf="authForm.get('email')!.hasError('email') && authForm.get('email')!.touched">
-                            Veuillez entrer une adresse email valide.
+                        <div class="error text-danger" *ngIf="authForm.get('email')!.hasError('pattern') && authForm.get('email')!.touched">
+                            Veuillez entrer une adresse email valide (ex: {{ exempleEmail }}) .
                         </div>
                     </div>
                     <div class="form-group">
@@ -74,13 +77,22 @@
                         <div class="error text-danger" *ngIf="authForm.get('password')!.hasError('minlength') && authForm.get('password')!.touched">
                             Le mot de passe doit contenir au moins 8 caractères.
                         </div>
+                        <div class="error text-danger" *ngIf="errorMessage">
+                            {{ errorMessage }}
+                        </div>
                     </div>
                     <div class="info">
-                        <mat-checkbox color="primary">
-                            J'accepte les <a href="javascript:void(0);" class="text-primary">Conditions générales</a>
+                        <mat-checkbox formControlName="termsAccepted" color="primary">
+                            J'accepte les <a href="#" class="text-primary">Conditions générales</a>
                         </mat-checkbox>
+                        <div class="error text-danger" *ngIf="authForm.get('termsAccepted')!.hasError('required') && authForm.get('termsAccepted')!.touched">
+                            Vous devez accepter les conditions générales pour continuer.
+                        </div>
                     </div>
-                    <button mat-button type="submit" [disabled]="authForm.invalid">
+                    <div class="spinner-wrapper" *ngIf="isLoading">
+                        <mat-spinner diameter="30" strokeWidth="4"></mat-spinner>
+                    </div>
+                    <button mat-button type="submit" [disabled]="authForm.invalid || isLoading">
                         S'inscrire
                     </button>
                 </form>
