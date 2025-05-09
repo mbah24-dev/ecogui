@@ -6,7 +6,8 @@ import { FeathericonsModule } from '../../../shared/icons/feathericons/featheric
 import { CommonModule } from '@angular/common';
 import { User } from '../../models/user/user.model';
 import { UserService } from '../../services/user/user.service';
-import { Enviroment } from '../../utils/eviroment';
+import { Environment } from '../../utils/environment';
+import { ImageService } from '../../services/image/image.service';
 
 
 @Component({
@@ -15,6 +16,11 @@ import { Enviroment } from '../../utils/eviroment';
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss'
 })
+/**
+ * Composant Angular affichant et gérant le profil utilisateur.
+ * Permet le chargement des informations de l'utilisateur, l'affichage de sa photo de profil
+ * et la mise à jour de celle-ci via un input fichier.
+ */
 export class ProfileComponent implements OnInit {
     @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
 
@@ -24,13 +30,18 @@ export class ProfileComponent implements OnInit {
     constructor(
         public router: Router,
         private userService: UserService,
-        private enviroment: Enviroment) {}
+        private environment: Environment,
+        private imageService: ImageService
+    ) {}
 
+    /**
+   * Initialise le composant, charge les données utilisateur, et définit l'image de profil.
+   */
     ngOnInit(): void {
         this.userService.user$.subscribe((user) => {
             this.userData = user;
             if (user?.profilePic) {
-                const imageUrl = `${this.enviroment.apiUrl}/static/upload/images/user_profiles/${user.profilePic}`;
+                const imageUrl = this.imageService.getUserProfileImageUrl(user.profilePic);
 
                 this.userService.checkImageExists(imageUrl, (exists) => {
                     this.profileImage = exists ? imageUrl : 'images/user_avatar.png';
@@ -45,6 +56,10 @@ export class ProfileComponent implements OnInit {
         this.userService.loadUser();
     }
 
+    /**
+   * Détermine si la sidebar doit être masquée en fonction de la route actuelle.
+   * @returns `true` si la sidebar doit être masquée, sinon `false`.
+   */
     isSidebarHidden(): boolean {
       return this.router.url === '/profile/orders/details'
           || this.router.url === '/profile/invoices/details'
@@ -52,10 +67,18 @@ export class ProfileComponent implements OnInit {
           || this.router.url === '/contact';
     }
 
+    /**
+   * Déclenche manuellement l'ouverture de l'input de sélection de fichier.
+   */
     triggerFileInput(): void {
       this.fileInput.nativeElement.click();
     }
 
+    /**
+   * Gère la sélection d'une nouvelle image de profil,
+   * envoie le fichier au backend et met à jour l'image affichée.
+   * @param event L'événement de changement de fichier (input file).
+   */
     onImageSelected(event: Event): void {
         const input = event.target as HTMLInputElement;
         const file = input.files?.[0];
@@ -65,7 +88,7 @@ export class ProfileComponent implements OnInit {
           formData.append('image', file);
           this.userService.updateProfilePic(formData).subscribe({
                 next: (res: any) => {
-                    this.profileImage = `${this.enviroment.apiUrl}/static/upload/images/user_profiles/${res.user.profilePic}`;
+                    this.profileImage = this.imageService.getUserProfileImageUrl(res.user.profilePic);
                     this.userService.loadUser();
                 },
                 error: (err) => console.error(err.error.message)

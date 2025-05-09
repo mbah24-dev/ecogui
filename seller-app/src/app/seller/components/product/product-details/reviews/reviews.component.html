@@ -4,7 +4,7 @@
         <div class="row align-items-center">
             <div class="col-lg-2">
                 <div class="product">
-                    <img [src]="product.image[0]" alt="product-image">
+                    <img [src]="productImage" alt="product-image">
                     <h5 class="mb-0">
                         {{ product.name}}
                     </h5>
@@ -92,7 +92,7 @@
                         <i class="ri-star-line"></i>
                     </div>
                     <span class="d-block text-black fw-medium fs-15">
-                       sur {{ product.totalReview }} avis
+                       sur {{ product.reviews }} avis
                     </span>
                 </div>
             </div>

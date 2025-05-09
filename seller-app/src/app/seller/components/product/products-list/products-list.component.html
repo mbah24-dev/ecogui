@@ -15,7 +15,7 @@
     <mat-card-content>
       <div class="products-list-table">
         <div class="table-responsive">
-          <table mat-table [dataSource]="dataSource">
+          <table mat-table [dataSource]="dataSource.data">
 
             <!-- Produit -->
             <ng-container matColumnDef="product">
@@ -24,11 +24,11 @@
               </th>
               <td mat-cell *matCellDef="let element" class="pl-0">
                 <div class="product-info d-flex align-items-center">
-                  <a [routerLink]="['/ecogui/client/product-details', 2]" class="image d-block">
+                  <a [routerLink]="['/product-details', element.product.id]" class="image d-block">
                     <img [src]="element.product.img" alt="Image du produit">
                   </a>
                   <div class="info">
-                    <a [routerLink]="['/ecogui/client/product-details', 2]" class="d-block fw-semibold">
+                    <a [routerLink]="['/product-details', element.product.id]" class="d-block fw-semibold">
                       {{element.product.title}}
                     </a>
                   </div>
@@ -37,12 +37,12 @@
             </ng-container>
 
             <!-- Catégorie -->
-            <ng-container matColumnDef="category">
+            <ng-container matColumnDef="categoryName">
               <th mat-header-cell *matHeaderCellDef>
                 Catégorie
               </th>
               <td mat-cell *matCellDef="let element" class="text-primary">
-                {{element.category}}
+                {{element.product.categoryName}}
               </td>
             </ng-container>
 
@@ -63,13 +63,14 @@
               </th>
               <td mat-cell *matCellDef="let element">
                 <div class="ratings lh-1">
-                  @for (content of element.ratings.star; track content) {
-                    <i class="{{content.star}}"></i>
-                  }
-                  <span class="lh-1 text-body">
-                    ({{element.ratings.totalRatings}})
-                  </span>
+                    <ng-container *ngFor="let content of element.ratings.star; trackBy: trackByStarIconWithProductId(element.product.id)">
+                      <i class="{{ content.star }}"></i>
+                    </ng-container>
+                    <span class="lh-1 text-body">
+                      ({{element.ratings.totalRatings}})
+                    </span>
                 </div>
+
               </td>
             </ng-container>
 

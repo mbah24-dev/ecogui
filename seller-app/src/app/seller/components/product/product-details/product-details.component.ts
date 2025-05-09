@@ -11,7 +11,12 @@ import { ReviewsComponent } from './reviews/reviews.component';
 import localeFr from '@angular/common/locales/fr';
 import { AlertNotificationComponent } from "../../../../shared/alert-notification/alert-notification.component";
 import { ColorService } from '../../../services/color.service';
-import { Product, ProductService } from '../../../services/product.service';
+import { ProductService } from '../../../services/product/product.service';
+import { Product } from '../../../models/product/product.model';
+import { CategoryService } from '../../../services/product/category.service';
+import { ImageService } from '../../../services/image/image.service';
+import { map, Observable } from 'rxjs';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Component({
     selector: 'app-e-product-details',
@@ -20,68 +25,84 @@ import { Product, ProductService } from '../../../services/product.service';
     styleUrl: './product-details.component.scss'
 })
 export class ProductDetailsComponent implements OnInit {
-    product!: Product;
-    productImages: { url: string }[] = [];
+    product?: Product;
     selectedImage!: string;
     selectedColor: string | null = null;
-    sizeSelected: string | null = null;
-    showAlert!: boolean;
-    alertMsg!: string;
-    alertType!: 'success' | 'error' | 'info';
+    selectedSize: string | null = null;
+    showAlert = false;
+    alertMsg = '';
+    alertType: 'success' | 'error' | 'info' = 'info';
+    sanitizedDescription!: SafeHtml;
+    productImages: { url: string }[] = [];
 
     constructor(
       private route: ActivatedRoute,
       private productService: ProductService,
-      private colorService: ColorService
-    ) {
-
-    }
+      private colorService: ColorService,
+      private categoryService: CategoryService,
+      private imageService: ImageService,
+      private sanitizer: DomSanitizer
+    ) {}
 
     ngOnInit(): void {
-        registerLocaleData(localeFr);
-        this.route.paramMap.subscribe(params => {
-          const id = Number(params.get('id'));
+      registerLocaleData(localeFr);
 
-          this.productService.getLiveProducts().subscribe(products => {
-            const found = products.find(p => p.id === id);
-            if (found) {
-              this.product = found;
-              this.productImages = found.image.map(img => ({ url: img }));
-              this.selectedImage = this.productImages[0]?.url || '';
-              this.selectedColor = found.colorAvailable?.[0] || null;
-              this.sizeSelected = found.sizeAvailable?.[0] || null;
-            }
-          });
-        });
-        this.productService.alert$.subscribe(alert => {
-            this.alertMsg = alert.message;
-            this.alertType = alert.type;
-            this.showAlert = true;
+      this.route.paramMap.subscribe(params => {
+        const id = params.get('id');
 
-            // Disparition automatique apres 4s
-            setTimeout(() => this.showAlert = false, 4000);
-        });
+        if (id) {
+            this.productService.getSellerProductById(id).subscribe({
+                next: (res) => {
+                  this.getCategoryName(res.categoryId).subscribe((categoryName) => {
+                    this.product = { ...res, categoryName };
+                    if (this.product?.description) {
+                        this.sanitizedDescription = this.sanitizer.bypassSecurityTrustHtml(this.product.description);
+                    }
+                    if (this.product && this.product.images) {
+                      this.productImages = this.product.images.map(img => ({ url: this.imageService.getProductImageUrl(img.url) })) || [];
+                      this.selectedImage = this.imageService.getProductImageUrl(this.productImages[0]?.url);
+                      this.selectedColor = this.product.colors?.[0] || null;
+                      this.selectedSize = this.product.sizes?.[0] || null;
+                    } else {
+                      console.error('Le produit ou ses images sont undefined');
+                    }
+                  });
+                },
+                error: (err) => {
+                  console.error(err);
+                  this.showAlertMessage('Erreur lors du chargement du produit', 'error');
+                }
+            });
+        }
+      });
     }
 
     selectColor(color: string): void {
-        this.selectedColor = color;
+      this.selectedColor = color;
+    }
+
+    private getCategoryName(categoryId: string): Observable<string> {
+          return this.categoryService.getCategoryById(categoryId).pipe(
+            map(category => category?.name || 'Inconnue')
+          );
     }
 
     selectSize(size: string): void {
-        this.sizeSelected = size;
+      this.selectedSize = size;
     }
 
-    changeimage(image: string) {
-        this.selectedImage = image;
-    }
-
-    toggleCart(): void {
-        this.productService.toggleCart(this.product, this.sizeSelected, this.selectedColor);
+    changeimage(url: string): void {
+      this.selectedImage = url;
     }
 
     isValidColor(color: string): boolean {
-        return (this.colorService.isValidCssColor(color));
+      return this.colorService.isValidCssColor(color);
     }
 
-  }
-
+    showAlertMessage(message: string, type: 'success' | 'error' | 'info'): void {
+      this.alertMsg = message;
+      this.alertType = type;
+      this.showAlert = true;
+      setTimeout(() => this.showAlert = false, 4000);
+    }
+}

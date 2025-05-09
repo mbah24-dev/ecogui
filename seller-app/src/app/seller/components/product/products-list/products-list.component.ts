@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { RouterLink } from '@angular/router';
@@ -6,180 +6,167 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { CommonModule, registerLocaleData } from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
+import { forkJoin, map, Observable } from 'rxjs';
+
+import { ProductService } from '../../../services/product/product.service';
+import { ImageService } from '../../../services/image/image.service';
+import { CategoryService } from '../../../services/product/category.service';
+import { Product } from '../../../models/product/product.model';
+import { generateStarIcons, generateRandomRating } from '../../../utils/generate-start-icon';
+
+export interface DisplayProduct {
+    product: {
+      id: string;
+      img: string;
+      title: string;
+      categoryName: string;
+    };
+    price: number;
+    ratings: {
+      star: { star: string }[];
+      totalRatings: number;
+    };
+    stock: string | number;
+    totalOrders: string;
+    action: {
+      view: string;
+      edit: string;
+      delete: string;
+    };
+}
 
 @Component({
-    selector: 'app-e-products-list',
-    imports: [MatCardModule, MatButtonModule, RouterLink, MatTableModule, MatPaginatorModule, CommonModule],
-    templateUrl: './products-list.component.html',
-    styleUrl: './products-list.component.scss'
+  selector: 'app-e-products-list',
+  standalone: true,
+  imports: [
+    CommonModule,
+    MatCardModule,
+    MatButtonModule,
+    MatTableModule,
+    MatPaginatorModule,
+    RouterLink
+  ],
+  templateUrl: './products-list.component.html',
+  styleUrl: './products-list.component.scss'
 })
-export class ProductsListComponent {
+export class ProductsListComponent implements OnInit {
+    displayedColumns: string[] = ['product', 'categoryName', 'price', 'ratings', 'stock', 'totalOrders', 'action'];
+    dataSource = new MatTableDataSource<DisplayProduct>();
 
-    displayedColumns: string[] = ['product', 'category', 'price', 'ratings', 'stock', 'totalOrders', 'action'];
-    dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
-
-    constructor(){
-        registerLocaleData(localeFr);
-    }
     @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-    ngAfterViewInit() {
-        this.dataSource.paginator = this.paginator;
+    constructor(
+      private productService: ProductService,
+      private imageService: ImageService,
+      private categoryService: CategoryService
+    ) {
+      // Enregistre les locales françaises pour les formats numériques
+      registerLocaleData(localeFr);
     }
 
-}
-export interface PeriodicElement {
-    product: any;
-    category: string;
-    price: number;
-    ratings: any;
-    stock: string;
-    totalOrders: string;
-    action: any;
-}
-const ELEMENT_DATA: PeriodicElement[] = [
-    {
-      product: { img: 'images/iphone14.png', title: 'iPhone 14 Pro Max' },
-      category: 'Smartphones',
-      price: 12500000,
-      ratings: { star: [{ star: 'ri-star-fill' }, { star: 'ri-star-fill' }, { star: 'ri-star-fill' }, { star: 'ri-star-fill' }, { star: 'ri-star-half-fill' }], totalRatings: '7800' },
-      stock: '120',
-      totalOrders: '8k',
-      action: { view: 'ri-eye-line', edit: 'ri-edit-line', delete: 'ri-delete-bin-line' }
-    },
-    {
-      product: { img: 'images/iphone15.png', title: 'iPhone 15 Pro' },
-      category: 'Smartphones',
-      price: 14500000,
-      ratings: { star: [{ star: 'ri-star-fill' }, { star: 'ri-star-fill' }, { star: 'ri-star-fill' }, { star: 'ri-star-fill' }, { star: 'ri-star-fill' }], totalRatings: '9200' },
-      stock: '96',
-      totalOrders: '9.5k',
-      action: { view: 'ri-eye-line', edit: 'ri-edit-line', delete: 'ri-delete-bin-line' }
-    },
-    {
-      product: { img: 'images/macbook.png', title: 'MacBook Air M2' },
-      category: 'Informatique',
-      price: 18000000,
-      ratings: { star: [{ star: 'ri-star-fill' }, { star: 'ri-star-fill' }, { star: 'ri-star-fill' }, { star: 'ri-star-fill' }, { star: 'ri-star-line' }], totalRatings: '3150' },
-      stock: '45',
-      totalOrders: '3.4k',
-      action: { view: 'ri-eye-line', edit: 'ri-edit-line', delete: 'ri-delete-bin-line' }
-    },
-    {
-      product: { img: 'images/macbook2.png', title: 'Sneakers Urban' },
-      category: 'Chaussures',
-      price: 950000,
-      ratings: { star: [{ star: 'ri-star-fill' }, { star: 'ri-star-fill' }, { star: 'ri-star-fill' }, { star: 'ri-star-half-fill' }, { star: 'ri-star-line' }], totalRatings: '610' },
-      stock: '320',
-      totalOrders: '1.2k',
-      action: { view: 'ri-eye-line', edit: 'ri-edit-line', delete: 'ri-delete-bin-line' }
-    },
-    {
-      product: { img: 'images/montre.png', title: 'Montre Galaxy Watch' },
-      category: 'Accessoires',
-      price: 2800000,
-      ratings: { star: [{ star: 'ri-star-fill' }, { star: 'ri-star-fill' }, { star: 'ri-star-fill' }, { star: 'ri-star-fill' }, { star: 'ri-star-half-fill' }], totalRatings: '1850' },
-      stock: '670',
-      totalOrders: '3.9k',
-      action: { view: 'ri-eye-line', edit: 'ri-edit-line', delete: 'ri-delete-bin-line' }
-    },
-    {
-      product: { img: 'images/iphone14.png', title: 'AirPods Pro' },
-      category: 'Audio',
-      price: 3200000,
-      ratings: { star: [{ star: 'ri-star-fill' }, { star: 'ri-star-fill' }, { star: 'ri-star-fill' }, { star: 'ri-star-fill' }, { star: 'ri-star-line' }], totalRatings: '4300' },
-      stock: '210',
-      totalOrders: '4.2k',
-      action: { view: 'ri-eye-line', edit: 'ri-edit-line', delete: 'ri-delete-bin-line' }
-    },
-    {
-      product: { img: 'images/iphone15.png', title: 'Apple Watch Series 9' },
-      category: 'Montres',
-      price: 6100000,
-      ratings: { star: [{ star: 'ri-star-fill' }, { star: 'ri-star-fill' }, { star: 'ri-star-fill' }, { star: 'ri-star-half-fill' }, { star: 'ri-star-line' }], totalRatings: '1700' },
-      stock: 'En rupture de stock',
-      totalOrders: '3.1k',
-      action: { view: 'ri-eye-line', edit: 'ri-edit-line', delete: 'ri-delete-bin-line' }
-    },
-    {
-      product: { img: 'images/macbook2.png', title: 'Chaussures de ville' },
-      category: 'Chaussures',
-      price: 840000,
-      ratings: { star: [{ star: 'ri-star-fill' }, { star: 'ri-star-fill' }, { star: 'ri-star-fill' }, { star: 'ri-star-line' }, { star: 'ri-star-line' }], totalRatings: '240' },
-      stock: '450',
-      totalOrders: '590',
-      action: { view: 'ri-eye-line', edit: 'ri-edit-line', delete: 'ri-delete-bin-line' }
-    },
-    {
-      product: { img: 'images/macbook.png', title: 'MacBook Pro M3' },
-      category: 'Informatique',
-      price: 22000000,
-      ratings: { star: [{ star: 'ri-star-fill' }, { star: 'ri-star-fill' }, { star: 'ri-star-fill' }, { star: 'ri-star-half-fill' }, { star: 'ri-star-line' }], totalRatings: '4000' },
-      stock: 'En rupture de stock',
-      totalOrders: '2.5k',
-      action: { view: 'ri-eye-line', edit: 'ri-edit-line', delete: 'ri-delete-bin-line' }
-    },
-    {
-      product: { img: 'images/montre.png', title: 'Casque Sony WH-1000XM5' },
-      category: 'Audio',
-      price: 4500000,
-      ratings: { star: [{ star: 'ri-star-fill' }, { star: 'ri-star-fill' }, { star: 'ri-star-fill' }, { star: 'ri-star-fill' }, { star: 'ri-star-line' }], totalRatings: '1800' },
-      stock: '310',
-      totalOrders: '3.6k',
-      action: { view: 'ri-eye-line', edit: 'ri-edit-line', delete: 'ri-delete-bin-line' }
-    },
-    {
-      product: { img: 'images/iphone14.png', title: 'Chargeur MagSafe' },
-      category: 'Accessoires',
-      price: 580000,
-      ratings: { star: [{ star: 'ri-star-fill' }, { star: 'ri-star-fill' }, { star: 'ri-star-line' }, { star: 'ri-star-line' }, { star: 'ri-star-line' }], totalRatings: '600' },
-      stock: '180',
-      totalOrders: '1.1k',
-      action: { view: 'ri-eye-line', edit: 'ri-edit-line', delete: 'ri-delete-bin-line' }
-    },
-    {
-      product: { img: 'images/iphone15.png', title: 'iPhone 15 Clear Case' },
-      category: 'Accessoires',
-      price: 240000,
-      ratings: { star: [{ star: 'ri-star-fill' }, { star: 'ri-star-fill' }, { star: 'ri-star-half-fill' }, { star: 'ri-star-line' }, { star: 'ri-star-line' }], totalRatings: '150' },
-      stock: 'En rupture de stock',
-      totalOrders: '820',
-      action: { view: 'ri-eye-line', edit: 'ri-edit-line', delete: 'ri-delete-bin-line' }
-    },
-    {
-      product: { img: 'images/macbook2.png', title: 'Sac à dos en cuir' },
-      category: 'Sacs',
-      price: 1950000,
-      ratings: { star: [{ star: 'ri-star-fill' }, { star: 'ri-star-fill' }, { star: 'ri-star-fill' }, { star: 'ri-star-half-fill' }, { star: 'ri-star-line' }], totalRatings: '900' },
-      stock: '320',
-      totalOrders: '1.9k',
-      action: { view: 'ri-eye-line', edit: 'ri-edit-line', delete: 'ri-delete-bin-line' }
-    },
-    {
-      product: { img: 'images/montre.png', title: 'Bracelet Montre Cuir' },
-      category: 'Accessoires',
-      price: 450000,
-      ratings: { star: [{ star: 'ri-star-fill' }, { star: 'ri-star-half-fill' }, { star: 'ri-star-line' }, { star: 'ri-star-line' }, { star: 'ri-star-line' }], totalRatings: '210' },
-      stock: '130',
-      totalOrders: '300',
-      action: { view: 'ri-eye-line', edit: 'ri-edit-line', delete: 'ri-delete-bin-line' }
-    },
-    {
-      product: { img: 'images/macbook.png', title: 'Trackpad Apple Magic' },
-      category: 'Informatique',
-      price: 1250000,
-      ratings: { star: [{ star: 'ri-star-fill' }, { star: 'ri-star-fill' }, { star: 'ri-star-fill' }, { star: 'ri-star-line' }, { star: 'ri-star-line' }], totalRatings: '620' },
-      stock: '99',
-      totalOrders: '1.2k',
-      action: { view: 'ri-eye-line', edit: 'ri-edit-line', delete: 'ri-delete-bin-line' }
-    },
-    {
-      product: { img: 'images/iphone15.png', title: 'iPhone 15 Leather Wallet' },
-      category: 'Accessoires',
-      price: 750000,
-      ratings: { star: [{ star: 'ri-star-fill' }, { star: 'ri-star-fill' }, { star: 'ri-star-fill' }, { star: 'ri-star-line' }, { star: 'ri-star-line' }], totalRatings: '850' },
-      stock: '215',
-      totalOrders: '1.6k',
-      action: { view: 'ri-eye-line', edit: 'ri-edit-line', delete: 'ri-delete-bin-line' }
+    /**
+     * Initialise le chargement des produits à l'initialisation du composant.
+     */
+    ngOnInit(): void {
+      this.loadProducts();
     }
-  ];
+
+    /**
+     * Connecte le paginator Angular Material à la data source une fois la vue chargée.
+     */
+    ngAfterViewInit(): void {
+      this.dataSource.paginator = this.paginator;
+    }
+
+    /**
+     * Récupère les produits du vendeur depuis le service
+     * et les enrichit avec leur catégorie pour affichage.
+     */
+    private loadProducts(): void {
+      this.productService.getSellerProducts().subscribe({
+        next: ({ products }) => this.resolveProductList(products),
+        error: err => console.error('Erreur de chargement des produits :', err)
+      });
+    }
+
+    /**
+     * Pour chaque produit, récupère le nom de sa catégorie,
+     * construit l’objet d’affichage, puis injecte le tout dans la table.
+     *
+     * @param products Liste des produits bruts à enrichir
+     */
+    private resolveProductList(products: Product[]): void {
+      const observables = products.map(product =>
+        this.getCategoryName(product.categoryId).pipe(
+          map(categoryName => this.mapToDisplayProduct(product, categoryName))
+        )
+      );
+
+      forkJoin(observables).subscribe(displayProducts => {
+        this.dataSource.data = displayProducts;
+      });
+    }
+
+    /**
+     * Récupère le nom d’une catégorie à partir de son identifiant.
+     *
+     * @param categoryId ID de la catégorie
+     * @returns Nom de la catégorie ou 'Inconnue' si non trouvée
+     */
+    private getCategoryName(categoryId: string): Observable<string> {
+      return this.categoryService.getCategoryById(categoryId).pipe(
+        map(category => category?.name || 'Inconnue')
+      );
+    }
+
+    /**
+     * Construit un objet `DisplayProduct` à partir d’un produit brut et de son nom de catégorie.
+     *
+     * @param product Le produit à afficher
+     * @param categoryName Nom de la catégorie associée
+     * @returns Produit au format adapté pour l’interface
+     */
+    private mapToDisplayProduct(product: Product, categoryName: string): DisplayProduct {
+      return {
+        product: {
+          id: product.id,
+          img: this.imageService.getProductImageUrl(product.images[0]?.url),
+          title: product.name,
+          categoryName
+        },
+        price: product.price,
+        ratings: {
+          star: generateStarIcons(generateRandomRating()),
+          totalRatings: 0
+        },
+        stock: product.stock,
+        totalOrders: product.buyCount?.toString() || '0',
+        action: {
+          view: 'ri-eye-line',
+          edit: 'ri-edit-line',
+          delete: 'ri-delete-bin-line'
+        }
+      };
+    }
+
+    /**
+     * Fonction `trackBy` pour optimiser le rendu des lignes de produits.
+     *
+     * @param _index Index de la ligne
+     * @param item Produit affiché
+     * @returns ID unique du produit
+     */
+    trackByProductId(_index: number, item: DisplayProduct): string {
+      return item.product.id;
+    }
+
+    /**
+     * Fonction `trackBy` pour les étoiles d’un produit (utilisée dans *ngFor).
+     *
+     * @param productId ID du produit
+     * @returns Clé de suivi unique pour chaque icône étoile
+     */
+    trackByStarIconWithProductId(productId: string) {
+      return (index: number, item: { star: string }) => `${productId}-${item.star}-${index}`;
+    }
+}

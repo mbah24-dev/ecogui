@@ -7,8 +7,8 @@ import { MatPaginatorModule, MatPaginator } from '@angular/material/paginator';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { NgIf } from '@angular/common';
 import { FeathericonsModule } from '../../../../../shared/icons/feathericons/feathericons.module';
-import { Product } from '../../../../services/product.service';
 import { ELEMENT_DATA, PeriodicElement } from '../../../../services/reviews.service';
+import { Product } from '../../../../models/product/product.model';
 
 @Component({
     selector: 'app-reviews',
@@ -18,6 +18,7 @@ import { ELEMENT_DATA, PeriodicElement } from '../../../../services/reviews.serv
 })
 export class ReviewsComponent {
     @Input() product!: Product;
+    @Input() productImage!: string;
     displayedColumns: string[] = ['reviewer', 'ratings', 'date'];
     dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
 

@@ -38,6 +38,10 @@ interface FileWithPreview {
     templateUrl: './create-product.component.html',
     styleUrls: ['./create-product.component.scss']
 })
+/**
+ * Composant Angular responsable de la création d’un nouveau produit.
+ * Gère le formulaire, la sélection de fichiers/images, les couleurs, tailles et catégories.
+ */
 export class CreateProductComponent implements OnInit, OnDestroy {
     createProductForm!: FormGroup;
     editor: Editor | null = null;
@@ -79,6 +83,9 @@ export class CreateProductComponent implements OnInit, OnDestroy {
       private router: Router
     ) {}
 
+    /**
+   * Initialise l’éditeur, le formulaire, et charge les catégories au démarrage du composant.
+   */
     ngOnInit(): void {
       if (isPlatformBrowser(this.platformId)) {
         this.editor = new Editor();
@@ -87,12 +94,18 @@ export class CreateProductComponent implements OnInit, OnDestroy {
       }
     }
 
+    /**
+   * Nettoie les ressources utilisées par le composant, notamment l'éditeur.
+   */
     ngOnDestroy(): void {
       if (isPlatformBrowser(this.platformId) && this.editor) {
         this.editor.destroy();
       }
     }
 
+    /**
+   * Initialise le formulaire de création de produit avec les validateurs nécessaires.
+   */
     initCreateProductForm(): void {
       this.createProductForm = this.fb.group({
         name: ['', [
@@ -124,6 +137,9 @@ export class CreateProductComponent implements OnInit, OnDestroy {
       });
     }
 
+    /**
+   * Charge les catégories depuis l’API, ou fournit une fallback locale en cas d’erreur.
+   */
     loadCategories(): void {
         this.categoryService.getCategories().subscribe({
         next: (categories: Category[]) => {
@@ -141,6 +157,11 @@ export class CreateProductComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+   * Gère la logique métier lors du changement de catégorie,
+   * et met à jour dynamiquement les tailles disponibles.
+   * @param event L’événement de sélection de catégorie.
+   */
     onCategoryChange(event: any): void {
         this.selectedCategory = event.value;
         if (this.selectedCategory) {
@@ -151,19 +172,37 @@ export class CreateProductComponent implements OnInit, OnDestroy {
         this.createProductForm.get('sizes')?.setValue([]);
     }
 
+    /**
+   * Met à jour les tailles sélectionnées dans le formulaire.
+   * @param selected Liste des tailles sélectionnées.
+   */
     onSizeSelectionChange(selected: string[]): void {
         this.createProductForm.get('sizes')?.setValue(selected);
     }
 
+    /**
+   * Met à jour les couleurs sélectionnées et synchronise avec le formulaire.
+   * @param selected Liste des couleurs sélectionnées.
+   */
     onColorSelectionChange(selected: string[]): void {
         this.selectedColors = selected;
         this.createProductForm.get('colors')?.setValue(selected);
     }
 
+    /**
+   * Compare deux catégories pour déterminer si elles sont identiques.
+   * @param c1 Première catégorie.
+   * @param c2 Deuxième catégorie.
+   * @returns `true` si les catégories sont identiques, sinon `false`.
+   */
     compareCategories(c1: Category | null, c2: Category | null): boolean {
         return (c1 && c2) ? c1.id === c2.id : c1 === c2;
     }
 
+    /**
+   * Soumet le formulaire de création de produit si tous les champs sont valides.
+   * Construit le `FormData`, puis appelle le service de création.
+   */
     onSubmit(): void {
         if (this.createProductForm.invalid || this.selectedFiles.length < 2) {
             this.createProductForm.markAllAsTouched();
@@ -192,7 +231,7 @@ export class CreateProductComponent implements OnInit, OnDestroy {
                 this.isSubmitting = false;
                 this.showAlertMessage("Votre produit a bien été creer", 'success');
                 setTimeout(() => {
-                    this.router.navigate(['/']);
+                    this.router.navigate(['/seller/products']);
                 }, 3000);
             },
             error: (err) => {
@@ -203,6 +242,11 @@ export class CreateProductComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+   * Gère la sélection de fichiers depuis l’input fichier,
+   * puis ajoute chaque fichier au tableau `selectedFiles`.
+   * @param event Événement de sélection de fichiers.
+   */
     onFileSelected(event: any): void {
         event.preventDefault();
         const files: FileList = event.target.files;
@@ -215,6 +259,10 @@ export class CreateProductComponent implements OnInit, OnDestroy {
         this.fileInput.nativeElement.value = '';
     }
 
+    /**
+   * Ajoute un fichier image au tableau `selectedFiles`, en générant son aperçu.
+   * @param file Le fichier à ajouter.
+   */
     addFile(file: File): void {
         if (!file.type.startsWith('image/')) return;
 
@@ -231,12 +279,20 @@ export class CreateProductComponent implements OnInit, OnDestroy {
         reader.readAsDataURL(file);
     }
 
+    /**
+   * Supprime une image de la liste et met à jour la validation du champ `images`.
+   * @param index L’index de l’image à supprimer.
+   */
     removeImage(index: number): void {
         this.selectedFiles.splice(index, 1);
         this.createProductForm.get('images')?.setValue(this.selectedFiles.length > 0 ? this.selectedFiles : null);
         this.createProductForm.get('images')?.updateValueAndValidity();
     }
 
+    /**
+   * Gère la logique de dépôt de fichiers via drag & drop.
+   * @param event Événement de dépôt.
+   */
     onDrop(event: DragEvent): void {
         event.preventDefault();
         this.dragOver = false;
@@ -247,7 +303,9 @@ export class CreateProductComponent implements OnInit, OnDestroy {
         }
     }
 
-    // Nouvelle méthode pour gérer la validation des images
+    /**
+   * Met à jour dynamiquement la validation du champ `images` en fonction du nombre de fichiers sélectionnés.
+   */
     private updateImagesValidation(): void {
         const imagesControl = this.createProductForm.get('images');
         if (this.selectedFiles.length >= 2) {
@@ -261,15 +319,28 @@ export class CreateProductComponent implements OnInit, OnDestroy {
         imagesControl?.updateValueAndValidity();
     }
 
+     /**
+     * Active l’état visuel de survol lors d’un drag & drop de fichiers.
+     * @param event Événement de survol.
+     */
     onDragOver(event: DragEvent) {
         event.preventDefault();
         this.dragOver = true;
     }
 
+    /**
+   * Réinitialise l’état visuel de survol lors du drag & drop.
+   * @param event Événement de sortie de zone.
+   */
     onDragLeave(event: DragEvent) {
         this.dragOver = false;
     }
 
+    /**
+   * Affiche un message d’alerte temporaire dans le composant.
+   * @param message Le contenu du message.
+   * @param type Le type d’alerte : success | error | info.
+   */
     private showAlertMessage(message: string, type: 'success' | 'error' | 'info'): void {
         this.alertMsg = message;
         this.alertType = type;

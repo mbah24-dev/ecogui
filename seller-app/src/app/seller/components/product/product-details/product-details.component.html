@@ -12,21 +12,21 @@
             <div class="col-xxxl-5 col-lg-6 col-md-12">
                 <div class="product-details-image">
                     <div class="product-gallery__featured">
-                        <owl-carousel-o [options]="{items: 1, dots: false}" #owlCar>
+                        <owl-carousel-o [options]="{items: 1, dots: false, loop: true}" #owlCar>
                             <ng-container *ngFor="let image of productImages">
                                 <ng-template carouselSlide [id]="image.url">
-                                    <img [src]="image.url" [alt]="image.url" class="border-radius">
+                                    <img [src]="image.url" [alt]="image.url" class="border-radius magic-hover">
                                 </ng-template>
                             </ng-container>
                         </owl-carousel-o>
                     </div>
                     <div class="product-gallery__carousel">
-                        <owl-carousel-o [options]="{dots: false, margin: 10, autoWidth: true}">
+                        <owl-carousel-o [options]="{dots: false, margin: 15, autoWidth: true, center: true}">
                             <ng-container *ngFor="let image of productImages; let i = index">
-                                <ng-template carouselSlide [id]="image.url+i" [width]="100">
+                                <ng-template carouselSlide [id]="image.url+i" [width]="110">
                                     <a
                                     (click)="owlCar.to(image.url); changeimage(image.url)"
-                                    class="border-radius"
+                                    class="border-radius thumbnail"
                                     [class.selected]="selectedImage === image.url"
                                     >
                                         <img [src]="image.url" [alt]="image.url" class="border-radius">
@@ -37,7 +37,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xxxl-7 col-lg-6 col-md-12">
+            <div class="col-xxxl-7 col-lg-6 col-md-12" *ngIf="product">
                 <div class="product-details-content">
                     <div class="title d-flex align-items-center justify-content-between">
                         <h3 class="mb-0">
@@ -54,15 +54,13 @@
                         <i class="ri-star-fill"></i>
                         <i class="ri-star-line"></i>
                         <span class="d-block fs-14 text-primary">
-                            {{ product.totalReview }}
+                            {{ product.reviews }}
                         </span>
                     </div>
                     <span class="sub-title d-block fs-14 fw-medium">
                         Description :
                     </span>
-                    <p class="fs-15 text-black">
-                        {{ product.description }}
-                    </p>
+                    <span  [innerHTML]="sanitizedDescription"></span>
                     <ul class="list p-0 list-unstyled">
                         <li class="d-flex align-items-center fs-14">
                             <span class="d-block fw-medium">
@@ -71,7 +69,7 @@
                             <div class="colors d-flex flex-wrap gap-2 mt-2">
                                 <div
                                   class="color-item"
-                                  *ngFor="let color of product.colorAvailable"
+                                  *ngFor="let color of product.colors"
                                   [ngClass]="{ 'selected': color === selectedColor }"
                                   (click)="selectColor(color)"
                                 >
@@ -100,7 +98,7 @@
                                 Category :
                             </span>
                             <span class="text-black">
-                                {{ product.category }}
+                                {{ product.categoryName }}
                             </span>
                         </li>
                         <li class="d-flex align-items-center fs-14">
@@ -110,8 +108,8 @@
                             <div class="colors d-flex flex-wrap gap-2 mt-2">
                                 <div
                                   class="color-item"
-                                  *ngFor="let size of product.sizeAvailable"
-                                  [ngClass]="{ 'selected': size === sizeSelected }"
+                                  *ngFor="let size of product.sizes"
+                                  [ngClass]="{ 'selected': size === selectedSize }"
                                   (click)="selectSize(size)"
                                 >
                                   <span>{{ size }}</span>
@@ -154,4 +152,4 @@
 </mat-card>
 
 <!-- Reviews -->
-<app-reviews [product]="product" />
+<app-reviews [product]="product" [productImage]="productImages[0].url"  *ngIf="product"/>
