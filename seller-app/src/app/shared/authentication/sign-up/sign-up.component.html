@@ -7,7 +7,7 @@
                         Créer un compte
                     </h3>
                     <p class="text-black fs-15">
-                        Vous avez déjà un compte ? <a routerLink="/authentication" class="text-primary fw-medium">Connectez-vous ici</a>
+                        Vous avez déjà un compte ? <a routerLink="/auth/sign-in" class="text-primary fw-medium">Connectez-vous ici</a>
                     </p>
                 </div>
                 <div class="signup-with-socials">
@@ -83,7 +83,7 @@
                     </div>
                     <div class="info">
                         <mat-checkbox formControlName="termsAccepted" color="primary">
-                            J'accepte les <a href="#" class="text-primary">Conditions générales</a>
+                            J'accepte les <a routerLink="/terms-conditions" class="text-primary">Conditions générales</a>
                         </mat-checkbox>
                         <div class="error text-danger" *ngIf="authForm.get('termsAccepted')!.hasError('required') && authForm.get('termsAccepted')!.touched">
                             Vous devez accepter les conditions générales pour continuer.

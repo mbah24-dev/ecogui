@@ -1,0 +1,10 @@
+<mat-card-content>
+    <div class="empty-state text-center py-10">
+      <img src="images/emptybox.png" alt="Aucun produit" style="max-width: 150px; margin-bottom: 20px;">
+      <h6 class="mb-2 text-muted">{{ title }}</h6>
+      <p class="mb-4 text-secondary">{{ message }}</p>
+      <a [routerLink]="linkTo" class="default-btn" mat-button>
+        <i class="ri-add-line"></i> {{ buttonText }}
+      </a>
+    </div>
+</mat-card-content>

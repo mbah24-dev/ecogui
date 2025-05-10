@@ -5,8 +5,9 @@ import { MatCardModule } from '@angular/material/card';
 import { RouterOutlet, RouterLinkActive, RouterLink, Router } from '@angular/router';
 import { FeathericonsModule } from '../icons/feathericons/feathericons.module';
 import { User } from '../../seller/models/user/user.model';
-import { Enviroment } from '../../seller/utils/eviroment';
+import { Environment } from '../../seller/utils/environment';
 import { CommonModule } from '@angular/common';
+import { ImageService } from '../../seller/services/image/image.service';
 
 @Component({
   selector: 'app-settings',
@@ -21,14 +22,16 @@ export class SettingsComponent implements OnInit{
 
     constructor(
         private userService: UserService,
-        private enviroment: Enviroment,
-        private router: Router) {}
+        private environment: Environment,
+        private router: Router,
+        private imageService: ImageService
+    ) {}
 
     ngOnInit(): void {
         this.userService.user$.subscribe((user) => {
             this.userData = user;
             if (user?.profilePic) {
-                const imageUrl = `${this.enviroment.apiUrl}/static/upload/images/user_profiles/${user.profilePic}`;
+                const imageUrl = this.imageService.getUserProfileImageUrl(user.profilePic);
 
                 this.userService.checkImageExists(imageUrl, (exists) => {
                     this.profileImage = exists ? imageUrl : 'images/user_avatar.png';
