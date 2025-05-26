@@ -432,7 +432,20 @@
 }
 }
 
+.logo {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem;
 
+  img {
+    width: 40px;
+    max-height: 40px;
+  }
+
+  span {
+    margin-left: 0.5rem;
+  }
+}
 
 active {
     opacity: 1;

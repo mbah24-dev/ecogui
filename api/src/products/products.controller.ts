@@ -38,7 +38,7 @@ export class ProductsController {
 			
 		try {
 			const productCreated = await this.productsService.create_product(body, req.session.user.id, files);
-			return res.json(productCreated);
+			return res.status(201).json(productCreated);
 		} catch (error) {
 			return res.status(400).json({ message: error.message || 'Erreur inconnue lors de l\'ajout du produit' });
 		}

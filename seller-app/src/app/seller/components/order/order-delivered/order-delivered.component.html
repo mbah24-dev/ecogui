@@ -1,3 +1,13 @@
+@if (true) {
+    <app-empty-box
+    title="Aucune commande livrée"
+    message="Vous n'avez pas encore livré de commandes."
+    linkTo="/seller/new-orders"
+    buttonText="Voir mes nouvelles commendes"
+    class="trinta-card product-card mb-25 bg-white border-none d-block">
+    </app-empty-box>
+}
+@else {
 <!-- Order Filter -->
 <mat-card class="trinta-card orders-filter-card mb-25 bg-white border-none d-block">
     <mat-card-header>
@@ -138,3 +148,4 @@
         </div>
     </mat-card-content>
 </mat-card>
+}

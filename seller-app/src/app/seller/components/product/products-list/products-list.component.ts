@@ -13,6 +13,7 @@ import { ImageService } from '../../../services/image/image.service';
 import { CategoryService } from '../../../services/product/category.service';
 import { Product } from '../../../models/product/product.model';
 import { generateStarIcons, generateRandomRating } from '../../../utils/generate-start-icon';
+import { EmptyBoxComponent } from '../../../../shared/empty-box/empty-box.component';
 
 export interface DisplayProduct {
     product: {
@@ -44,7 +45,8 @@ export interface DisplayProduct {
     MatButtonModule,
     MatTableModule,
     MatPaginatorModule,
-    RouterLink
+    RouterLink,
+    EmptyBoxComponent
   ],
   templateUrl: './products-list.component.html',
   styleUrl: './products-list.component.scss'

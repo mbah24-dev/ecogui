@@ -5,12 +5,23 @@ import { MatMenuModule } from '@angular/material/menu';
 import { RouterLink } from '@angular/router';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
-import { NgIf } from '@angular/common';
+import { CommonModule, NgIf } from '@angular/common';
 import { FeathericonsModule } from '../../../../shared/icons/feathericons/feathericons.module';
+import { EmptyBoxComponent } from '../../../../shared/empty-box/empty-box.component';
 
 @Component({
     selector: 'app-to-do',
-    imports: [MatCardModule, MatMenuModule, FeathericonsModule, MatButtonModule, MatTableModule, MatPaginatorModule, NgIf, RouterLink],
+    imports: [
+        MatCardModule,
+        MatMenuModule,
+        FeathericonsModule,
+        MatButtonModule,
+        MatTableModule,
+        MatPaginatorModule,
+        CommonModule,
+        RouterLink,
+        EmptyBoxComponent
+    ],
     templateUrl: './to-do.component.html',
     styleUrl: './to-do.component.scss',
 })

@@ -6,14 +6,14 @@
 /*   By: mbah <mbah@student.42lyon.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 20:06:08 by mbah              #+#    #+#             */
-/*   Updated: 2025/05/05 13:56:36 by mbah             ###   ########.fr       */
+/*   Updated: 2025/05/08 21:43:30 by mbah             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Enviroment } from "../../utils/eviroment";
+import { Environment } from "../../utils/environment";
 import { LoginDto } from "../../dto/user/login.dto";
 import { tap } from "rxjs";
 import { LoginResponseDto } from "../../models/user/login-response.model";
@@ -24,8 +24,8 @@ import { LoginResponseDto } from "../../models/user/login-response.model";
 export class SignupService {
     private signupApiUrl!: string;
 
-    constructor(private http: HttpClient, private enviroment: Enviroment) {
-        this.signupApiUrl = `${this.enviroment.apiUrl}/auth/signup/seller`;
+    constructor(private http: HttpClient, private environment: Environment) {
+        this.signupApiUrl = `${this.environment.apiUrl}/auth/signup/seller`;
     }
 
     signup(userData: LoginDto) {

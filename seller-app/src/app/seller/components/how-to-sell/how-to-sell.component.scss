@@ -1,63 +1,554 @@
-.vendeur-guide-card {
-    margin-bottom: 20px !important;
-    padding: 1.5rem;
-    border-radius: 12px;
-    background-color: transparent;
-    box-shadow: lightgray 3px 3px 7px;
-    font-family: 'Roboto', sans-serif;
+// Variables
+$primary-color: #2e7d32; // Vert Ecogui
+$primary-dark: #1b5e20;
+$primary-light: #81c784;
+$secondary-color: #ff8f00; // Orange
+$warning-color: #d32f2f;
+$success-color: #388e3c;
+$info-color: #1976d2;
+$light-bg: #f5f5f5;
+$dark-text: #212121;
+$light-text: #757575;
+$white: #ffffff;
+$border-radius: 8px;
+$box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+$transition: all 0.3s ease;
 
-    a {
-        color: #1565c0 !important;
-        text-decoration: underline !important;
+// Mixins
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin card-style {
+  //background: $white;
+  border-radius: $border-radius;
+  box-shadow: $box-shadow;
+  overflow: hidden;
+  transition: $transition;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  }
+}
+
+// Base styles
+.seller-guide-container {
+  font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+  //color: $dark-text;
+  line-height: 1.6;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+
+  h1, h2, h3, h4 {
+    margin: 0 0 1rem;
+    font-weight: 600;
+    //color: $dark-text;
+  }
+
+  p {
+    margin: 0 0 1.5rem;
+    //color: $light-text;
+  }
+
+  a {
+    //color: $primary-color;
+    text-decoration: none;
+    font-weight: 500;
+
+    &:hover {
+      text-decoration: underline;
     }
+  }
+
+ 
+}
+
+// Hero section
+.hero-section {
+  background: linear-gradient(135deg, $primary-color, $primary-dark);
+  //color: $white;
+  padding: 60px 0;
+  border-radius: $border-radius;
+  margin-bottom: 40px;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiIHBhdHRlcm5UcmFuc2Zvcm09InJvdGF0ZSg0NSkiPjxyZWN0IHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjA1KSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNwYXR0ZXJuKSIvPjwvc3ZnPg==');
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  .hero-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1.25rem;
+    opacity: 0.9;
+    margin-bottom: 2rem;
+  }
+
+  .trust-badges {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 30px;
+    flex-wrap: wrap;
+
+    .badge {
+      @include flex-center;
+      gap: 8px;
+      background: rgba($white, 0.15);
+      padding: 12px 20px;
+      border-radius: 50px;
+      backdrop-filter: blur(5px);
+      font-weight: 500;
+
+      .icon {
+        width: 20px;
+        height: 20px;
+      }
+    }
+  }
+}
+
+// Content cards
+.guide-content {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  margin-bottom: 60px;
+}
+
+.content-card {
+  @include card-style;
+
+  .card-header {
+    padding: 20px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+
     h2 {
-      font-size: 24px;
-      color: #2e7d32;
-      margin-bottom: 1rem;
+      margin: 0;
+      font-size: 1.5rem;
+    }
+
+    .icon-wrapper {
+      @include flex-center;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: rgba($primary-color, 0.1);
+
+      .card-icon {
+        width: 24px;
+        height: 24px;
+        color: $primary-color;
+      }
+    }
+  }
+
+  .card-body {
+    padding: 20px;
+  }
+}
+
+// Success strategies card
+.success-strategies {
+  .strategy-item {
+    display: flex;
+    gap: 20px;
+    padding: 20px 0;
+
+    &:not(:last-child) {
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .number-badge {
+      @include flex-center;
+      min-width: 36px;
+      height: 36px;
+      background: $primary-color;
+      //color: $white;
+      border-radius: 50%;
+      font-weight: 700;
+      font-size: 1.1rem;
     }
 
     h3 {
-      font-size: 18px;
-      margin-top: 1.5rem;
-      margin-bottom: 0.5rem;
-      color: #1565c0;
-    }
-
-    ul {
-      list-style: disc;
-      padding-left: 1.5rem;
-
-      font-size: 15px;
-
-      li {
-        margin-bottom: 0.5rem;
-      }
-    }
-
-    .section {
-      margin-bottom: 2rem;
-    }
-
-    .warning {
-
-      padding: 1rem;
-      border-left: 4px solid #f57c00;
-
-      .warning-text {
-        display: inline-block;
-        color: #c62828;
-        margin-left: 0.5rem;
-        font-weight: bold;
-      }
-    }
-
-    .tip {
-
-      padding: 1rem;
-      border-left: 4px solid #1976d2;
-    }
-
-    mat-icon {
-      vertical-align: middle;
+      //color: $primary-dark;
+      margin-bottom: 8px;
     }
   }
+}
+
+.strategy-cards-container {
+  display: flex;
+  gap: 24px;
+  margin: 32px 0;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 16px;
+  }
+}
+
+.strategy-card {
+  flex: 1;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+  }
+}
+
+.differentiation-card {
+  //background: white;
+  border: 1px solid #e0e0e0;
+}
+
+.warning-card {
+  //background: #fff8f8;
+  border: 1px solid #ffebee;
+}
+
+.strategy-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+
+  h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+    //color: #333;
+  }
+
+  .strategy-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    //background: rgba(76, 175, 80, 0.1);
+
+    svg {
+      color: #4CAF50;
+    }
+  }
+}
+
+.warning-card .strategy-card-header .strategy-icon {
+  //background: rgba(244, 67, 54, 0.1);
+
+  svg {
+    color: #F44336;
+  }
+}
+
+.strategy-points {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 20px;
+
+  li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 8px 0;
+    font-size: 0.95rem;
+    line-height: 1.5;
+
+    svg {
+      flex-shrink: 0;
+      margin-top: 3px;
+    }
+
+    span {
+     // color: #555;
+    }
+  }
+}
+
+.warning-points li span {
+  //color: #666;
+}
+
+.performance-stats {
+  display: flex;
+  gap: 16px;
+  margin-top: 20px;
+
+  .stat-item {
+    flex: 1;
+    text-align: center;
+    padding: 12px;
+    background: rgba(76, 175, 80, 0.05);
+    border-radius: 8px;
+    border: 1px solid rgba(76, 175, 80, 0.1);
+  }
+
+  .stat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #4CAF50;
+    margin-bottom: 4px;
+  }
+
+  .stat-label {
+    font-size: 0.8rem;
+    color: #666;
+  }
+}
+
+.critical-warning {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  background: rgba(244, 67, 54, 0.05);
+  border-radius: 8px;
+  border-left: 3px solid #F44336;
+  margin-top: 20px;
+
+  svg {
+    flex-shrink: 0;
+  }
+
+  p {
+    margin: 0;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #d32f2f;
+  }
+}
+// Cards row
+.cards-row {
+  display: flex;
+  gap: 30px;
+
+  @media (max-width: 900px) {
+    flex-direction: column;
+  }
+
+  .content-card {
+    flex: 1;
+  }
+}
+
+// Market differentiation card
+.market-differentiation {
+  .feature-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 20px;
+
+    li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 10px 0;
+
+      .list-icon {
+        color: $success-color;
+        flex-shrink: 0;
+        margin-top: 2px;
+      }
+    }
+  }
+
+  .performance-metrics {
+    display: flex;
+    gap: 20px;
+    margin-top: 30px;
+
+    .metric {
+      flex: 1;
+      text-align: center;
+      padding: 15px;
+      background: rgba($primary-color, 0.05);
+      border-radius: $border-radius;
+
+      &-value {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: $primary-color;
+        margin-bottom: 5px;
+      }
+
+      &-label {
+        font-size: 0.9rem;
+        //color: $light-text;
+      }
+    }
+  }
+}
+
+// Pro tips card
+.pro-tips {
+  .tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+
+    .tip-item {
+      padding: 20px;
+      //background: $light-bg;
+      border-radius: $border-radius;
+      border: gray 2px solid;
+      transition: $transition;
+
+      &:hover {
+        background: rgba($primary-color, 0.05);
+      }
+
+      .tip-icon {
+        @include flex-center;
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: rgba($primary-color, 0.1);
+        margin-bottom: 15px;
+
+        svg {
+          width: 24px;
+          height: 24px;
+          color: $primary-color;
+        }
+      }
+
+      h3 {
+        font-size: 1.1rem;
+        margin-bottom: 10px;
+        //color: $primary-dark;
+      }
+
+      p {
+        font-size: 0.95rem;
+        margin: 0;
+      }
+    }
+  }
+}
+
+// CTA section
+.cta-section {
+  text-align: center;
+  padding: 40px;
+  background: linear-gradient(135deg, $primary-color, $primary-dark);
+  color: $white;
+  border-radius: $border-radius;
+  margin-top: 30px;
+
+  h2 {
+    font-size: 2rem;
+    margin-bottom: 15px;
+    color: $white;
+  }
+
+  p {
+    font-size: 1.1rem;
+    max-width: 700px;
+    margin: 0 auto 30px;
+    color: rgba($white, 0.9);
+  }
+
+  .cta-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+  }
+
+  .primary-button, .secondary-button {
+    padding: 12px 24px;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: $transition;
+    border: none;
+  }
+
+  .primary-button {
+    background: $white;
+    color: $primary-color;
+
+    &:hover {
+      background: darken($white, 5%);
+      transform: translateY(-2px);
+    }
+  }
+
+  .secondary-button {
+    background: transparent;
+    color: $white;
+    border: 2px solid rgba($white, 0.3);
+
+    &:hover {
+      background: rgba($white, 0.1);
+      transform: translateY(-2px);
+    }
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 2rem !important;
+  }
+
+  .hero-subtitle {
+    font-size: 1.1rem !important;
+  }
+
+  .trust-badges {
+    flex-direction: column;
+    align-items: center;
+
+    .badge {
+      width: 100%;
+      max-width: 250px;
+    }
+  }
+
+  .cta-buttons {
+    flex-direction: column;
+    align-items: center;
+
+    button {
+      width: 100%;
+      max-width: 250px;
+    }
+  }
+}

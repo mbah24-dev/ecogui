@@ -6,13 +6,13 @@
 /*   By: mbah <mbah@student.42lyon.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 19:35:24 by mbah              #+#    #+#             */
-/*   Updated: 2025/05/05 00:20:06 by mbah             ###   ########.fr       */
+/*   Updated: 2025/05/08 21:42:10 by mbah             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Enviroment } from "../../utils/eviroment";
+import { Environment } from "../../utils/environment";
 import { AuthService } from "./auth.service";  // Ajoute le AuthService
 import { tap } from "rxjs";
 
@@ -24,10 +24,10 @@ export class LogoutService {
 
     constructor(
         private http: HttpClient,
-        private enviroment: Enviroment,
+        private environment: Environment,
         private authService: AuthService  // Injection de AuthService
     ) {
-        this.logoutApiUrl = `${this.enviroment.apiUrl}/auth/logout`;
+        this.logoutApiUrl = `${this.environment.apiUrl}/auth/logout`;
     }
 
     logout() {

@@ -6,7 +6,7 @@
 /*   By: mbah <mbah@student.42lyon.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 23:26:22 by mbah              #+#    #+#             */
-/*   Updated: 2025/05/05 00:57:00 by mbah             ###   ########.fr       */
+/*   Updated: 2025/05/08 17:30:21 by mbah             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,7 +188,9 @@ export class UsersService {
 		});
 	
 		if (!user || user.products.length === 0)
-			throw new HttpException('Aucun produit trouvé', HttpStatus.NOT_FOUND);
+		{
+			return (user?.products);
+		}
 	
 		// Filtre les produits dont le statut est différent de ProductStatus.ARCHIVED
 		const activeProducts = user.products.filter(product => product.status !== ProductStatus.ARCHIVED);
@@ -196,7 +198,6 @@ export class UsersService {
 		if (activeProducts.length === 0) {
 			throw new HttpException('Aucun produit actif trouvé', HttpStatus.NOT_FOUND);
 		}
-	
 		return activeProducts;
 	}
 	

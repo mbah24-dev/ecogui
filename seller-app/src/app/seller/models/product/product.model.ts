@@ -6,7 +6,7 @@
 /*   By: mbah <mbah@student.42lyon.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 18:28:45 by mbah              #+#    #+#             */
-/*   Updated: 2025/04/24 18:33:18 by mbah             ###   ########.fr       */
+/*   Updated: 2025/05/09 20:13:25 by mbah             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,10 @@ export interface Product {
     description: string;
     price: number;
     stock: number;
-    size: string[];
-    color: string[];
+    sizes: string[];
+    colors: string[];
     categoryId: string;
+    categoryName?: string;
     sellerId: string;
     createdAt: string;
     updatedAt: string;

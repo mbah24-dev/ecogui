@@ -6,7 +6,7 @@
 /*   By: mbah <mbah@student.42lyon.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 03:43:16 by mbah              #+#    #+#             */
-/*   Updated: 2025/05/05 22:15:11 by mbah             ###   ########.fr       */
+/*   Updated: 2025/05/09 18:14:13 by mbah             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,7 +147,7 @@ export class ProductsService {
 		const product = await this.prismaService.product.findUnique({
 			where: {
 				id: productId,
-				status: ProductStatus.AVAILABLE
+				//status: ProductStatus.AVAILABLE
 			},
 			include: {
 				images: true

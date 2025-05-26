@@ -171,7 +171,30 @@ export class TransactionService {
 	
 		return (orders);
 	}
-	
+
+	async get_seller_orders(sellerId: string, status?: OrderStatus) {
+		const all_orders = await this.get_orders();
+	  
+		// Filtre les commandes contenant au moins un produit du vendeur
+		let seller_orders = all_orders.filter(order =>
+		  order.items.some(item => item.product.sellerId === sellerId)
+		);
+	  
+		// Si un statut est fourni, filtre aussi par statut de commande
+		if (status) {
+		  seller_orders = seller_orders.filter(order => order.status === status);
+		}
+	  
+		if (!seller_orders.length) {
+		  throw new HttpException(
+			`Toujours aucune commande ?\nNe vous inquiétez pas, chaque vendeur commence quelque part — votre tour arrive bientôt !`,
+			HttpStatus.NOT_FOUND
+		  );
+		}
+	  
+		return (seller_orders);
+	}
+	  
 	async get_user_orders(userId: string) {
 		const orders = await this.prismaService.order.findMany({
 			where: { buyerId: userId },

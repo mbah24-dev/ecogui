@@ -7,12 +7,23 @@ import { MatMenuModule } from '@angular/material/menu';
 import { RouterLink } from '@angular/router';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
-import { NgIf } from '@angular/common';
+import { CommonModule, NgIf } from '@angular/common';
 import { FeathericonsModule } from '../../../../shared/icons/feathericons/feathericons.module';
+import { EmptyBoxComponent } from '../../../../shared/empty-box/empty-box.component';
 
 @Component({
     selector: 'app-order-delivered',
-    imports: [MatCardModule, FeathericonsModule,  MatMenuModule, MatButtonModule, MatTableModule, MatPaginatorModule, NgIf, RouterLink],
+    imports: [
+        MatCardModule,
+        FeathericonsModule,
+        MatMenuModule,
+        MatButtonModule,
+        MatTableModule,
+        MatPaginatorModule,
+        CommonModule,
+        RouterLink,
+        EmptyBoxComponent
+    ],
     templateUrl: './order-delivered.component.html',
     styleUrl: './order-delivered.component.scss',
 })

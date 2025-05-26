@@ -12,114 +12,125 @@
       </mat-card-subtitle>
     </mat-card-header>
 
-    <mat-card-content>
-      <div class="products-list-table">
-        <div class="table-responsive">
-          <table mat-table [dataSource]="dataSource.data">
+    @if (dataSource.data.length) {
+        <mat-card-content>
+            <div class="products-list-table">
+              <div class="table-responsive">
+                <table mat-table [dataSource]="dataSource.data">
 
-            <!-- Produit -->
-            <ng-container matColumnDef="product">
-              <th mat-header-cell *matHeaderCellDef class="pl-0">
-                Produit
-              </th>
-              <td mat-cell *matCellDef="let element" class="pl-0">
-                <div class="product-info d-flex align-items-center">
-                  <a [routerLink]="['/product-details', element.product.id]" class="image d-block">
-                    <img [src]="element.product.img" alt="Image du produit">
-                  </a>
-                  <div class="info">
-                    <a [routerLink]="['/product-details', element.product.id]" class="d-block fw-semibold">
-                      {{element.product.title}}
-                    </a>
-                  </div>
-                </div>
-              </td>
-            </ng-container>
+                  <!-- Produit -->
+                  <ng-container matColumnDef="product">
+                    <th mat-header-cell *matHeaderCellDef class="pl-0">
+                      Produit
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="pl-0">
+                      <div class="product-info d-flex align-items-center">
+                        <a [routerLink]="['/product-details', element.product.id]" class="image d-block">
+                          <img [src]="element.product.img" alt="Image du produit">
+                        </a>
+                        <div class="info">
+                          <a [routerLink]="['/product-details', element.product.id]" class="d-block fw-semibold">
+                            {{element.product.title}}
+                          </a>
+                        </div>
+                      </div>
+                    </td>
+                  </ng-container>
 
-            <!-- Catégorie -->
-            <ng-container matColumnDef="categoryName">
-              <th mat-header-cell *matHeaderCellDef>
-                Catégorie
-              </th>
-              <td mat-cell *matCellDef="let element" class="text-primary">
-                {{element.product.categoryName}}
-              </td>
-            </ng-container>
+                  <!-- Catégorie -->
+                  <ng-container matColumnDef="categoryName">
+                    <th mat-header-cell *matHeaderCellDef>
+                      Catégorie
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="text-primary">
+                      {{element.product.categoryName}}
+                    </td>
+                  </ng-container>
 
-            <!-- Prix -->
-            <ng-container matColumnDef="price">
-              <th mat-header-cell *matHeaderCellDef>
-                Prix (GNF)
-              </th>
-              <td mat-cell *matCellDef="let element">
-                {{element.price | number:'1.0-2':'fr' }} GNF
-              </td>
-            </ng-container>
+                  <!-- Prix -->
+                  <ng-container matColumnDef="price">
+                    <th mat-header-cell *matHeaderCellDef>
+                      Prix (GNF)
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{element.price | number:'1.0-2':'fr' }} GNF
+                    </td>
+                  </ng-container>
 
-            <!-- Évaluations -->
-            <ng-container matColumnDef="ratings">
-              <th mat-header-cell *matHeaderCellDef>
-                Notes
-              </th>
-              <td mat-cell *matCellDef="let element">
-                <div class="ratings lh-1">
-                    <ng-container *ngFor="let content of element.ratings.star; trackBy: trackByStarIconWithProductId(element.product.id)">
-                      <i class="{{ content.star }}"></i>
-                    </ng-container>
-                    <span class="lh-1 text-body">
-                      ({{element.ratings.totalRatings}})
-                    </span>
-                </div>
+                  <!-- Évaluations -->
+                  <ng-container matColumnDef="ratings">
+                    <th mat-header-cell *matHeaderCellDef>
+                      Notes
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      <div class="ratings lh-1">
+                          <ng-container *ngFor="let content of element.ratings.star; trackBy: trackByStarIconWithProductId(element.product.id)">
+                            <i class="{{ content.star }}"></i>
+                          </ng-container>
+                          <span class="lh-1 text-body">
+                            ({{element.ratings.totalRatings}})
+                          </span>
+                      </div>
 
-              </td>
-            </ng-container>
+                    </td>
+                  </ng-container>
 
-            <!-- Stock -->
-            <ng-container matColumnDef="stock">
-              <th mat-header-cell *matHeaderCellDef>
-                En stock
-              </th>
-              <td mat-cell *matCellDef="let element">
-                {{element.stock}}
-              </td>
-            </ng-container>
+                  <!-- Stock -->
+                  <ng-container matColumnDef="stock">
+                    <th mat-header-cell *matHeaderCellDef>
+                      En stock
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{element.stock}}
+                    </td>
+                  </ng-container>
 
-            <!-- Commandes totales -->
-            <ng-container matColumnDef="totalOrders">
-              <th mat-header-cell *matHeaderCellDef>
-                Commandes
-              </th>
-              <td mat-cell *matCellDef="let element">
-                {{element.totalOrders}}
-              </td>
-            </ng-container>
+                  <!-- Commandes totales -->
+                  <ng-container matColumnDef="totalOrders">
+                    <th mat-header-cell *matHeaderCellDef>
+                      Commandes
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{element.totalOrders}}
+                    </td>
+                  </ng-container>
 
-            <!-- Actions -->
-            <ng-container matColumnDef="action">
-              <th mat-header-cell *matHeaderCellDef class="text-end pr-0">
-                Actions
-              </th>
-              <td mat-cell *matCellDef="let element" class="text-end pr-0">
-                <div class="action">
-                  <button type="button" mat-button class="p-0 min-w-auto lh-1 h-auto" title="Voir" [routerLink]="['/ecogui/client/product-details', 3]">
-                    <i class="{{element.action.view}}"></i>
-                  </button>
-                  <button type="button" mat-button class="p-0 min-w-auto lh-1 h-auto" title="Modifier">
-                    <i class="{{element.action.edit}}"></i>
-                  </button>
-                  <button type="button" mat-button class="p-0 min-w-auto lh-1 h-auto" title="Supprimer">
-                    <i class="{{element.action.delete}}"></i>
-                  </button>
-                </div>
-              </td>
-            </ng-container>
+                  <!-- Actions -->
+                  <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef class="text-end pr-0">
+                      Actions
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="text-end pr-0">
+                      <div class="action">
+                        <button type="button" mat-button class="p-0 min-w-auto lh-1 h-auto" title="Voir" [routerLink]="['/product-details', element.product.id]">
+                          <i class="{{element.action.view}}"></i>
+                        </button>
+                        <button type="button" mat-button class="p-0 min-w-auto lh-1 h-auto" title="Modifier">
+                          <i class="{{element.action.edit}}"></i>
+                        </button>
+                        <button type="button" mat-button class="p-0 min-w-auto lh-1 h-auto" title="Supprimer">
+                          <i class="{{element.action.delete}}"></i>
+                        </button>
+                      </div>
+                    </td>
+                  </ng-container>
 
-            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 
-          </table>
-        </div>
-        <mat-paginator [pageSizeOptions]="[10, 20, 30]"></mat-paginator>
-      </div>
-    </mat-card-content>
+                </table>
+              </div>
+              <mat-paginator [pageSizeOptions]="[10, 20, 30]"></mat-paginator>
+            </div>
+          </mat-card-content>
+    }
+    @else {
+        <app-empty-box
+        title="Aucun produit trouvé"
+        message="Vous n'avez pas encore ajouté de produits à votre boutique."
+        linkTo="/seller/add-product"
+        buttonText="Ajouter mon premier produit"
+        />
+    }
+
   </mat-card>

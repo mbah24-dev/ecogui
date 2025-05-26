@@ -9,13 +9,24 @@ import { CommonModule, registerLocaleData } from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
 import { AlertNotificationComponent } from "../../../../shared/alert-notification/alert-notification.component";
 import { Product, ProductService } from '../../../services/product.service';
+import { EmptyBoxComponent } from '../../../../shared/empty-box/empty-box.component';
 
 
 @Component({
   selector: 'app-order-items',
   templateUrl: './order-items.component.html',
   styleUrl: './order-items.component.scss',
-  imports: [MatCardModule, MatMenuModule, MatButtonModule, RouterLink, MatSelectModule, FormsModule, ReactiveFormsModule, CommonModule, AlertNotificationComponent]
+  imports: [
+    MatCardModule,
+    MatMenuModule,
+    MatButtonModule,
+    RouterLink,
+    MatSelectModule,
+    FormsModule,
+    ReactiveFormsModule,
+    CommonModule,
+    AlertNotificationComponent
+]
 })
 export class OrderItemsComponent implements OnInit {
     products: Product[] = [];

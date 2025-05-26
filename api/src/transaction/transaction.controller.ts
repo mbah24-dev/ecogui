@@ -1,4 +1,4 @@
-import { Controller, Post, Req, UseGuards, Res, Put, Param, Get, Body } from '@nestjs/common';
+import { Controller, Post, Req, UseGuards, Res, Put, Param, Get, Body, Query } from '@nestjs/common';
 import { TransactionService } from './transaction.service';
 import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
 import { BuyerGuard } from 'src/guards/buyer.guard';
@@ -11,7 +11,7 @@ import { SellerGuard } from 'src/guards/seller.guard';
 import { IsSeller } from 'src/decorator/is-seller.decorator';
 import { ApproveOrderItemDto } from 'src/dto/transaction/approved-order-item.dto';
 import { OrdersValidationService } from './orders-validation.service';
-import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBody } from '@nestjs/swagger'; // Importation des décorateurs Swagger
+import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBody, ApiQuery } from '@nestjs/swagger'; // Importation des décorateurs Swagger
 
 @ApiTags('Transactions') // Etiquette pour regrouper les routes liées aux transactions
 @Controller('transaction')
@@ -21,7 +21,7 @@ export class TransactionController {
 		private readonly ordersValidationService: OrdersValidationService) {}
 
 	@Post('create')
-	@UseGuards(JwtAuthGuard, BuyerGuard)
+	@UseGuards(BuyerGuard)
 	@IsBuyer()
 	@ApiOperation({ summary: 'Créer une nouvelle commande.' })
 	@ApiResponse({ status: 200, description: 'Commande créée avec succès.' })
@@ -35,7 +35,7 @@ export class TransactionController {
 	}
 
 	@Put('seller/confirm/product')
-	@UseGuards(JwtAuthGuard, SellerGuard)
+	@UseGuards(SellerGuard)
 	@IsSeller()
 	@ApiOperation({ summary: 'Le vendeur confirme un produit dans une commande.' })
 	@ApiBody({ type: ApproveOrderItemDto })
@@ -58,7 +58,7 @@ export class TransactionController {
 	}
 
 	@Put('cancel/id=:orderId')
-	@UseGuards(JwtAuthGuard, BuyerGuard)
+	@UseGuards(BuyerGuard)
 	@IsBuyer()
 	@ApiOperation({ summary: 'Annuler une commande.' })
 	@ApiParam({ name: 'orderId', description: 'ID de la commande à annuler.' })
@@ -77,7 +77,7 @@ export class TransactionController {
 	}
 
 	@Get('all-orders')
-	@UseGuards(JwtAuthGuard, AdminGuard)
+	@UseGuards(AdminGuard)
 	@IsAdmin()
 	@ApiOperation({ summary: 'Récupère toutes les commandes.' })
 	@ApiResponse({ status: 200, description: 'Liste de toutes les commandes récupérée avec succès.' })
@@ -90,8 +90,34 @@ export class TransactionController {
 		return res.json({ orders });
 	}
 
+	@Get('seller-orders')
+	@UseGuards(SellerGuard)
+	@ApiOperation({ summary: 'Récupère les commandes d’un vendeur (avec filtre par statut facultatif).' })
+	@ApiQuery({ name: 'status', enum: OrderStatus, required: false })
+	@ApiResponse({ status: 200, description: 'Commandes du vendeur récupérées avec succès.' })
+	@ApiResponse({ status: 401, description: 'Utilisateur non connecté.' })
+	@ApiResponse({ status: 404, description: 'Aucune commande trouvée.' })
+	async get_seller_orders(
+	@Req() req: RequestExpressSession,
+	@Res() res: Response,
+	@Query('status') status?: OrderStatus
+	) {
+		const user = req.session.user;
+		if (!user) {
+			return res.status(401).json({ message: 'Utilisateur non connecté' });
+		}
+
+		try {
+			const orders = await this.transactionService.get_seller_orders(user.id, status);
+			return res.status(200).json({ orders });
+		} catch (error) {
+			return res.status(error.status || 500).json({ message: error.message || 'Erreur inconnue' });
+		}
+	}
+
+
 	@Get('me/all-orders')
-	@UseGuards(JwtAuthGuard, BuyerGuard)
+	@UseGuards(BuyerGuard)
 	@IsBuyer()
 	@ApiOperation({ summary: 'Récupère toutes les commandes de l\'utilisateur connecté.' })
 	@ApiResponse({ status: 200, description: 'Liste des commandes de l\'utilisateur récupérée avec succès.' })

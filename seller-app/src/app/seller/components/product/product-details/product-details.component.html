@@ -12,21 +12,21 @@
             <div class="col-xxxl-5 col-lg-6 col-md-12">
                 <div class="product-details-image">
                     <div class="product-gallery__featured">
-                        <owl-carousel-o [options]="{items: 1, dots: false, loop: true}" #owlCar>
+                        <owl-carousel-o [options]="{items: 1, dots: false}" #owlCar>
                             <ng-container *ngFor="let image of productImages">
                                 <ng-template carouselSlide [id]="image.url">
-                                    <img [src]="image.url" [alt]="image.url" class="border-radius magic-hover">
+                                    <img [src]="image.url" [alt]="image.url" class="border-radius">
                                 </ng-template>
                             </ng-container>
                         </owl-carousel-o>
                     </div>
                     <div class="product-gallery__carousel">
-                        <owl-carousel-o [options]="{dots: false, margin: 15, autoWidth: true, center: true}">
+                        <owl-carousel-o [options]="{dots: false, margin: 10, autoWidth: true}">
                             <ng-container *ngFor="let image of productImages; let i = index">
-                                <ng-template carouselSlide [id]="image.url+i" [width]="110">
+                                <ng-template carouselSlide [id]="image.url+i" [width]="100">
                                     <a
                                     (click)="owlCar.to(image.url); changeimage(image.url)"
-                                    class="border-radius thumbnail"
+                                    class="border-radius"
                                     [class.selected]="selectedImage === image.url"
                                     >
                                         <img [src]="image.url" [alt]="image.url" class="border-radius">

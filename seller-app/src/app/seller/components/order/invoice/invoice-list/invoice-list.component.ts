@@ -1,4 +1,4 @@
-import { NgIf } from '@angular/common';
+import { CommonModule, NgIf } from '@angular/common';
 import { Component, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -6,10 +6,20 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatPaginatorModule, MatPaginator } from '@angular/material/paginator';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { RouterLink } from '@angular/router';
+import { EmptyBoxComponent } from '../../../../../shared/empty-box/empty-box.component';
 
 @Component({
     selector: 'app-invoices',
-    imports: [MatCardModule, MatButtonModule, MatMenuModule, MatPaginatorModule, MatTableModule, RouterLink],
+    imports: [
+        MatCardModule,
+        MatButtonModule,
+        MatMenuModule,
+        MatPaginatorModule,
+        MatTableModule,
+        RouterLink,
+        CommonModule,
+        EmptyBoxComponent
+    ],
     templateUrl: './invoice-list.component.html',
     styleUrl: './invoice-list.component.scss'
 })

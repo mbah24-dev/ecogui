@@ -405,266 +405,126 @@
 
 }
 
-/* Style global de la carte produit */
-.product-details-card {
-    border-radius: 16px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-    overflow: hidden;
-    border: none;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    background: linear-gradient(145deg, #ffffff, #f9f9f9);
-
-    &:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
-    }
-  }
-
-  /* Section image principale */
-  .product-details-image {
-    position: relative;
-    padding: 20px;
-    background: white;
-    border-radius: 12px;
-    box-shadow: inset 0 0 0 1px rgba(0,0,0,0.03);
-
+.product-details-image {
     .product-gallery__featured {
-      background: white;
+      background-color: #f9f9f9;
       border-radius: 12px;
-      padding: 15px;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.03);
-      position: relative;
-      overflow: hidden;
-
-      &::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 4px;
-        background: linear-gradient(90deg, #a18cd1 0%, #fbc2eb 100%);
-      }
+      padding: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
 
       img {
         width: 100%;
-        max-height: 500px;
+        max-height: 400px;
         object-fit: contain;
-        border-radius: 8px;
-        transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
-        background: white;
-        padding: 10px;
-      }
-
-      &:hover img {
-        transform: scale(1.02);
+        background-color: #fff;
+        border-radius: 10px;
       }
     }
 
     .product-gallery__carousel {
-      margin-top: 20px;
-      padding: 10px 5px;
+      margin-top: 15px;
+
+      .owl-carousel .owl-item {
+        transition: transform 0.3s ease;
+      }
+
+      .owl-carousel .owl-item:hover {
+        transform: scale(1.05);
+      }
 
       a {
-        border: 2px solid transparent;
+        display: inline-block;
+        padding: 6px;
+        background-color: #efefef;
         border-radius: 8px;
-        padding: 5px;
-        background: white;
-        transition: all 0.3s ease;
-        box-shadow: 0 3px 6px rgba(0,0,0,0.05);
+        border: 2px solid transparent;
 
+        &.active,
         &.selected {
-          border-color: #a18cd1;
-          box-shadow: 0 0 0 3px rgba(161,140,209,0.2);
+          background-color: #d1e7dd; // vert pâle pour montrer que c’est sélectionné
+          border-color: #198754;
         }
 
         img {
-          width: 80px;
-          height: 80px;
+          height: 70px;
+          width: auto;
           object-fit: cover;
           border-radius: 6px;
-          border: 1px solid #f0f0f0;
-        }
-
-        &:hover {
-          transform: translateY(-3px);
-          box-shadow: 0 5px 10px rgba(0,0,0,0.1);
         }
       }
     }
   }
 
-  /* Section détails produit */
-  .product-details-content {
-    padding: 20px 30px;
+  .product-gallery__carousel a.selected {
+    background-color: #d1e7dd !important;
+    border: 2px solid #198754;
+    box-shadow: 0 0 0 2px #c3e6cb;
+  }
 
-    .title h3 {
-      font-size: 28px;
-      font-weight: 600;
-      color: #333;
-      margin-bottom: 5px;
-      position: relative;
-      display: inline-block;
+/* Min width 1200px to Max width 1399px */
+@media only screen and (min-width: 1200px) and (max-width: 1399px) {
 
-      &::after {
-        content: '';
-        position: absolute;
-        bottom: -5px;
-        left: 0;
-        width: 50px;
-        height: 3px;
-        background: linear-gradient(90deg, #a18cd1, #fbc2eb);
-        border-radius: 3px;
-      }
-    }
-
-    .category {
-      color: #888;
-      font-size: 14px;
-      margin-bottom: 15px;
-      display: block;
-    }
-
-    .ratings {
-      margin: 15px 0;
-
-      i {
-        color: #ffc107;
-        font-size: 18px;
-        margin-right: 2px;
-      }
-
-      span {
-        margin-left: 8px;
-        color: #666;
-      }
-    }
-
-    .sub-title {
-      font-size: 16px;
-      font-weight: 600;
-      color: #444;
-      margin: 20px 0 10px;
-    }
-
-    /* Liste des caractéristiques */
-    .list {
-      margin: 25px 0;
-
-      li {
-        margin-bottom: 15px;
-        padding-bottom: 15px;
-        border-bottom: 1px dashed #eee;
-
-        &:last-child {
-          border-bottom: none;
+    .trinta-card {
+        &.product-details-card {
+            .product-details-image {
+                padding-right: 0;
+            }
+            .product-details-content {
+                .title {
+                    h3 {
+                        font-size: 22px;
+                    }
+                }
+                .ratings {
+                    margin: {
+                        top: 20px;
+                        bottom: 20px;
+                    };
+                    i {
+                        font-size: 20px;
+                    }
+                    span {
+                        margin-left: 15px;
+                    }
+                }
+                .list {
+                    margin: {
+                        top: 20px;
+                        bottom: 20px;
+                    };
+                    li {
+                        margin-bottom: 15px;
+                    }
+                }
+                .box {
+                    padding: 20px;
+                    min-width: auto;
+                    margin-right: 20px;
+                }
+            }
         }
-
-        .fw-medium {
-          min-width: 100px;
-          color: #666;
-        }
-      }
     }
 
-    /* Styles pour les sélecteurs de couleur/taille */
-    .colors {
-      margin-left: 10px;
+}
 
-      .color-item {
-        padding: 8px 15px;
-        border-radius: 8px;
-        background: white;
-        border: 1px solid #e0e0e0;
-        transition: all 0.3s ease;
-        cursor: pointer;
-        font-size: 13px;
+/* Min width 1600px */
+@media only screen and (min-width: 1600px) {
 
-        &:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+    .trinta-card {
+        &.product-details-card {
+            .product-details-image {
+                padding-right: 27px;
+            }
+            .product-details-content {
+                padding: {
+                    left: 25px;
+                    right: 25px;
+                };
+                p {
+                    max-width: 715px;
+                }
+            }
         }
-
-        &.selected {
-          background: #8b5cf6;
-          color: white;
-          border-color: #8b5cf6;
-          box-shadow: 0 3px 10px rgba(139, 92, 246, 0.3);
-        }
-      }
     }
 
-    /* Boxes statistiques */
-    .box {
-      margin-right: 30px;
-      margin-top: 20px;
-
-      .icon {
-        width: 40px;
-        height: 40px;
-        background: linear-gradient(135deg, #a18cd1, #fbc2eb);
-        margin-right: 15px;
-
-        i-feather {
-          width: 18px;
-          height: 18px;
-        }
-      }
-
-      h4 {
-        font-size: 20px;
-        color: #333;
-      }
-
-      .text-gray {
-        color: #888;
-        font-size: 13px;
-      }
-    }
-  }
-
-  /* Prix */
-  .text-black {
-    font-size: 24px;
-    font-weight: 700;
-    color: #8b5cf6 !important;
-  }
-
-  /* Disponibilité */
-  .availability {
-    color: #10b981;
-    font-weight: 500;
-
-    .fs-15 {
-      color: #333;
-    }
-  }
-
-  /* Animation féerique */
-  @keyframes fairyDust {
-    0% { opacity: 0; transform: translateY(0) rotate(0deg); }
-    50% { opacity: 1; }
-    100% { opacity: 0; transform: translateY(-100px) rotate(360deg); }
-  }
-
-  .product-details-card::after {
-    content: '✦';
-    position: absolute;
-    color: rgba(251, 194, 235, 0.6);
-    font-size: 12px;
-    animation: fairyDust 3s infinite;
-    pointer-events: none;
-    left: 20%;
-    top: 10%;
-  }
-
-  .product-details-card::before {
-    content: '✦';
-    position: absolute;
-    color: rgba(161, 140, 209, 0.6);
-    font-size: 8px;
-    animation: fairyDust 4s infinite 0.5s;
-    pointer-events: none;
-    right: 15%;
-    bottom: 20%;
-  }
+}

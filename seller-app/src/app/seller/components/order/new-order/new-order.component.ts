@@ -9,13 +9,24 @@ import { CommonModule, registerLocaleData } from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
 import { AlertNotificationComponent } from "../../../../shared/alert-notification/alert-notification.component";
 import { OrderItemsComponent } from "../order-items/order-items.component";
+import { EmptyBoxComponent } from '../../../../shared/empty-box/empty-box.component';
 
 
 @Component({
   selector: 'app-product-list',
   templateUrl: './new-order.component.html',
   styleUrl: './new-order.component.scss',
-  imports: [MatCardModule, MatMenuModule, MatButtonModule, MatSelectModule, FormsModule, ReactiveFormsModule, CommonModule, OrderItemsComponent]
+  imports: [
+    MatCardModule,
+    MatMenuModule,
+    MatButtonModule,
+    MatSelectModule,
+    FormsModule,
+    ReactiveFormsModule,
+    CommonModule,
+    OrderItemsComponent,
+    EmptyBoxComponent
+]
 })
 export class NewOrderComponent {
 

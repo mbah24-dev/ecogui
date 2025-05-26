@@ -1,140 +1,152 @@
-<!-- Order Filter -->
-<mat-card class="trinta-card orders-filter-card mb-25 bg-white border-none d-block">
-    <mat-card-header>
-      <mat-card-title>
-        <h5 class="mt-0 mb-0">Filtres des commandes</h5>
-      </mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <form>
-        <div class="row">
-          <!-- Nom du client / N° de commande -->
-          <div class="col-sm-8 col-lg-3">
-            <form class="search-box position-relative">
-                <input
-                    type="text"
-                    class="input-search w-100 d-block border-none"
-                    placeholder="Filtrer par commande ou client."
-                    (input)="applyFilter($event)" />
 
-                <button type="submit" class="bg-transparent p-0 border-none transition">
-                    <i-feather name="search"></i-feather>
-                </button>
-            </form>
-          </div>
-        </div>
-      </form>
-    </mat-card-content>
-</mat-card>
 
-<mat-card class="trinta-card recent-orders-card mb-25 bg-white border-none d-block">
-    <mat-card-header>
+@if (true) {
+    <app-empty-box
+    title="Aucune commande à traiter"
+    message="Vous n'avez pas encore de commandes en attente de traitement."
+    linkTo="/seller/products"
+    buttonText="Voir mes produits"
+    class="trinta-card product-card mb-25 bg-white border-none d-block" />
+}
+@else {
+    <!-- Order Filter -->
+    <mat-card class="trinta-card orders-filter-card mb-25 bg-white border-none d-block">
+        <mat-card-header>
         <mat-card-title>
-            <h5 class="mt-0 mb-0">
-                Commandes à traiter
-            </h5>
+            <h5 class="mt-0 mb-0">Filtres des commandes</h5>
         </mat-card-title>
-        <mat-card-subtitle>
-            <button type="button" mat-button class="card-header-menu-btn" [matMenuTriggerFor]="cardHeaderMenu">
-                Cette semaine
-            </button>
-            <mat-menu #cardHeaderMenu="matMenu" class="card-header-menu" xPosition="before">
-                <button mat-menu-item>
-                    Aujourd’hui
-                </button>
-                <button mat-menu-item>
+        </mat-card-header>
+        <mat-card-content>
+        <form>
+            <div class="row">
+            <!-- Nom du client / N° de commande -->
+            <div class="col-sm-8 col-lg-3">
+                <form class="search-box position-relative">
+                    <input
+                        type="text"
+                        class="input-search w-100 d-block border-none"
+                        placeholder="Filtrer par commande ou client."
+                        (input)="applyFilter($event)" />
+
+                    <button type="submit" class="bg-transparent p-0 border-none transition">
+                        <i-feather name="search"></i-feather>
+                    </button>
+                </form>
+            </div>
+            </div>
+        </form>
+        </mat-card-content>
+    </mat-card>
+
+    <mat-card class="trinta-card recent-orders-card mb-25 bg-white border-none d-block">
+        <mat-card-header>
+            <mat-card-title>
+                <h5 class="mt-0 mb-0">
+                    Commandes à traiter
+                </h5>
+            </mat-card-title>
+            <mat-card-subtitle>
+                <button type="button" mat-button class="card-header-menu-btn" [matMenuTriggerFor]="cardHeaderMenu">
                     Cette semaine
                 </button>
-                <button mat-menu-item>
-                    Ce mois
-                </button>
-                <button mat-menu-item>
-                    Cette année
-                </button>
-            </mat-menu>
-        </mat-card-subtitle>
-    </mat-card-header>
-    <mat-card-content>
-        <div class="recent-orders-table">
-            <div class="table-responsive">
-                <table mat-table [dataSource]="dataSource">
+                <mat-menu #cardHeaderMenu="matMenu" class="card-header-menu" xPosition="before">
+                    <button mat-menu-item>
+                        Aujourd’hui
+                    </button>
+                    <button mat-menu-item>
+                        Cette semaine
+                    </button>
+                    <button mat-menu-item>
+                        Ce mois
+                    </button>
+                    <button mat-menu-item>
+                        Cette année
+                    </button>
+                </mat-menu>
+            </mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+            <div class="recent-orders-table">
+                <div class="table-responsive">
+                    <table mat-table [dataSource]="dataSource">
 
-                    <!-- Colonne Numéro de suivi -->
-                    <ng-container matColumnDef="orderId">
-                        <th mat-header-cell *matHeaderCellDef class="text-primary pl-0">
-                            N° de commande
-                        </th>
-                        <td mat-cell *matCellDef="let element" class="text-primary fw-medium pl-0">
-                            {{element.orderId}}
-                        </td>
-                    </ng-container>
+                        <!-- Colonne Numéro de suivi -->
+                        <ng-container matColumnDef="orderId">
+                            <th mat-header-cell *matHeaderCellDef class="text-primary pl-0">
+                                N° de commande
+                            </th>
+                            <td mat-cell *matCellDef="let element" class="text-primary fw-medium pl-0">
+                                {{element.orderId}}
+                            </td>
+                        </ng-container>
 
-                    <!-- Colonne Client -->
-                    <ng-container matColumnDef="customer">
-                        <th mat-header-cell *matHeaderCellDef>
-                            Client
-                        </th>
-                        <td mat-cell *matCellDef="let element">
-                            {{element.customer}}
-                        </td>
-                    </ng-container>
+                        <!-- Colonne Client -->
+                        <ng-container matColumnDef="customer">
+                            <th mat-header-cell *matHeaderCellDef>
+                                Client
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.customer}}
+                            </td>
+                        </ng-container>
 
-                    <!-- Colonne Prix -->
-                    <ng-container matColumnDef="price">
-                        <th mat-header-cell *matHeaderCellDef>
-                            Total
-                        </th>
-                        <td mat-cell *matCellDef="let element">
-                            {{element.price}} GNF
-                        </td>
-                    </ng-container>
+                        <!-- Colonne Prix -->
+                        <ng-container matColumnDef="price">
+                            <th mat-header-cell *matHeaderCellDef>
+                                Total
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.price}} GNF
+                            </td>
+                        </ng-container>
 
-                    <!-- Colonne Quantité -->
-                    <ng-container matColumnDef="quantity">
-                        <th mat-header-cell *matHeaderCellDef>
-                            Quantité
-                        </th>
-                        <td mat-cell *matCellDef="let element">
-                            {{element.quantity}}
-                        </td>
-                    </ng-container>
+                        <!-- Colonne Quantité -->
+                        <ng-container matColumnDef="quantity">
+                            <th mat-header-cell *matHeaderCellDef>
+                                Quantité
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.quantity}}
+                            </td>
+                        </ng-container>
 
-                    <!-- Colonne Statut -->
-                    <ng-container matColumnDef="status">
-                        <th mat-header-cell *matHeaderCellDef class="text-end pr-0">
-                            Statut
-                        </th>
-                        <td mat-cell *matCellDef="let element" class="text-end pr-0">
-                            <span class="trinta-badge fw-medium pending d-inline-block" *ngIf="element.status.pending">
-                                {{element.status.pending}} <!-- Ex : En attente -->
-                            </span>
-                            <span class="trinta-badge fw-medium delivered d-inline-block" *ngIf="element.status.delivered">
-                                {{element.status.delivered}} <!-- Ex : Livré -->
-                            </span>
-                        </td>
+                        <!-- Colonne Statut -->
+                        <ng-container matColumnDef="status">
+                            <th mat-header-cell *matHeaderCellDef class="text-end pr-0">
+                                Statut
+                            </th>
+                            <td mat-cell *matCellDef="let element" class="text-end pr-0">
+                                <span class="trinta-badge fw-medium pending d-inline-block" *ngIf="element.status.pending">
+                                    {{element.status.pending}} <!-- Ex : En attente -->
+                                </span>
+                                <span class="trinta-badge fw-medium delivered d-inline-block" *ngIf="element.status.delivered">
+                                    {{element.status.delivered}} <!-- Ex : Livré -->
+                                </span>
+                            </td>
 
-                    </ng-container>
+                        </ng-container>
 
-                    <ng-container matColumnDef="action">
-                        <th mat-header-cell *matHeaderCellDef class="text-end pr-0">
-                            Action
-                        </th>
-                        <td mat-cell *matCellDef="let element" class="text-end pr-0">
-                            <div class="action">
-                                <a routerLink="/profile/orders/details" mat-button class="p-0 min-w-auto lh-1 h-auto">
-                                  <i class="ri-eye-line"></i>
-                                </a>
-                            </div>
-                        </td>
+                        <ng-container matColumnDef="action">
+                            <th mat-header-cell *matHeaderCellDef class="text-end pr-0">
+                                Action
+                            </th>
+                            <td mat-cell *matCellDef="let element" class="text-end pr-0">
+                                <div class="action">
+                                    <a routerLink="/profile/orders/details" mat-button class="p-0 min-w-auto lh-1 h-auto">
+                                    <i class="ri-eye-line"></i>
+                                    </a>
+                                </div>
+                            </td>
 
-                    </ng-container>
+                        </ng-container>
 
-                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 
-                </table>
+                    </table>
+                </div>
+                <mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 15]"></mat-paginator>
             </div>
-            <mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 15]"></mat-paginator>
-        </div>
-    </mat-card-content>
-</mat-card>
+        </mat-card-content>
+    </mat-card>
+}

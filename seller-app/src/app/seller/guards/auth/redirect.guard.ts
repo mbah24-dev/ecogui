@@ -6,7 +6,7 @@
 /*   By: mbah <mbah@student.42lyon.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 19:14:31 by mbah              #+#    #+#             */
-/*   Updated: 2025/05/08 01:24:08 by mbah             ###   ########.fr       */
+/*   Updated: 2025/05/08 14:28:56 by mbah             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
-import { catchError, map, tap } from 'rxjs/operators';
+import { catchError, map, mapTo, take, tap } from 'rxjs/operators';
 import { AuthService } from '../../services/auth/auth.service';
 
 @Injectable({
@@ -24,19 +24,16 @@ export class AuthRedirectGuard implements CanActivate {
     constructor(private authService: AuthService, private router: Router) {}
 
     canActivate(): Observable<boolean> {
-        return this.authService.isLoggedIn().pipe(
-            map(isAuthenticated => {
-                if (isAuthenticated) {
-                    this.router.navigate(['/dashboard']);
-                } else {
-                    this.router.navigate(['/home']);
-                }
-                return false; // On ne permet jamais l'activation de cette route
-            }),
-            catchError(() => {
-                this.router.navigate(['/home']);
-                return of(false);
-            })
+        return this.authService.isAuthenticatedClean$.pipe(
+          take(1),
+          tap(isAuthenticated => {
+            this.router.navigate([isAuthenticated ? '/dashboard' : '/home']);
+          }),
+          mapTo(false),
+          catchError(() => {
+            this.router.navigate(['/home']);
+            return of(false);
+          })
         );
     }
 }

@@ -1,2 +1,13 @@
-<app-order-items userName="Mamadou BAH" orderId="CMD-1001"></app-order-items>
-<app-order-items userName="Said Balde" orderId="CMD-1002"></app-order-items>
+@if (true) {
+    <app-empty-box
+    title="Aucune commande reçue"
+    message="Vous n'avez pas encore reçu de commandes."
+    linkTo="/seller/products"
+    buttonText="Voir mes produits"
+    class="trinta-card product-card mb-25 bg-white border-none d-block">
+  </app-empty-box>
+}
+@else {
+    <app-order-items userName="Mamadou BAH" orderId="CMD-1001"></app-order-items>
+    <app-order-items userName="Said Balde" orderId="CMD-1002"></app-order-items>
+}

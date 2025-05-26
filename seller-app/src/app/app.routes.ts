@@ -63,12 +63,11 @@ export const routes: Routes = [
         ]
       },
       { path: 'howtosell', component: HowToSellComponent },
-      { path: 'faq', component: FaqComponent },
-      { path: 'privacy-policy', component: PrivacyPolicyComponent },
-      { path: 'terms-conditions', component: TermsConditionsComponent }
     ]
   },
-
+  { path: 'faq', component: FaqComponent },
+  { path: 'privacy-policy', component: PrivacyPolicyComponent },
+  { path: 'terms-conditions', component: TermsConditionsComponent },
   // Zone privée
   {
     path: '',

@@ -6,7 +6,7 @@
 /*   By: mbah <mbah@student.42lyon.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 20:52:26 by mbah              #+#    #+#             */
-/*   Updated: 2025/05/08 01:21:32 by mbah             ###   ########.fr       */
+/*   Updated: 2025/05/08 14:28:22 by mbah             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,17 +23,16 @@ export class NoAuthGuard implements CanActivate {
     constructor(private authService: AuthService, private router: Router) {}
 
     canActivate(): Observable<boolean> {
-        return this.authService.isLoggedIn().pipe(
-            map(isAuthenticated => {
-                if (isAuthenticated) {
-                    this.router.navigate(['/dashboard']);
-                    return false;
-                }
-                return true;
-            }),
-            catchError(() => {
-                return of(true); // En cas d'erreur, on laisse passer
-            })
+        return this.authService.isAuthenticatedClean$.pipe(
+          map(isAuthenticated => {
+            if (isAuthenticated) {
+              this.router.navigate(['/dashboard']);
+              return false;
+            }
+            return true;
+          }),
+          catchError(() => of(true))
         );
     }
+
 }

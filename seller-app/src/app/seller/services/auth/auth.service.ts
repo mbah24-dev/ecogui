@@ -6,14 +6,14 @@
 /*   By: mbah <mbah@student.42lyon.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 20:46:52 by mbah              #+#    #+#             */
-/*   Updated: 2025/05/07 12:54:05 by mbah             ###   ########.fr       */
+/*   Updated: 2025/05/08 21:42:31 by mbah             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { BehaviorSubject, catchError, filter, map, Observable, of } from "rxjs";
-import { Enviroment } from "../../utils/eviroment";
+import { Environment } from "../../utils/environment";
 import { User } from "../../models/user/user.model";
 
 @Injectable({
@@ -23,7 +23,7 @@ export class AuthService {
     private isAuthenticatedSubject = new BehaviorSubject<boolean | null>(null);
     isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
 
-    constructor(private http: HttpClient, private enviroment: Enviroment) {
+    constructor(private http: HttpClient, private environment: Environment) {
       this.checkSession();
     }
 
@@ -34,13 +34,17 @@ export class AuthService {
     }
 
     private checkSession() {
-      this.http.get<User>(`${this.enviroment.apiUrl}/auth/session`, { withCredentials: true })
-        .pipe(
-          map(() => true),
-          catchError(() => of(false))
-        )
-        .subscribe((isLoggedIn) => this.isAuthenticatedSubject.next(isLoggedIn));
+        this.http.get<User>(`${this.environment.apiUrl}/auth/session`, { withCredentials: true })
+          .pipe(
+            map(() => true),
+            catchError((err) => {
+              console.warn('Aucune session active détectée.');
+              return of(false);
+            })
+          )
+          .subscribe((isLoggedIn) => this.isAuthenticatedSubject.next(isLoggedIn));
     }
+
 
     // Manuels
     login() {
